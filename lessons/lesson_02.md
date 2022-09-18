@@ -18,7 +18,7 @@ jupyter:
 <!-- #endregion -->
 
 ```python hide_input=false slideshow={"slide_type": "skip"}
-import arviz as az
+import arviz as azt
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
@@ -42,18 +42,18 @@ mpl.rcParams["axes.spines.left"] = False
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## The setting
 
-TODO: Add picture/gif/etc.
-
-Ideas: A map?
+<center>
+  <img src="imgs/raw-fish-market_1368-6217.jpg" style="height:850px"; />
+</center>
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-### Who we are 
+## The problem
 
-* Data scientist at an e-commerce company that sells fish
+* We can't weight each fish individually
 * The weight of the fish is critical information for the business we operate in
-    * We bill our clients according to weight
-    * Our provider has price tiers based on weight
+* Is there a way to estimate the weight of a fish from a picture?
+  * We have historical data on fish dimensions and weight
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
@@ -63,92 +63,15 @@ When we ship our products, there is a very important piece of information we nee
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-### The problem
-
-* We buy wholesale
-    * We know the weight of the total order, but not of each fish individually
-* The obvious solution is not feasible
-* What can we do?!
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "notes"} -->
-The problem is that we buy wholesale, so we know the weight of our total order, but not the one of the individual fishes. So there is an obvious solution, right? Just weigh all the fishes manually.
-
-But that's not a great solution: weighing each fish manually is expensive, time-consuming and labor-intensive.
-
-So what can we do? Any ideas?
-
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "slide"} -->
-TODO: Picture of a desesperated person
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "slide"} -->
-### The solution
-
-* The supplier knows the size of each individual fish
-* These are automatically measured with a fancy camera
-
-But there's more...
-
-* Our company used to weigh fish manually in the past
-* We have training data, with weight included
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "notes"} -->
-Well, talking with some colleagues, we discovered that our wholesale supplier knows the size (i.e [length, height, and width](https://www.kaggle.com/aungpyaeap/fish-market)) of each individual fish. It's impossible to weigh the fishes on the boat, because the boat is always moving, but they have a camera, which records each fish's size!
-
-This is great news! But wait, there is more. Our company used to weigh each fish manually before stopping for cost reasons, so that means we have a training data set of different types of fish, with their weight accurately measured.
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "slide"} -->
-Let's celebrate, dance, and sing!
-
-TODO: Excited person gif
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "notes"} -->
-When they heard that, the whole data science team cheered and cried -- we now have everything to train a model on these training data, learn the correlations between weight and the other features we have, and then predict the weight of the new fishes we sell, based on their size. OMG, what a great time to be alive!
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "slide"} -->
-### The big picture
-
-This lesson about much more than just linear regression
-
-* Build a model step-by-step based on evidence
-* Fit the model using the Bayesian approach
-* Predict while accounting for uncertainty
-* Communicate in the language the business cares about 
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "notes"} -->
-In this lesson you're not only learning linear regression, you're learning about how to estimate linear regression, and most importantly the thought process of creating a generative model and the workflow to do so. This one idea alone will put you far ahead of the "predict and pray" data scientists that mainly overfit models.
-
-The beauty of the Bayesian framework is that you can incorporate the model estimates directly into the decision making process, considering all plausible scenarios and not only the most likely one.
-
-Cherry on the cake, it also allows you - the modeler - to communicate your results in the only language business cares about -- money, money, money, as Abba would say.
-
-Without further ado, let's dive in (pun intended)!
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "slide"} -->
-TODO: Dive in GIF
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "slide"} -->
-### The trailer
+## Spoilers, Yes there is
 
 <center>
-    
-![](imgs/l02_fitted_model.png)
-    
+  <img src="imgs/l02_fitted_model.png" />
 </center>
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-Hey! Hold on for a second! We thought it would be nice to reveal just a little bit of the model we'll have built by the end of this lesson. 
+Surprise, We thought it would be nice to reveal just a little bit of the model we'll have built by the end of this lesson. 
 
 We're really happy if you are amazed by how beautiful a regression plot can be since we make it with lots of love!
 
@@ -158,6 +81,39 @@ But if you're too surprised about what we are seeing because it looks so confusi
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
+## More than linear regression
+
+1. Build a model step-by-step based on evidence
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "fragment"} -->
+2. Fit the model using the Bayesian approach
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "fragment"} -->
+3. Predict while accounting for uncertainty
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "fragment"} -->
+4. Communicate in the language the business cares about
+<!-- #endregion -->
+
+## This should feel familiar
+** Insert some picture 
+
+
+## The worlds simplest model
+* Plotting the straightest line
+* The thing that most average people forget about linear regression
+
+
+## Adding a covariate
+* Insert bullet points
+
+
+## Next section title
+
+<!-- #region slideshow={"slide_type": "skip"} -->
 ### Section recap
 
 * We are an e-commerce company that needs to know the weights of fish, without being able to directly weigh each fish immediately
@@ -168,40 +124,66 @@ But if you're too surprised about what we are seeing because it looks so confusi
     * Communicate our results in the language business cares about
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "slide"} -->
+<!-- #region slideshow={"slide_type": "notes"} -->
+In this lesson you're not only learning linear regression, you're learning about how to estimate linear regression, and most importantly the thought process of creating a generative model and the workflow to do so. This one idea alone will put you far ahead of the "predict and pray" data scientists that mainly overfit models.
+
+The beauty of the Bayesian framework is that you can incorporate the model estimates directly into the decision making process, considering all plausible scenarios and not only the most likely one.
+
+Cherry on the cake, it also allows you - the modeler - to communicate your results in the only language business cares about -- money, money, money, as Abba would say.
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "notes"} -->
+None of this should feel new.
+
+ This lesson is meant to be a review and complement to what was already covered there and most of the content should look familiar already. If you're too surprised about what we are seeing because it looks so confusing, it may indicate that you could take the Introductory Course before moving forward with Advanced Regression. We'll provide some resources if you prefer self learning
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "notes"} -->
 ## Exploratory Data Analysis
+* Why we should look at the data before modeling
+* why blindly modelin
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-### Our challenge is just starting
+# Exploratory Data Analysis
+<!-- #endregion -->
 
-TODO: Picture/GIF of someone getting started for a challenging situation.
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Our challenge is just starting
+
+
+<center>
+  <img src="imgs/MountainProgression.jpg" />
+</center>
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
 We start a challenging adventure. We want to fit a linear regression model to predict the weight of fish. We know this is going to be extremely valuable to our company and we can't wait to get this rolling.
 <!-- #endregion -->
 
+## Need to build a build
+
 <!-- #region slideshow={"slide_type": "slide"} -->
-* How do we know if it's appropriate to use linear regression?
-    * We can do better than an "if you never try you'll never know" approach
-* Exploratory Data Analysis (EDA) for the win!
-    * Visualizations and numerical summaries that tell a story about the data
-    * It allows obtaining insights _before_ modeling
-    * Puts ourselves in a much better prepared position to start modeling
-* EDA will help you be a better statstician
+## Is linear regression the right choice?
+** insert image
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "notes"} -->
-But, how do we know we can fit a linear model to a dataset? Well, some may say "if you never try you'll never know". And while that's a valid approach that may end up working sometimes, we know we can do something smarter.
+But, how do we know we can fit a linear model to a dataset? Well, some may say won't ask that question and will blindly fit models to data.
 
+And while that's a valid approach that may end up working sometimes, we know we can do something smarter.
+
+
+
+## You need to look at the data
+
+<!-- #region slideshow={"slide_type": "notes"} -->
 A better approach is to first get started by doing Exploratory Data Analysis (EDA). This will give us lots of valuable information about our dataset _before_ doing any modeling. 
 
 Some of you may roll your eyes and say "I came here to learn Bayesian Stats!". We know it may sound boring. Believe us, EDA will help you be a better statistician. By the end of the course, you won't only know how to do Bayesian modeling, you'll also know what's the right tool for a given situation and why it works the way it does.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-### Initial overview
+## Loading our fish data
 <!-- #endregion -->
 
 ```python
@@ -216,7 +198,7 @@ Great! We now have the data loaded. We see we have 159 observations and 7 variab
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-### Initial overview
+## Column Overview
 
 <center>
 
@@ -239,7 +221,11 @@ For each fish we have the its species, weight, height, width, and not one, not t
 Let's now check the column types and whether there are any missing values.
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"}
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Deeper dive
+<!-- #endregion -->
+
+```python slideshow={"slide_type": "-"}
 data.info()
 ```
 
@@ -248,11 +234,7 @@ So far so good! Pandas let us know that all the columns have the appropriate dat
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-### Summary statistics
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "notes"} -->
-The next step is to compute some basic summaries. We can get started with the numeric variables in the dataset. These simple aggregations are very powerful and give us quick and valuable information.
+## Summary statistics
 <!-- #endregion -->
 
 ```python slideshow={"slide_type": "fragment"}
@@ -260,6 +242,8 @@ data.describe().round(2)
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
+The next step is to compute some basic summaries. We can get started with the numeric variables in the dataset. These simple aggregations are very powerful and give us quick and valuable information.
+
 Shoot! Have a look at the summary table. Can you spot any unexpected result? 
 
 The minimum weight is zero (!). Have you ever seen anything on earth that weighs exactly zero? I haven't been that lucky, so it must be an error. Maybe the fish was too small for the scale to notice it, or there was a mistake somehow during data collection. For the lesson purposes is safe to ignore that record so we simply discard it.
@@ -283,7 +267,11 @@ It turns out that the smallest fish weights only 5.9 grams!
 It feels a bit weird to have three columns for the length of the fish. These probably encode the same information so there's no point in keeping all of them. Let's explore the correlation among them to see if we can confirm our intuition.
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"}
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Linear Correlation 
+<!-- #endregion -->
+
+```python slideshow={"slide_type": "-"}
 corr = data[["Length1", "Length2", "Length3"]].corr()
 corr.style.background_gradient(cmap="coolwarm")
 ```
@@ -292,7 +280,11 @@ corr.style.background_gradient(cmap="coolwarm")
 Bingo! The three length measurements are extremely correlated. So, without more information about their differences, we should just arbitrarily drop two of them as they provide virtually the same information. 
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"}
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Dropping the extra columns
+<!-- #endregion -->
+
+```python slideshow={"slide_type": "-"}
 data = data.drop(["Length2", "Length3"], axis="columns")
 data.head()
 ```
@@ -302,15 +294,7 @@ IDEA: Split this section here?
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-### How frequent species are?
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "notes"} -->
-We have gained lots of insights so far and that's aswesome. But we're still missing key part: the species. What do we know about it? 
-
-We can get started by exploring the number of records we have for each species.
-
-It's time to show off our data visualization skills!
+## How frequent species are?
 <!-- #endregion -->
 
 ```python hide_input=true slideshow={"slide_type": "fragment"}
@@ -326,12 +310,22 @@ ax.set(xlabel="Species", ylabel="Number of fish", title="Number of fish by speci
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
+We have gained lots of insights so far and that's aswesome. But we're still missing key part: the species. What do we know about it? 
+
+We can get started by exploring the number of records we have for each species.
+
+It's time to show off our data visualization skills!
+
 Who said doing data exploration needs to be painful and boring?
 
 Let's get analytical now. What information can we extract from this plot? Well, the number of records per species varies a lot. Perch is, by far, the most common species, and Bream is the second. Other species, appear less frequently. Perkki and Whitefish are the most extreme cases with 11 and 6 records only.
 <!-- #endregion -->
 
-```python hide_input=true slideshow={"slide_type": "slide"}
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Table Summary
+<!-- #endregion -->
+
+```python hide_input=false slideshow={"slide_type": "-"}
 pd.concat(
     [species_n, species_pct, species_pct.cumsum()], 
     axis=1, 
@@ -340,7 +334,7 @@ pd.concat(
 ```
 
 <!-- #region slideshow={"slide_type": "fragment"} -->
-* Perch and Bream concentrate around 60% of all the fish
+* Perch and Bream represent around 60% of all the fish
 * Whitefish appears very rarely
     * Perch is 10 times as frequent as Whitefish!
 <!-- #endregion -->
@@ -350,13 +344,7 @@ In this table view, we see the top-two species together make up around 60% of th
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-### How much do fish weigh?
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "notes"} -->
-We already got some insights about the weight. For example, we know the average fish weighs 400 grams. But that doesn't mean that 400 grams is a good number to represent all the fish! 
-
-Also, we're Bayesians and we love distributions. So why don't just see the entire the distribution of all the weights?
+## How much do fish weigh?
 <!-- #endregion -->
 
 ```python hide_input=true slideshow={"slide_type": "fragment"}
@@ -365,12 +353,14 @@ ax.hist(data["Weight"], ec="C0", alpha=0.85, bins=30)
 ax.set(xlabel="Weight (grams)", ylabel="Count", title="Distribution of fish weight");
 ```
 
-<!-- #region slideshow={"slide_type": "slide"} -->
-### How much do fish weigh?
+<!-- #region slideshow={"slide_type": "notes"} -->
+We already got some insights about the weight. For example, we know the average fish weighs 400 grams. But that doesn't mean that 400 grams is a good number to represent all the fish! 
+
+Also, we're Bayesians and we love distributions. So why don't just see the entire the distribution of all the weights?
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "notes"} -->
-And that's not all! We can overlay the plot with more layers of information. For example, we can add percentiles on top of it to gain an even better understanding.
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Plotting percentiles
 <!-- #endregion -->
 
 ```python hide_input=true slideshow={"slide_type": "-"}
@@ -393,19 +383,15 @@ ax.set(xlabel="Weight (grams)", ylabel="Count", title="Distribution of fish weig
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
+And that's not all! We can overlay the plot with more layers of information. For example, we can add percentiles on top of it to gain an even better understanding. 
+ 
 It's way more informative! As we've seen before, we can confirm the fish weight varies a lot. But this is much better. For example, we can see the dataset contains mostly small fish. 80% of the fish weigh 700 grams or less! In other words, we could say 8 out of 10 fish in the data weigh 700 grams or less.
 
 We also see most observations are concentrated around low weights and fewer observations show higher weights. As you may recall from the introductory course, when a distribution has this shape it is said it is a right-skewed distribution (because it has a long tail on the right side).
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-### How does weight vary from species to species?
-<!-- #endregion -->
-
-<!-- #region hide_input=true slideshow={"slide_type": "notes"} -->
-We can ask another related question: Is the weight of the fish related to the species? In a more intuitive way, does knowing the species help us make a better guess of the fish weight? 
-
-Our intuition and experience suggest so. But, we have data, right?
+## How does weight vary from species to species?
 <!-- #endregion -->
 
 ```python hide_input=true slideshow={"slide_type": "fragment"}
@@ -426,6 +412,9 @@ ax.set(xlabel="Weight (grams)", ylabel="Species", title="Fish weight by species"
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
+We can ask another related question: Is the weight of the fish related to the species? In a more intuitive way, does knowing the species help us make a better guess of the fish weight? 
+
+Our intuition and experience suggest so. But, we have data, right?
 * How to read the chart
     * The dot represents the median weight
     * The thicker line represents 25% and 75% percentiles
@@ -433,11 +422,11 @@ ax.set(xlabel="Weight (grams)", ylabel="Species", title="Fish weight by species"
 
 As we expected, the distribution of the weight varies from species to species. Some species are similar (see Whitefish and Bream) and some others are waaay different (see Pike and Smelt). The spread of these distributions are different as well. For example, Parkki fish have very similar weights, while Bream varies a lot more.
 
-The **main takeaway** is that species is something we need to consider seriously when building our regression model. We expect to adjust weight predictions based on the species. If the model says weight is not associated with fish species, we'll need to double check the model because it's being unconsistent with what we've just found. Do you see it now? This is what EDA is made for!
+The **main takeaway** is that species is something we need to consider seriously when building our regression model. We expect to adjust weight predictions based on the species. If the model says weight is not associated with fish species, we'll need to double check the model because it's being inconsistent with what we've just found. Do you see it now? This is what EDA is made for!
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-### Relationship among fish measurements
+## Relationship among fish measurements
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
@@ -475,7 +464,7 @@ This is so exciting! We started from nothing and after all this work we have so 
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-### Making a plan
+## Making a plan
 
 * We extracted lots of insights
 * We're in a good position to start modeling
@@ -489,13 +478,9 @@ But before we finish this section, we have one last job to do: we're making a pl
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-#### A baseline model
+## A baseline model
 
-* No predictors. Just weight information
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "notes"} -->
-First of all, we are going to create a **baseline model**. This model won't incorporate any information but the fish weight. Yes, it sounds quite crazy! But that's what we're going to do to get started. The only feature of the fish the model is going to see is their weight. Just like what we can see in the following histogram.
+No predictors. Just weight information
 <!-- #endregion -->
 
 ```python hide_input=true slideshow={"slide_type": "fragment"}
@@ -504,16 +489,14 @@ ax.hist(data["Weight"], ec="C0", alpha=0.85, bins=30)
 ax.set(xlabel="Weight (grams)", ylabel="Count", title="Distribution of fish weight");
 ```
 
-<!-- #region slideshow={"slide_type": "slide"} -->
-#### Adding a continuous predictor
-
-* Use fish length to predict weight
+<!-- #region slideshow={"slide_type": "notes"} -->
+First of all, we are going to create a **baseline model**. This model won't incorporate any information but the fish weight. Yes, it sounds quite crazy! But that's what we're going to do to get started. The only feature of the fish the model is going to see is their weight. Just like what we can see in the following histogram.
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "notes"} -->
-But... don't we know much more about the fish?!
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Adding a continuous predictor
 
-Of course, yes! That's our next step: adding predictors. We'll first add the fish length. We can anticipate this will give us a much richer model, which now can see how long fish are and use it to predict weight. Following our graphical story, this is equivalent to having access to the following scatterplot. Here we can see the length of the fish gives us valuable information about the weight.
+Use fish length to predict weight
 <!-- #endregion -->
 
 ```python hide_input=true slideshow={"slide_type": "fragment"}
@@ -522,14 +505,16 @@ ax.scatter(x=data["Length1"], y=data["Weight"], alpha=0.6)
 ax.set(xlabel="Length (centimeters)", ylabel="Weight (grams)", title="Fish length vs weight");
 ```
 
-<!-- #region slideshow={"slide_type": "slide"} -->
-#### Adding a categorical predictor
+<!-- #region slideshow={"slide_type": "notes"} -->
+But... don't we know much more about the fish?!
 
-* Incorporate the species
+Of course, yes! That's our next step: adding predictors. We'll first add the fish length. We can anticipate this will give us a much richer model, which now can see how long fish are and use it to predict weight. Following our graphical story, this is equivalent to having access to the following scatterplot. Here we can see the length of the fish gives us valuable information about the weight.
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "notes"} -->
-And if you're wondering about the species we mentioned so many times, that's what's coming next! We'll be adding the species as a predictor in our model. As we can see in the following chart, we expect it to add even more information on top of what the fish length already gives. 
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Adding a categorical predictor
+
+Incorporate the species
 <!-- #endregion -->
 
 ```python hide_input=true slideshow={"slide_type": "fragment"}
@@ -559,6 +544,8 @@ ax.legend(
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
+And if you're wondering about the species we mentioned so many times, that's what's coming next! We'll be adding the species as a predictor in our model. As we can see in the following chart, we expect it to add even more information on top of what the fish length already gives. 
+
 Finally, we'll see how we can incorporate the other fish measurements into the model. Our exploration suggests that not only the length is informative of the fish weight. We also have width and height, right? We'll cover how to add them very close to the end of the lesson.
 
 It's been a very intense exploration. But it's been worth it! After this much work, we were able to provide ourselves with so many resources that make us feel much more confident about the modeling work that comes next.
@@ -567,22 +554,29 @@ It's been a very intense exploration. But it's been worth it! After this much wo
 <!-- #region slideshow={"slide_type": "slide"} -->
 ### Section Recap
 
-* We have to know what we're modeling
 * Exploratory Data Analysis is recommended essential
-    * Doing EDA right is what separates mediocre data practitioners and DS from great ones
+    * Proper EDA  is what separates mediocre data practitioners and DS from great ones
     * Becomes more necessary when we get to advanced models
 * In our fish data we noticed
     * Longer fish weigh more
-        * Obvious but good to verify
-    * Found rows that were zero weight or otherwise unreasonable
     * Noted a non-linear patterns.
-* Fish of the same species tend to be have similar weight together.
-    * Species is an important feature we'll need to consider later
+    * Species is an important feature we'll need to consider 
 * We made a plan
     * We'll get started very simple and add complexity one step at a time
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
+EDA is a must
+    * Becomes more necessary when we get to advanced models
+           * Found rows that were zero weight or otherwise unreasonable
+
+* In our fish data we noticed
+* Obvious but good to verify
+  
+
+
+
+
 I'm so excited about it and can't wait to get started. Are you ready?
 <!-- #endregion -->
 
@@ -886,7 +880,7 @@ Now we overlay the model estimate...
 ### Visualize the fitted curve
 <!-- #endregion -->
 
-```python hide_input=false slideshow={"slide_type": "fragment"}
+```python hide_input=true slideshow={"slide_type": "fragment"}
 fig, ax = plt.subplots(figsize=(8, 6))
 ax.scatter(x=data["Length1"], y=data["Weight"], alpha=0.6)
 ax.set(xlabel="Length (centimeters)", ylabel="Weight (grams)", title="Fish length vs weight");
