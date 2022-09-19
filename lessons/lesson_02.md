@@ -18,7 +18,7 @@ jupyter:
 <!-- #endregion -->
 
 ```python hide_input=false slideshow={"slide_type": "skip"}
-import arviz as azt
+import arviz as az
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
@@ -30,9 +30,13 @@ from matplotlib.lines import Line2D
 from matplotlib.patches import  FancyArrowPatch
 ```
 
+```python
+mpl.get_configdir()
+```
+
 ```python slideshow={"slide_type": "skip"}
 %matplotlib inline
-plt.style.use("intuitivebayes")
+plt.style.use("intuitivebayes.mplstyle")
 
 mpl.rcParams["figure.dpi"] = 120
 mpl.rcParams["figure.facecolor"] = "white"
@@ -47,17 +51,21 @@ mpl.rcParams["axes.spines.left"] = False
 </center>
 <!-- #endregion -->
 
+<!-- #region slideshow={"slide_type": "notes"} -->
+In this lesson, we'll imagine we are working in the data science team of an e-commerce company. In particular, we sell really good and fresh fish to our clients (mainly fancy restaurants).
+
+<!-- #endregion -->
+
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## The problem
 
-* We can't weight each fish individually
+* We can't weigh each fish individually
 * The weight of the fish is critical information for the business we operate in
-* Is there a way to estimate the weight of a fish from a picture?
+* Is there a way to estimate the weigh of a fish from a picture?
   * We have historical data on fish dimensions and weight
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-In this lesson, we'll imagine we are working in the data science team of an e-commerce company. In particular, we sell really good and fresh fish to our clients (mainly fancy restaurants).
 
 When we ship our products, there is a very important piece of information we need: **the weight of the fish**. Why? First, because we bill our clients according to weight. Second, because the company that delivers the fish to our clients has different price tiers for weights, and those tiers can get really expensive. So we want to know the probability of an item being above that line. In other words, estimating uncertainty is important here!
 <!-- #endregion -->
@@ -81,7 +89,7 @@ But if you're too surprised about what we are seeing because it looks so confusi
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## More than linear regression
+## We'll cover more than linear regression
 
 1. Build a model step-by-step based on evidence
 <!-- #endregion -->
@@ -98,20 +106,26 @@ But if you're too surprised about what we are seeing because it looks so confusi
 4. Communicate in the language the business cares about
 <!-- #endregion -->
 
-## This should feel familiar
-** Insert some picture 
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Exploratory Data Analysis
+* Why its critical to look at your data no matter what kind of model you're building
+<!-- #endregion -->
 
-
+<!-- #region slideshow={"slide_type": "slide"} -->
 ## The worlds simplest model
 * Plotting the straightest line
 * The thing that most average people forget about linear regression
+<!-- #endregion -->
 
-
+<!-- #region slideshow={"slide_type": "slide"} -->
 ## Adding a covariate
 * Insert bullet points
+<!-- #endregion -->
 
-
+<!-- #region slideshow={"slide_type": "slide"} -->
 ## Next section title
+@tomas add section title 
+<!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "skip"} -->
 ### Section recap
@@ -146,6 +160,7 @@ None of this should feel new.
 
 <!-- #region slideshow={"slide_type": "slide"} -->
 # Exploratory Data Analysis
+Building a map for what were going to model
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -161,11 +176,9 @@ None of this should feel new.
 We start a challenging adventure. We want to fit a linear regression model to predict the weight of fish. We know this is going to be extremely valuable to our company and we can't wait to get this rolling.
 <!-- #endregion -->
 
-## Need to build a build
-
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## Is linear regression the right choice?
-** insert image
+** insert image **
 <!-- #endregion -->
 
 But, how do we know we can fit a linear model to a dataset? Well, some may say won't ask that question and will blindly fit models to data.
@@ -173,8 +186,13 @@ But, how do we know we can fit a linear model to a dataset? Well, some may say w
 And while that's a valid approach that may end up working sometimes, we know we can do something smarter.
 
 
-
+<!-- #region slideshow={"slide_type": "slide"} -->
 ## You need to look at the data
+
+<center>
+  <img src="imgs/telescope.jpg" />
+</center>
+<!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
 A better approach is to first get started by doing Exploratory Data Analysis (EDA). This will give us lots of valuable information about our dataset _before_ doing any modeling. 
@@ -197,7 +215,7 @@ Let's get started by exploring the data our team shared with us. There's the CSV
 Great! We now have the data loaded. We see we have 159 observations and 7 variables. Each observation represents a single fish, so there are 159 different fish in total. We can try to figure out the meaning of the columns by their names, but it's better to check out the description provided with the data.
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "slide"} -->
+<!-- #region slideshow={"slide_type": "skip"} -->
 ## Column Overview
 
 <center>
@@ -215,10 +233,8 @@ Great! We now have the data loaded. We see we have 159 observations and 7 variab
 </center>
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "notes"} -->
-For each fish we have the its species, weight, height, width, and not one, not two, but three (!) different length measurements. 
+<!-- #region slideshow={"slide_type": "skip"} -->
 
-Let's now check the column types and whether there are any missing values.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -230,6 +246,10 @@ data.info()
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
+For each fish we have the its species, weight, height, width, and not one, not two, but three (!) different length measurements. 
+
+Let's now check the column types and whether there are any missing values.
+
 So far so good! Pandas let us know that all the columns have the appropriate data type and none of them have missing values.
 <!-- #endregion -->
 
@@ -289,19 +309,19 @@ data = data.drop(["Length2", "Length3"], axis="columns")
 data.head()
 ```
 
-<!-- #region slideshow={"slide_type": "skip"} -->
-IDEA: Split this section here?
+<!-- #region slideshow={"slide_type": "notes"} -->
+We drop the extra columns to make this tidy and remove the correlated columns
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## How frequent species are?
 <!-- #endregion -->
 
-```python hide_input=true slideshow={"slide_type": "fragment"}
+```python hide_input=true slideshow={"slide_type": "-"}
 species_n = data["Species"].value_counts()
 species_pct = (100 * species_n / species_n.sum()).round(2)
 
-fig, ax = plt.subplots(figsize=(8, 6))
+fig, ax = plt.subplots(figsize=(14, 7))
 color = [f"C{i}" for i in range(len(species_n))]
 ax.bar(species_n.index, species_n, color=color)
 for i, n in enumerate(species_n):
@@ -463,22 +483,38 @@ Bingo! Once we map the species to the color of the dots we see clusters with dot
 This is so exciting! We started from nothing and after all this work we have so much information about our data! I cannot wait until we start using all of this in our model!
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "slide"} -->
-## Making a plan
+## Section Recap
+* Exploratory Data Analysis is recommended essential
+    * Proper EDA  is what separates mediocre data practitioners and data scientist from great ones
+    * Becomes more necessary when we get to advanced models
+* In our fish data we noticed
+    * Longer fish weigh more
+    * Noted a non-linear patterns.
+    * Species is an important feature we'll need to consider 
 
-* We extracted lots of insights
-* We're in a good position to start modeling
-* Our last job is to make a plan
+<!-- #region slideshow={"slide_type": "slide"} -->
+# Making a plan for models
+Higher probability of a good modeling results when we use informed priors 
 <!-- #endregion -->
+
+## Planning takes thought
+
+
+
+<center>
+  <img src="imgs/PeopleMakingAPlan.jpg" />
+</center>
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-At this point we already extracted lots of information about the fish. This puts us in a much better position to start modeling. We're quite well informed to judge if model inferences make sense or not. That's the power of Exploratory Data Analysis!
+In this case our EDA informed our priors about how make a Bayesian model
 
-But before we finish this section, we have one last job to do: we're making a plan! We want to trace a path that we're going to follow when developing our Bayesian Regression model.
+We already extracted lots of information about the fish. This puts us in a much better position to start modeling. We're quite well informed to judge if model inferences make sense or not. That's the power of Exploratory Data Analysis!
+
+we have one last job to do: we're making a plan! We want to trace a path that we're going to follow when developing our Bayesian Regression model.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## A baseline model
+## Model 1: Our simplest baseline
 
 No predictors. Just weight information
 <!-- #endregion -->
@@ -494,7 +530,7 @@ First of all, we are going to create a **baseline model**. This model won't inco
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## Adding a continuous predictor
+## Model 2: Adding a continuous predictor
 
 Use fish length to predict weight
 <!-- #endregion -->
@@ -512,9 +548,8 @@ Of course, yes! That's our next step: adding predictors. We'll first add the fis
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## Adding a categorical predictor
-
-Incorporate the species
+## Model 3: Adding a categorical predictor
+Adding a species predictor
 <!-- #endregion -->
 
 ```python hide_input=true slideshow={"slide_type": "fragment"}
@@ -551,17 +586,21 @@ Finally, we'll see how we can incorporate the other fish measurements into the m
 It's been a very intense exploration. But it's been worth it! After this much work, we were able to provide ourselves with so many resources that make us feel much more confident about the modeling work that comes next.
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "slide"} -->
-### Section Recap
+## This is just the Bayesian Workflow
 
-* Exploratory Data Analysis is recommended essential
-    * Proper EDA  is what separates mediocre data practitioners and DS from great ones
-    * Becomes more necessary when we get to advanced models
-* In our fish data we noticed
-    * Longer fish weigh more
-    * Noted a non-linear patterns.
-    * Species is an important feature we'll need to consider 
-* We made a plan
+
+<center>
+  <img src="imgs/Bayesian_workflow.png" style="height:700px" />
+</center>
+
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Section Recap
+
+* It's important to consciously add complexity when modeling
+  * Doing so helps you be more efficient but also saves you time if you run into issues
+  * Enables justification of complexity as we go
+  * This is just the Bayesian Workflow
+* In this case anticipate taking three 
     * We'll get started very simple and add complexity one step at a time
 <!-- #endregion -->
 
