@@ -477,12 +477,6 @@ What's even more curious is there seems to be clouds of points that are well sep
 sns.pairplot(data, vars=["Length1", "Height", "Width", "Weight"], hue="Species");
 ```
 
-<!-- #region slideshow={"slide_type": "notes"} -->
-Bingo! Once we map the species to the color of the dots we see clusters with dots of the same color. How can we read it? Length, height, and width are quite informative about the weight of the fish. But, on top of that, knowing the species adds even more information!
-
-This is so exciting! We started from nothing and after all this work we have so much information about our data! I cannot wait until we start using all of this in our model!
-<!-- #endregion -->
-
 ## Section Recap
 * Exploratory Data Analysis is recommended essential
     * Proper EDA  is what separates mediocre data practitioners and data scientist from great ones
@@ -491,6 +485,12 @@ This is so exciting! We started from nothing and after all this work we have so 
     * Longer fish weigh more
     * Noted a non-linear patterns.
     * Species is an important feature we'll need to consider 
+
+<!-- #region slideshow={"slide_type": "notes"} -->
+Bingo! Once we map the species to the color of the dots we see clusters with dots of the same color. How can we read it? Length, height, and width are quite informative about the weight of the fish. But, on top of that, knowing the species adds even more information!
+
+This is so exciting! We started from nothing and after all this work we have so much information about our data! I cannot wait until we start using all of this in our model!
+<!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
 # Making a plan for models
@@ -578,6 +578,13 @@ ax.legend(
 );
 ```
 
+## This is just the Bayesian Workflow
+
+
+<center>
+  <img src="imgs/Bayesian_workflow.png" style="height:700px" />
+</center>
+
 <!-- #region slideshow={"slide_type": "notes"} -->
 And if you're wondering about the species we mentioned so many times, that's what's coming next! We'll be adding the species as a predictor in our model. As we can see in the following chart, we expect it to add even more information on top of what the fish length already gives. 
 
@@ -586,41 +593,25 @@ Finally, we'll see how we can incorporate the other fish measurements into the m
 It's been a very intense exploration. But it's been worth it! After this much work, we were able to provide ourselves with so many resources that make us feel much more confident about the modeling work that comes next.
 <!-- #endregion -->
 
-## This is just the Bayesian Workflow
-
-
-<center>
-  <img src="imgs/Bayesian_workflow.png" style="height:700px" />
-</center>
+<!-- #region slideshow={"slide_type": "notes"} -->
+Were following a simplified version of the Bayesian workflow, which is a structured series of steps to achieve consciouisly achieve a great modeling result. From experience we can tell you this works better than a "random search" You'll see this many times in throughout the course,
+<!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## Section Recap
 
-* It's important to consciously add complexity when modeling
+* We recommend following Bayesian Workflow
   * Doing so helps you be more efficient but also saves you time if you run into issues
   * Enables justification of complexity as we go
-  * This is just the Bayesian Workflow
-* In this case anticipate taking three 
-    * We'll get started very simple and add complexity one step at a time
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "notes"} -->
-EDA is a must
-    * Becomes more necessary when we get to advanced models
-           * Found rows that were zero weight or otherwise unreasonable
-
-* In our fish data we noticed
-* Obvious but good to verify
-  
-
-
-
-
-I'm so excited about it and can't wait to get started. Are you ready?
+* For our fish model we anticipate building three models
+  * No covariate regression e.g. No predictors
+  * Single covariate
+  * Single covariate with categorical (@tomas to come up with something)
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## The world's simplest model
+Also called average regression
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
@@ -638,7 +629,7 @@ In this section we'll cover the following points:
 * Analysis of the results
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "slide"} -->
+<!-- #region slideshow={"slide_type": "skip"} -->
 ### The intuition
 
 * This model ignores all information about the fish, except their weight
@@ -648,7 +639,7 @@ In this section we'll cover the following points:
     * It does not have access to any information that allows to differentiate them 
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "notes"} -->
+<!-- #region slideshow={"slide_type": "skip"} -->
 How can we be sure we're about to build the simplest linear model? Well, listen to this: it turns out the model we are going to build to predict the weight of the fish ignores all other information about fish. It sounds crazy, doesn't it? We've just seen so many interesting relationships between measurements of the fish and its weight and we're just about to ignore it all! You got to be kidding you may say. Well, that's true only for the rest of this section. More complex stuff is awaiting us later!
 
 If it's hard to understand why ignoring all the information is the simplest approach, we can try to see it from a different angle as well. Let's say we wanted to build the most complex model from the data we have. As we can imagine, that model would use all the fish measurements in a very clever and complicated way so it can extract as much information as possible about the fish (sounds exciting and intimidating!)
@@ -657,21 +648,24 @@ If simplicity is the opposite of complexity, and the most complex model uses all
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-### The math
-
-* The world's simplset model, uses the simplest math in the world
+## The simplest Idea
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "notes"} -->
-Time to fasten our seatbelts, we don't want anyone to get hurt in this section... Just kidding! We're more than prepared to face our first math challenge. Let's go!
-
-The math formulation of the model expresses the response variable, Weight, as the result of a mathematical expression. This expression can be either very simple or complex. The world's simplest model... hmm well, has the world's simplest expression!
-<!-- #endregion -->
+All fish weigh the same
 
 <!-- #region slideshow={"slide_type": "fragment"} -->
+### The idea in math
+<!-- #endregion -->
+
 $$
 \text{Weight}_i = \text{Constant value}
 $$
+
+<!-- #region slideshow={"slide_type": "notes"} -->
+Time to fasten our seatbelts, we don't want anyone to get hurt in this section... Just kidding! We're more than prepared to face our first math challenge. Let's go!
+* The world's simplset model, uses the simplest math in the world
+
+The math formulation of the model expresses the response variable, Weight, as the result of a mathematical expression. This expression can be either very simple or complex. The world's simplest model... hmm well, has the world's simplest expression!
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
@@ -680,16 +674,20 @@ The math of our model says "Weight is equal to a constant value". The subscript 
 From the model perspective, all fish are equal. Equal how? Equal in terms of weight, which is the only attribute the model knows about the fish. Since we don't feed it with any other information, it can't distinguish one from the other. Thus, it has no choice but to predict the weight of all fish with the same value.
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "fragment"} -->
-We can go further and translate the formulation above into a more statistical model notation.
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Expanded math notation
+<!-- #endregion -->
 
+<!-- #region slideshow={"slide_type": "fragment"} -->
 $$
 \begin{aligned}
 \text{Weight}_i &= \beta_0 + \varepsilon_i \\
 \varepsilon_i & \sim \text{Normal}(0, \sigma) 
 \end{aligned}
 $$
+<!-- #endregion -->
 
+<!-- #region slideshow={"slide_type": "fragment"} -->
 with the following priors
 
 $$
@@ -701,6 +699,9 @@ $$
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
+We can go further and translate the formulation above into a more statistical model notation.
+
+
 It's lots of information! Let's digest it one by one, step by step. See the first line
 
 $$\text{Weight}_i = \beta_0 + \varepsilon_i$$
@@ -717,7 +718,7 @@ Finally, $\sigma_{\beta_0}$ and $\sigma_\varepsilon$. These are the parameters o
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-### The math: A fully Bayesian approach
+## A fully Bayesian approach
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
@@ -727,6 +728,7 @@ All in all, this allow us to write the model above just as
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "fragment"} -->
+### Condensed Math
 $$
 \begin{aligned}
 \beta_0 & \sim \text{Normal}(0, \sigma_{\beta_0}) \\
@@ -740,15 +742,15 @@ $$
 This is very popular in Bayesian statistics and you'll find it everywhere.
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "slide"} -->
-### The code
+<!-- #region slideshow={"slide_type": "fragment"} -->
+### The PyMC Code
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "skip"} -->
 Now we use PyMC to build our model. One of the features that distinguish PyMC is its expressiveness. It allows us to map the statistical formulation of the model into very clear and concise Python code. This is how it looks like:
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "fragment"}
+```python slideshow={"slide_type": "-"}
 with pm.Model() as model:
     β0 = pm.Normal("β0", mu=0, sigma=200)
     sigma = pm.HalfNormal("σ", sigma=20)
@@ -759,22 +761,8 @@ with pm.Model() as model:
 If we have a second look at the math, we can see PyMC maps the stats to Python code straightforwardly. It's so neat!
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "fragment"} -->
-$$
-\begin{aligned}
-\beta_0 & \sim \text{Normal}(0, \sigma_{\beta_0}) \\
-\sigma & \sim \text{HalfNormal}(\sigma_\varepsilon) \\
-\text{Weight}_i & \sim \text{Normal}(\beta_0, \sigma) 
-\end{aligned}
-$$
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "skip"} -->
-The next step is to find the posterior distribution (a.k.a. fitting the model). As you may already now, doing it with PyMC is so easy.
-<!-- #endregion -->
-
 <!-- #region slideshow={"slide_type": "slide"} -->
-### Let's get the sampler rolling
+## Let's get the MCMC sampler sampling
 <!-- #endregion -->
 
 ```python slideshow={"slide_type": "fragment"}
@@ -782,60 +770,42 @@ with model:
     idata = pm.sample(chains=4, random_seed=1234)
 ```
 
-<!-- #region slideshow={"slide_type": "fragment"} -->
-* Sampling went so good!
+Modern Bayesian inference is really fast. With Markov Chain Monte Carlo, also called MCMC we get samples that approximate the posterior. We won't be discussing details of the sampler in this course, we assume you already know it, though we'll link some resources if you curious.
+
+The takeaway is most of the time, especially with linear models, if things are specified correctly sampling and hte data is quick and easy.
+
     * It was blazingly fast
     * No warning or error messages
-* Great start!
-<!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "skip"} -->
 Let's have a look at the traceplots so we have a first look at the posterior and we can analyze the convergence of our MCMC chains.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-### Analyize the posterior: MCMC checks
-
-Let's produce a traceplot to evaluate chain quality.
+## Analyze the posterior: MCMC checks
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "fragment"}
+```python slideshow={"slide_type": "-"}
 az.plot_trace(idata, compact=False, backend_kwargs={"tight_layout": True});
 ```
 
-<!-- #region slideshow={"slide_type": "fragment"} -->
+<!-- #region slideshow={"slide_type": "notes"} -->
+with MCMC its always a good idea to check your posterior. Let's produce a traceplot to evaluate chain quality.
+This plot is called a traceplot, what we  look for on the right is the "fuzzy caterpillar"
+
+* Sampling went so good!
 * No evident MCMC convergence issues
 * All chains converged to the same distribution
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "notes"} -->
 Both posteriors have a bell shape, and the estimates from all chains are quite similar. The traces are all also very similar and they look very much like white noise, meaning there's no convergence or mixing issues. That's great!
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-### Analyize the posterior: insights
-
-* Extract meaningful information from the model
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "skip"} -->
-Now it's time to double-click on the posterior of $\beta_0$ and $\sigma$.
-
-`az.summary()` is the way to go if we want to obtain a quick summary of the posterior. The argument `kind="stats"` indicates we only want statistical summaries from the posterior and not sampling diagnostics.
+## Analyze the posterior: High Level Summary
 <!-- #endregion -->
 
 ```python slideshow={"slide_type": "fragment"}
 az.summary(idata, round_to=2, kind="stats")
 ```
-
-<!-- #region slideshow={"slide_type": "fragment"} -->
-* $\beta_0$ has a mean of 397 and standard deviation of 20.
-* $\sigma$ has a mean of 252 and a standard deviation of 3.29
-* Their standard deviations are small compared with their mean values. That's good!
-* It's not all happiness though
-    * $\sigma$ is quite high
-    * There will be high uncertainty in predictions
-<!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
 How do we interpret these results?
@@ -845,21 +815,25 @@ First of all, the uncertainty around $\beta_0$ and $\sigma$ is low if we compare
 On the other hand, if we compare $\sigma$ with the usual weights, we can conclude $\sigma$ is quite high. This will be translated into high uncertainty in the prediction of weight for new fish. 
 
 Ideally, we would like $\sigma$ to be as low as possible, so we are more certain about the predictions of the model.
+Now it's time to double-click on the posterior of $\beta_0$ and $\sigma$.
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "skip"} -->
+`az.summary()` is the way to go if we want to obtain a quick summary of the posterior. The argument `kind="stats"` indicates we only want statistical summaries from the posterior and not sampling diagnostics.
+
+* Extract meaningful information from the model
+
+* $\beta_0$ has a mean of 397 and standard deviation of 20.
+* $\sigma$ has a mean of 252 and a standard deviation of 3.29
+* Their standard deviations are small compared with their mean values. That's good!
+* It's not all happiness though
+    * $\sigma$ is quite high
+    * There will be high uncertainty in predictions
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-### Analyize the posterior: making it meaningful
+## Analyze the posterior: making it meaningful
 
-* Numbers are fine
-* Go the extra mile: What does a number mean?
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "notes"} -->
-Numbers are fine. We use them all the time. And as data scientists, we use them more often than regular people do. But if we really want to go the extra mile we need to ask ourselves another question. What's behind a number? In other words, what does that number mean? 
-
-This is exactly the missing part in our interpretation of the parameters in the model. For example, what does it mean to say the posterior mean of $\beta_0$ is 397?
-
-Another look at the model expression is going to be of help
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "fragment"} -->
@@ -868,25 +842,43 @@ $$
 $$
 <!-- #endregion -->
 
+Lets be sure we really. What's behind a number? In other words, what does that number mean? In the modern AI/ML world often times these fitted values are forgotten but that won't be the case in this course. In regression these have
+
+Another look at the model expression is going to be of help.
+
+This is exactly the missing part in our interpretation of the parameters in the model. For example, what does it mean to say the posterior mean of $\beta_0$ is 397?
+
+
+
+
+## Comparing two possible mean weights
+
+
+### Empirical Mean
+$$
+\text{Weight}_i = \beta_0
+$$
+
+```python slideshow={"slide_type": "fragment"}
+empirical_mean = round(data["Weight"].mean(), 2)
+empirical_mean
+```
+
+### Bayesian Mean
+$$
+\text{Weight}_i = \beta_0 + \varepsilon_i
+$$
+
+```python slideshow={"slide_type": "-"}
+round(idata.posterior["β0"].to_numpy().mean(), 2)
+```
+
 <!-- #region slideshow={"slide_type": "notes"} -->
 So if the respose is weight (measured in grams) and $\beta_0$ is the constant value that is mapped to the weight... well, $\beta_0$ must represent a weight! 
 
 The math of the model says it predicts the same weight, $\beta_0$, for all fish. 
 
 Let's compare the posterior of $\beta_0$ with the mean weight, to see if we can conclude something.
-<!-- #endregion -->
-
-```python slideshow={"slide_type": "fragment"}
-print(round(data["Weight"].mean(), 2))
-```
-
-```python slideshow={"slide_type": "-"}
-print(round(idata.posterior["β0"].to_numpy().mean(), 2))
-```
-
-<!-- #region slideshow={"slide_type": "fragment"} -->
-* It's not coincidence that the posterior mean of the intercept is so close to the mean weight
-* The intercept-only model uses the sample mean plus prior smoothing to predict the weight
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
@@ -897,8 +889,17 @@ If we don't have any other information, using the mean of the response is a reas
 In our problem, where fish weight is not always close to the mean, this implies a very high uncertainty. This is reflected in the estimated $\sigma$, which is quite high compared to $\beta_0$.
 <!-- #endregion -->
 
+## Plotting them together
+
+```python
+fig, ax = plt.subplots(figsize=(12, 8))
+az.plot_posterior(idata, var_names="β0", ax=ax)
+ax.axvline(empirical_mean, c="C1", label="Empirical Mean")
+ax.legend()
+```
+
 <!-- #region slideshow={"slide_type": "slide"} -->
-### Visualize the fitted curve
+## Visualize the fitted curve
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
@@ -916,7 +917,7 @@ Now we overlay the model estimate...
 <!-- #endregion -->
 
 <!-- #region hide_input=true slideshow={"slide_type": "slide"} -->
-### Visualize the fitted curve
+## Visualize the fitted curve
 <!-- #endregion -->
 
 ```python hide_input=true slideshow={"slide_type": "fragment"}
@@ -959,17 +960,14 @@ The curve is completely flat because the model ignores what we know about the re
 ### Section Recap
 
 * Straight lines are powerful building blocks for statistical modeling
-* Parameters in the linear function have an interpretable meaning
-    * In this special case the parameter equivalent to the average
-    * They are important to understand what the model wants to tell
-    * Expertise comes with practice!
-* Uncertainty quantification for free. Going Bayesian is great!
-    * Even for as things as simple as the mean
 * The simplest linear regression model we can build is a flat line.
     * It omits all the information from any available predictor
     * It assigns the same weight for all the fish
     * It is known as the intercept only model
-* We discovered the learned intercept is equal to the mean response
+* Parameters in the linear function have an interpretable meaning
+    * We discovered the learned intercept is equal to the mean response
+* In Bayesian Regression we get uncertainty quantification for free
+    * Even for as things as simple as the mean
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
