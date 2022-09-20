@@ -809,13 +809,12 @@ az.summary(idata, round_to=2, kind="stats")
 
 <!-- #region slideshow={"slide_type": "notes"} -->
 How do we interpret these results?
-
 First of all, the uncertainty around $\beta_0$ and $\sigma$ is low if we compare their respective standard deviations with their respective means. That's the good part!
 
-On the other hand, if we compare $\sigma$ with the usual weights, we can conclude $\sigma$ is quite high. This will be translated into high uncertainty in the prediction of weight for new fish. 
+From a Bayesian model we get two results. The posterior estimate of the mean with $\beta_0$, but also the posterior estimate of individual fish observations
 
-Ideally, we would like $\sigma$ to be as low as possible, so we are more certain about the predictions of the model.
-Now it's time to double-click on the posterior of $\beta_0$ and $\sigma$.
+$\sigma$ with the usual weights, we can conclude $\sigma$ is quite high. This will be translated into high uncertainty in the prediction of weight for new fish. 
+
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "skip"} -->
@@ -832,31 +831,12 @@ Now it's time to double-click on the posterior of $\beta_0$ and $\sigma$.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## Analyze the posterior: making it meaningful
+## Just the empirical Mean
 
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "fragment"} -->
 $$
-\text{Weight}_i = \beta_0 + \varepsilon_i
-$$
-<!-- #endregion -->
-
-Lets be sure we really. What's behind a number? In other words, what does that number mean? In the modern AI/ML world often times these fitted values are forgotten but that won't be the case in this course. In regression these have
-
-Another look at the model expression is going to be of help.
-
-This is exactly the missing part in our interpretation of the parameters in the model. For example, what does it mean to say the posterior mean of $\beta_0$ is 397?
-
-
-
-
-## Comparing two possible mean weights
-
-
-### Empirical Mean
-$$
-\text{Weight}_i = \beta_0
+\text{Weight} = \beta_0
 $$
 
 ```python slideshow={"slide_type": "fragment"}
@@ -864,13 +844,28 @@ empirical_mean = round(data["Weight"].mean(), 2)
 empirical_mean
 ```
 
-### Bayesian Mean
+```python
+fig, ax = plt.subplots(figsize=(12, 8))
+ax.set_xlim(333, 460)
+ax.axvline(empirical_mean, c="C1", label="Empirical Mean")
+ax.legend();
+```
+
+If we ignore our Bayesian analysis for a second and just look at the mean this is what we get. Just a single point estimate for our sample. 
+
+
+## Bayesian Mean
+
+
 $$
 \text{Weight}_i = \beta_0 + \varepsilon_i
 $$
 
-```python slideshow={"slide_type": "-"}
-round(idata.posterior["β0"].to_numpy().mean(), 2)
+```python
+fig, ax = plt.subplots(figsize=(12, 8))
+az.plot_posterior(idata, var_names="β0", ax=ax)
+ax.axvline(empirical_mean, c="C1", label="Empirical Mean")
+ax.legend()
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
@@ -879,24 +874,39 @@ So if the respose is weight (measured in grams) and $\beta_0$ is the constant va
 The math of the model says it predicts the same weight, $\beta_0$, for all fish. 
 
 Let's compare the posterior of $\beta_0$ with the mean weight, to see if we can conclude something.
-<!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "notes"} -->
 Without any other relevant information, the linear model uses the mean of the response as the prediction for the response for all observations.
 
 If we don't have any other information, using the mean of the response is a reasonable choice. 
 
-In our problem, where fish weight is not always close to the mean, this implies a very high uncertainty. This is reflected in the estimated $\sigma$, which is quite high compared to $\beta_0$.
+
+
 <!-- #endregion -->
 
-## Plotting them together
+```python
+with model:
+    ppc = pm.sample_posterior_predictive(idata)
+```
+
+## Mean Uncertainty vs individual observation uncertainty
 
 ```python
 fig, ax = plt.subplots(figsize=(12, 8))
 az.plot_posterior(idata, var_names="β0", ax=ax)
 ax.axvline(empirical_mean, c="C1", label="Empirical Mean")
+az.plot_dist(ppc.posterior_predictive["weight"])
 ax.legend()
 ```
+
+<!-- #region -->
+In our problem, where fish weight is not always close to the mean, this implies a very high uncertainty. This is reflected in the estimated $\sigma$, which is quite high compared to $\beta_0$.
+
+
+**Note to Tomas**
+My concern here is that this statement doesn't make too much sense if people don't know the difference in \sigma
+
+I'm not sure if we should include this plot but adding it here for discussion. I feel this also would be the right place to talk about "how do we intrepret parameters" as we can say "beta and beta sd tell us the uncertainty for a bucketload of fish" "\sigma and \sigma sd, give us uncertainty for each individual observation" but again I don't know if thats too much detail
+<!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## Visualize the fitted curve
