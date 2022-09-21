@@ -6,14 +6,14 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.14.1
+      jupytext_version: 1.13.8
   kernelspec:
     display_name: Python 3 (ipykernel)
     language: python
     name: python3
 ---
 
-<!-- #region slideshow={"slide_type": "slide"} -->
+<!-- #region slideshow={"slide_type": "slide"} hide_input=true -->
 # Bayesian Regression Refresher
 <!-- #endregion -->
 
@@ -28,10 +28,6 @@ import seaborn as sns
 
 from matplotlib.lines import Line2D
 from matplotlib.patches import  FancyArrowPatch
-```
-
-```python
-mpl.get_configdir()
 ```
 
 ```python slideshow={"slide_type": "skip"}
@@ -79,11 +75,9 @@ When we ship our products, there is a very important piece of information we nee
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-Surprise, We thought it would be nice to reveal just a little bit of the model we'll have built by the end of this lesson. 
+Surprise! We thought it would be nice to reveal just a little bit of the model we'll have built by the end of this lesson. 
 
-We're really happy if you are amazed by how beautiful a regression plot can be since we make it with lots of love!
-
-This chart shows the relationship between fish length and weight, for each species. On top of that, there are the estimated regression curves, properly accounting for uncertainty using the whole posterior.
+This chart, which was made with lots of love, shows the relationship between fish length and weight, for each species. On top of that, there are the estimated regression curves, properly accounting for uncertainty using the whole posterior.
 
 But if you're too surprised about what we are seeing because it looks so confusing, it may indicate that you could take the Introductory Course before moving forward with Advanced Regression. This lesson is meant to be a review and complement to what was already covered there and most of the content should look familiar already.
 <!-- #endregion -->
@@ -181,10 +175,12 @@ We start a challenging adventure. We want to fit a linear regression model to pr
 ** insert image **
 <!-- #endregion -->
 
+<!-- #region slideshow={"slide_type": "notes"} -->
 But, how do we know we can fit a linear model to a dataset? Well, some may say won't ask that question and will blindly fit models to data.
 
 And while that's a valid approach that may end up working sometimes, we know we can do something smarter.
 
+<!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## You need to look at the data
@@ -233,10 +229,6 @@ Great! We now have the data loaded. We see we have 159 observations and 7 variab
 </center>
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "skip"} -->
-
-<!-- #endregion -->
-
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## Deeper dive
 <!-- #endregion -->
@@ -262,18 +254,16 @@ data.describe().round(2)
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-The next step is to compute some basic summaries. We can get started with the numeric variables in the dataset. These simple aggregations are very powerful and give us quick and valuable information.
+The next step is to compute some basic summaries. We can get started with the numeric variables in the dataset. These simple aggregations are very powerful and give us quick and valuable information. For example:
 
-Shoot! Have a look at the summary table. Can you spot any unexpected result? 
-
-The minimum weight is zero (!). Have you ever seen anything on earth that weighs exactly zero? I haven't been that lucky, so it must be an error. Maybe the fish was too small for the scale to notice it, or there was a mistake somehow during data collection. For the lesson purposes is safe to ignore that record so we simply discard it.
-
-The table contains lots of information and it allows to draw many more conclusions, for example:
-
-* Fish weight ranges from very close to 0, goes up to 1650 grams, and averages 400 grams. We can conclude we're working with small to medium sized fish.
+* Fish weight ranges from 0, goes up to 1650 grams, and averages 400 grams. We can conclude we're working with small to medium sized fish.
 * Weight variability is quite high. Its standard deviation is quite close to the mean. In other words, fish are quite different in terms of weight.
 
-Let's discard the record with the wrong weight measurement and recompute the minimum weight so we have more accurate information.
+Shoot! Have a look at the summary table again. Can you spot any unexpected result? 
+
+The minimum weight is zero (!). Have you ever seen anything on earth that weighs exactly zero? I haven't been that lucky, so it must be an error. Maybe the fish was too small for the scale to notice it, or there was a mistake somehow during data collection. 
+
+For the lesson purposes is safe to ignore that record so we simply discard it.
 <!-- #endregion -->
 
 ```python slideshow={"slide_type": "fragment"}
@@ -282,7 +272,7 @@ print(data["Weight"].min())
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-It turns out that the smallest fish weights only 5.9 grams!
+It turns out that the smallest fish weights only 5.9 grams.
 
 It feels a bit weird to have three columns for the length of the fish. These probably encode the same information so there's no point in keeping all of them. Let's explore the correlation among them to see if we can confirm our intuition.
 <!-- #endregion -->
@@ -313,7 +303,7 @@ data.head()
 We drop the extra columns to make this tidy and remove the correlated columns
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "slide"} -->
+<!-- #region slideshow={"slide_type": "slide"} hide_input=true -->
 ## How frequent species are?
 <!-- #endregion -->
 
@@ -325,20 +315,16 @@ fig, ax = plt.subplots(figsize=(14, 7))
 color = [f"C{i}" for i in range(len(species_n))]
 ax.bar(species_n.index, species_n, color=color)
 for i, n in enumerate(species_n):
-    ax.text(i, n + 0.5, str(n), ha="center", va="bottom")
+    ax.text(i, n + 0.5, str(n), size=16, ha="center", va="bottom")
 ax.set(xlabel="Species", ylabel="Number of fish", title="Number of fish by species");
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-We have gained lots of insights so far and that's aswesome. But we're still missing key part: the species. What do we know about it? 
+We have gained lots of insights so far and that's aswesome. But we're still missing key part: the species. It's time to show off our data visualization skills!
 
-We can get started by exploring the number of records we have for each species.
+We can get started by exploring the number of records we have for each species using a nice chart.
 
-It's time to show off our data visualization skills!
-
-Who said doing data exploration needs to be painful and boring?
-
-Let's get analytical now. What information can we extract from this plot? Well, the number of records per species varies a lot. Perch is, by far, the most common species, and Bream is the second. Other species, appear less frequently. Perkki and Whitefish are the most extreme cases with 11 and 6 records only.
+The first thing we notice is the height of the bars are quite different. This means the number of records per species varies a lot. The most common species is (by far) Perch and it shows 56 records. Other species appear less frequently. Perkki and Whitefish are the most extreme cases with 11 and 6 records only.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -368,7 +354,7 @@ In this table view, we see the top-two species together make up around 60% of th
 <!-- #endregion -->
 
 ```python hide_input=true slideshow={"slide_type": "fragment"}
-fig, ax = plt.subplots(figsize=(8, 6))
+fig, ax = plt.subplots(figsize=(14, 7))
 ax.hist(data["Weight"], ec="C0", alpha=0.85, bins=30)
 ax.set(xlabel="Weight (grams)", ylabel="Count", title="Distribution of fish weight");
 ```
@@ -377,6 +363,10 @@ ax.set(xlabel="Weight (grams)", ylabel="Count", title="Distribution of fish weig
 We already got some insights about the weight. For example, we know the average fish weighs 400 grams. But that doesn't mean that 400 grams is a good number to represent all the fish! 
 
 Also, we're Bayesians and we love distributions. So why don't just see the entire the distribution of all the weights?
+
+Here we see taller bins for lower weights and shorter ones for higher weights. In other words, smaller weights are more common. 
+
+As you may recall from the Introductory Course, when a distribution has this shape it is said it is a right-skewed distribution (because it has a long tail on the right side). So the distribution of weights is right-skewed.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -389,12 +379,13 @@ quantile = data["Weight"].quantile(percentage)
 text_y = 28
 text_x_pad = 10
 
-fig, ax = plt.subplots(figsize=(8, 6))
+fig, ax = plt.subplots(figsize=(14, 7))
 ax.hist(data["Weight"], ec="C0", alpha=0.85, bins=30)
 ax.text(
     quantile + text_x_pad, 
     text_y, 
-    f"{round(quantile)}gm ({round(percentage * 100)}% percentile)", 
+    f"{round(quantile)}gm ({round(percentage * 100)}% percentile)",
+    size=14,
     va="top", 
     ha="left"
 )
@@ -403,11 +394,9 @@ ax.set(xlabel="Weight (grams)", ylabel="Count", title="Distribution of fish weig
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-And that's not all! We can overlay the plot with more layers of information. For example, we can add percentiles on top of it to gain an even better understanding. 
+And that's not all! We can also add extra layers of information. For example, we can visualize percentiles on top of the distribution to get richer insights.
  
-It's way more informative! As we've seen before, we can confirm the fish weight varies a lot. But this is much better. For example, we can see the dataset contains mostly small fish. 80% of the fish weigh 700 grams or less! In other words, we could say 8 out of 10 fish in the data weigh 700 grams or less.
-
-We also see most observations are concentrated around low weights and fewer observations show higher weights. As you may recall from the introductory course, when a distribution has this shape it is said it is a right-skewed distribution (because it has a long tail on the right side).
+We overlay the 80% percentile and it confirms with numbers what we've been seeing so far: the dataset contains mostly small fish. 8 out of 10 fish in the data weigh 700 grams or less!
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -418,13 +407,13 @@ We also see most observations are concentrated around low weights and fewer obse
 plot_data = data.groupby("Species")["Weight"].describe()
 species_list = data["Species"].unique()
 
-fig, ax = plt.subplots(figsize=(8, 6))
+fig, ax = plt.subplots(figsize=(14, 7))
 
 for i, species in enumerate(species_list):
     row = plot_data.loc[species]
-    ax.scatter(row["50%"], i, s=80)
-    ax.hlines(i, xmin=row["25%"], xmax=row["75%"], lw=4.2, color=f"C{i}")
-    ax.hlines(i, xmin=row["min"], xmax=row["max"], lw=3, color=f"C{i}")
+    ax.scatter(row["50%"], i, s=100)
+    ax.hlines(i, xmin=row["25%"], xmax=row["75%"], lw=5.2, color=f"C{i}")
+    ax.hlines(i, xmin=row["min"], xmax=row["max"], lw=3.2, color=f"C{i}")
     ax.text(1750, i, f"n={round(row['count'])}", ha="left")
 
 ax.set_yticks(np.arange(i + 1), species_list)
@@ -432,17 +421,22 @@ ax.set(xlabel="Weight (grams)", ylabel="Species", title="Fish weight by species"
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-We can ask another related question: Is the weight of the fish related to the species? In a more intuitive way, does knowing the species help us make a better guess of the fish weight? 
+There's a related question we need to ask: Is the weight of the fish related to the species? In a more intuitive way, does knowing the species help us make a better guess of the fish weight? 
 
-Our intuition and experience suggest so. But, we have data, right?
+Our intuition and experience suggest so. But, we have data, right? So let's use it!
+
+**Note:** Highlight as we describe each of the components
+
 * How to read the chart
     * The dot represents the median weight
     * The thicker line represents 25% and 75% percentiles
     * The thinner line represents the minimum and the maximum values
 
-As we expected, the distribution of the weight varies from species to species. Some species are similar (see Whitefish and Bream) and some others are waaay different (see Pike and Smelt). The spread of these distributions are different as well. For example, Parkki fish have very similar weights, while Bream varies a lot more.
+As we expected, weight varies from species to species. Some species are similar (see Whitefish and Bream) and some others are waaay different (see Pike and Smelt). The spread of these distributions are different as well. For example, Parkki fish have very similar weights, while Bream varies a lot more.
 
-The **main takeaway** is that species is something we need to consider seriously when building our regression model. We expect to adjust weight predictions based on the species. If the model says weight is not associated with fish species, we'll need to double check the model because it's being inconsistent with what we've just found. Do you see it now? This is what EDA is made for!
+The **main takeaway** is that the species is something we need to really consider when building our regression model. We expect to adjust weight predictions based on the species. If a model predicts the same weight for all fish no matter the species, well, that's a red flag! It's inconsistent with what we've just found.
+
+So great to have this figured out! Thanks very much EDA!
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -450,11 +444,11 @@ The **main takeaway** is that species is something we need to consider seriously
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-We've been doing an intensive exploration so far. It's been exciting and insightful! Now we are in a much better position to start building our model. We're more informed about the weight of the fish and how it varies from species to species. That's awesome! 
+We've been doing an intensive exploration so far. It's been exciting and insightful! Now we are in a much better position to start building our model. We know much more about the weight of the fish and how it varies from species to species. That's awesome!
 
-We're missing only one last piece to finish the job, and we'll get it done right now. We have information about several other charactersitics of the fish like the length, height, and width. Our intuition suggests longer, taller, and wider fish weigh more. That's pretty reasonable form a biological perspective (we could also use our culinary experience here!)
+On top of that, we have information about several other charactersitics of the fish like the length, height, and width. If we had to guess we would say longer, taller, and wider fish weigh more, right? That's pretty reasonable form a biological (and why not, culinary) perspective.
 
-But we are data people and we prefer facts over guessing. Let's see what the data says!
+But we have data, folks! Let's use it!
 <!-- #endregion -->
 
 ```python hide_input=false slideshow={"slide_type": "fragment"}
@@ -462,11 +456,13 @@ sns.pairplot(data, vars=["Length1", "Height", "Width", "Weight"], diag_kws={"bin
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-As expected, all the variables are positively associated. Larger values of one variable are associated with larger values of the other. For example, longer fish are usually taller, wider, and heavier.
+The chart confirm our guess was right. All the variables are positively associated. Larger values of one variable are associated with larger values of the other. For example, longer fish are usually taller, wider, and heavier.
 
 There's a another very interesting finding here. Some relationships are linear, while others are not. For example, Height and Width show a linear pattern, but Height and Weight don't.
 
-What's even more curious is there seems to be clouds of points that are well separated from each other. What can this be? Let's explore a little more!
+What's even more curious is there seems to be clouds of points that are very well separated from each other. What can this be? Let's double-click on it!
+
+**Note:** Highlight individual scatterplots when saying "Height and Width" and "Height and Weight". Even better, draw a straight and a curved line on each.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -477,6 +473,13 @@ What's even more curious is there seems to be clouds of points that are well sep
 sns.pairplot(data, vars=["Length1", "Height", "Width", "Weight"], hue="Species");
 ```
 
+<!-- #region slideshow={"slide_type": "notes"} -->
+Bingo! Once we map the species to the color of the dots we see clusters with dots of the same color. How can we read it? Length, height, and width are quite informative about the weight of the fish. But, on top of that, knowing the species adds even more information!
+
+This is so exciting! We started from nothing and after all this work we have so much information about our data! I cannot wait until we start using all of this in our model!
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "slide"} -->
 ## Section Recap
 * Exploratory Data Analysis is recommended essential
     * Proper EDA  is what separates mediocre data practitioners and data scientist from great ones
@@ -485,11 +488,6 @@ sns.pairplot(data, vars=["Length1", "Height", "Width", "Weight"], hue="Species")
     * Longer fish weigh more
     * Noted a non-linear patterns.
     * Species is an important feature we'll need to consider 
-
-<!-- #region slideshow={"slide_type": "notes"} -->
-Bingo! Once we map the species to the color of the dots we see clusters with dots of the same color. How can we read it? Length, height, and width are quite informative about the weight of the fish. But, on top of that, knowing the species adds even more information!
-
-This is so exciting! We started from nothing and after all this work we have so much information about our data! I cannot wait until we start using all of this in our model!
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -497,20 +495,21 @@ This is so exciting! We started from nothing and after all this work we have so 
 Higher probability of a good modeling results when we use informed priors 
 <!-- #endregion -->
 
+<!-- #region slideshow={"slide_type": "slide"} -->
 ## Planning takes thought
 
-
+<!-- #endregion -->
 
 <center>
   <img src="imgs/PeopleMakingAPlan.jpg" />
 </center>
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-In this case our EDA informed our priors about how make a Bayesian model
+In this case our EDA informed our priors about how make a Bayesian model.
 
 We already extracted lots of information about the fish. This puts us in a much better position to start modeling. We're quite well informed to judge if model inferences make sense or not. That's the power of Exploratory Data Analysis!
 
-we have one last job to do: we're making a plan! We want to trace a path that we're going to follow when developing our Bayesian Regression model.
+We have one last job to do: we're making a plan! We want to trace a path that we're going to follow when developing our Bayesian Regression model.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -520,7 +519,7 @@ No predictors. Just weight information
 <!-- #endregion -->
 
 ```python hide_input=true slideshow={"slide_type": "fragment"}
-fig, ax = plt.subplots(figsize=(8, 6))
+fig, ax = plt.subplots(figsize=(14, 7))
 ax.hist(data["Weight"], ec="C0", alpha=0.85, bins=30)
 ax.set(xlabel="Weight (grams)", ylabel="Count", title="Distribution of fish weight");
 ```
@@ -536,13 +535,13 @@ Use fish length to predict weight
 <!-- #endregion -->
 
 ```python hide_input=true slideshow={"slide_type": "fragment"}
-fig, ax = plt.subplots(figsize=(8, 6))
+fig, ax = plt.subplots(figsize=(14, 7))
 ax.scatter(x=data["Length1"], y=data["Weight"], alpha=0.6)
 ax.set(xlabel="Length (centimeters)", ylabel="Weight (grams)", title="Fish length vs weight");
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-But... don't we know much more about the fish?!
+Don't we know much more about the fish?!
 
 Of course, yes! That's our next step: adding predictors. We'll first add the fish length. We can anticipate this will give us a much richer model, which now can see how long fish are and use it to predict weight. Following our graphical story, this is equivalent to having access to the following scatterplot. Here we can see the length of the fish gives us valuable information about the weight.
 <!-- #endregion -->
@@ -560,7 +559,7 @@ handles = [
     for i, s in enumerate(species)
 ]
 
-fig, ax = plt.subplots(figsize=(8, 6))
+fig, ax = plt.subplots(figsize=(14, 7))
 fig.subplots_adjust(right=0.8)
 ax.scatter(
     x=data["Length1"], 
@@ -578,23 +577,22 @@ ax.legend(
 );
 ```
 
-## This is just the Bayesian Workflow
+<!-- #region slideshow={"slide_type": "notes"} -->
+And if you're wondering about the species we mentioned so many times, that's what's coming next! We'll be adding the species as a predictor in our model. As we can see in the following chart, we expect it to add even more information on top of what the fish length already gives. 
 
+Finally, we'll see how we can incorporate the other fish measurements into the model. Our exploration suggests that not only the length is informative of the fish weight. We also have width and height, right? We'll cover how to add them very close to the end of the lesson.
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "slide"} -->
+## This is just the Bayesian Workflow
+<!-- #endregion -->
 
 <center>
   <img src="imgs/Bayesian_workflow.png" style="height:700px" />
 </center>
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-And if you're wondering about the species we mentioned so many times, that's what's coming next! We'll be adding the species as a predictor in our model. As we can see in the following chart, we expect it to add even more information on top of what the fish length already gives. 
-
-Finally, we'll see how we can incorporate the other fish measurements into the model. Our exploration suggests that not only the length is informative of the fish weight. We also have width and height, right? We'll cover how to add them very close to the end of the lesson.
-
-It's been a very intense exploration. But it's been worth it! After this much work, we were able to provide ourselves with so many resources that make us feel much more confident about the modeling work that comes next.
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "notes"} -->
-Were following a simplified version of the Bayesian workflow, which is a structured series of steps to achieve consciouisly achieve a great modeling result. From experience we can tell you this works better than a "random search" You'll see this many times in throughout the course,
+We're following a simplified version of the Bayesian workflow, which is a structured series of steps to achieve consciouisly achieve a great modeling result. From experience we can tell you this works better than a "random search" You'll see this many times in throughout the course,
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -607,6 +605,10 @@ Were following a simplified version of the Bayesian workflow, which is a structu
   * No covariate regression e.g. No predictors
   * Single covariate
   * Single covariate with categorical (@tomas to come up with something)
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "notes"} -->
+It's been a very intense exploration. But it's been worth it! After this much work, we were able to provide ourselves with so many resources that make us feel much more confident about the modeling work that comes next.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -807,16 +809,6 @@ Both posteriors have a bell shape, and the estimates from all chains are quite s
 az.summary(idata, round_to=2, kind="stats")
 ```
 
-<!-- #region slideshow={"slide_type": "notes"} -->
-How do we interpret these results?
-First of all, the uncertainty around $\beta_0$ and $\sigma$ is low if we compare their respective standard deviations with their respective means. That's the good part!
-
-From a Bayesian model we get two results. The posterior estimate of the mean with $\beta_0$, but also the posterior estimate of individual fish observations
-
-$\sigma$ with the usual weights, we can conclude $\sigma$ is quite high. This will be translated into high uncertainty in the prediction of weight for new fish. 
-
-<!-- #endregion -->
-
 <!-- #region slideshow={"slide_type": "skip"} -->
 `az.summary()` is the way to go if we want to obtain a quick summary of the posterior. The argument `kind="stats"` indicates we only want statistical summaries from the posterior and not sampling diagnostics.
 
@@ -828,6 +820,16 @@ $\sigma$ with the usual weights, we can conclude $\sigma$ is quite high. This wi
 * It's not all happiness though
     * $\sigma$ is quite high
     * There will be high uncertainty in predictions
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "notes"} -->
+How do we interpret these results?
+First of all, the uncertainty around $\beta_0$ and $\sigma$ is low if we compare their respective standard deviations with their respective means. That's the good part!
+
+From a Bayesian model we get two results. The posterior estimate of the mean with $\beta_0$, but also the posterior estimate of individual fish observations
+
+$\sigma$ with the usual weights, we can conclude $\sigma$ is quite high. This will be translated into high uncertainty in the prediction of weight for new fish. 
+
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -868,21 +870,6 @@ ax.axvline(empirical_mean, c="C1", label="Empirical Mean")
 ax.legend()
 ```
 
-<!-- #region slideshow={"slide_type": "notes"} -->
-So if the respose is weight (measured in grams) and $\beta_0$ is the constant value that is mapped to the weight... well, $\beta_0$ must represent a weight! 
-
-The math of the model says it predicts the same weight, $\beta_0$, for all fish. 
-
-Let's compare the posterior of $\beta_0$ with the mean weight, to see if we can conclude something.
-
-Without any other relevant information, the linear model uses the mean of the response as the prediction for the response for all observations.
-
-If we don't have any other information, using the mean of the response is a reasonable choice. 
-
-
-
-<!-- #endregion -->
-
 ```python
 with model:
     ppc = pm.sample_posterior_predictive(idata)
@@ -906,6 +893,21 @@ In our problem, where fish weight is not always close to the mean, this implies 
 My concern here is that this statement doesn't make too much sense if people don't know the difference in \sigma
 
 I'm not sure if we should include this plot but adding it here for discussion. I feel this also would be the right place to talk about "how do we intrepret parameters" as we can say "beta and beta sd tell us the uncertainty for a bucketload of fish" "\sigma and \sigma sd, give us uncertainty for each individual observation" but again I don't know if thats too much detail
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "notes"} -->
+So if the respose is weight (measured in grams) and $\beta_0$ is the constant value that is mapped to the weight... well, $\beta_0$ must represent a weight! 
+
+The math of the model says it predicts the same weight, $\beta_0$, for all fish. 
+
+Let's compare the posterior of $\beta_0$ with the mean weight, to see if we can conclude something.
+
+Without any other relevant information, the linear model uses the mean of the response as the prediction for the response for all observations.
+
+If we don't have any other information, using the mean of the response is a reasonable choice. 
+
+
+
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
