@@ -353,7 +353,7 @@ In this table view, we see the top-two species together make up around 60% of th
 ## How much do fish weigh?
 <!-- #endregion -->
 
-```python hide_input=true slideshow={"slide_type": "fragment"}
+```python hide_input=true slideshow={"slide_type": "-"}
 fig, ax = plt.subplots(figsize=(14, 7))
 ax.hist(data["Weight"], ec="C0", alpha=0.85, bins=30)
 ax.set(xlabel="Weight (grams)", ylabel="Count", title="Distribution of fish weight");
@@ -403,7 +403,7 @@ We overlay the 80% percentile and it confirms with numbers what we've been seein
 ## How does weight vary from species to species?
 <!-- #endregion -->
 
-```python hide_input=true slideshow={"slide_type": "fragment"}
+```python hide_input=true slideshow={"slide_type": "-"}
 plot_data = data.groupby("Species")["Weight"].describe()
 species_list = data["Species"].unique()
 
@@ -612,14 +612,16 @@ It's been a very intense exploration. But it's been worth it! After this much wo
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## The world's simplest model
-Also called average regression
+# The world's simplest model
+Also known as average regression
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
 The moment we've been waiting for has come. Finally, it's time to start modeling! 
 
-But as with many things in life, we need to walk before we can run. This is to make sure we don't stumble once we run. So now we start very simple. So simple we decided to name this model as "The world's simplest model".
+But as with many things in life, we need to walk before we can run. This is to make sure we don't stumble once things get more complex and fun. 
+
+So now we start very simple. So simple we decided to name this model as "The world's simplest model".
 
 In this section we'll cover the following points:
 <!-- #endregion -->
@@ -631,26 +633,8 @@ In this section we'll cover the following points:
 * Analysis of the results
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "skip"} -->
-### The intuition
-
-* This model ignores all information about the fish, except their weight
-* It's the opposite of the most complex approach
-    * Instead of using all the information, omit as much as possible
-* For this model, all fish are the same.
-    * It does not have access to any information that allows to differentiate them 
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "skip"} -->
-How can we be sure we're about to build the simplest linear model? Well, listen to this: it turns out the model we are going to build to predict the weight of the fish ignores all other information about fish. It sounds crazy, doesn't it? We've just seen so many interesting relationships between measurements of the fish and its weight and we're just about to ignore it all! You got to be kidding you may say. Well, that's true only for the rest of this section. More complex stuff is awaiting us later!
-
-If it's hard to understand why ignoring all the information is the simplest approach, we can try to see it from a different angle as well. Let's say we wanted to build the most complex model from the data we have. As we can imagine, that model would use all the fish measurements in a very clever and complicated way so it can extract as much information as possible about the fish (sounds exciting and intimidating!)
-
-If simplicity is the opposite of complexity, and the most complex model uses all the features in a fancy way, then the world's simplest linear model needs to omit as much information as possible. How much can be that much? Well, we mean it, we can omit all! In other words, the world's simplest linear model ignores so much information about fish that it doesn't use any. 
-<!-- #endregion -->
-
 <!-- #region slideshow={"slide_type": "slide"} -->
-## The simplest Idea
+## The simplest idea ever
 <!-- #endregion -->
 
 All fish weigh the same
@@ -664,16 +648,9 @@ $$
 $$
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-Time to fasten our seatbelts, we don't want anyone to get hurt in this section... Just kidding! We're more than prepared to face our first math challenge. Let's go!
-* The world's simplset model, uses the simplest math in the world
+Nobody has gone crazy here. The model we're going to build in this section is that simple. It sees the fish as if they all weigh the same. 
 
-The math formulation of the model expresses the response variable, Weight, as the result of a mathematical expression. This expression can be either very simple or complex. The world's simplest model... hmm well, has the world's simplest expression!
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "notes"} -->
-The math of our model says "Weight is equal to a constant value". The subscript $i$ represents (or indexes) each one of the fish. So, $\text{Weight}_1$ is the weight of the first fish, $\text{Weight}_2$, and so on.
-
-From the model perspective, all fish are equal. Equal how? Equal in terms of weight, which is the only attribute the model knows about the fish. Since we don't feed it with any other information, it can't distinguish one from the other. Thus, it has no choice but to predict the weight of all fish with the same value.
+In math, the simplest idea is translated into $\text{Weight}_i = \text{Constant value}$. This is simply the mathematical way to say that all fish, indexed by $i$, weight the same (thus the "Constant value").
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -723,12 +700,6 @@ Finally, $\sigma_{\beta_0}$ and $\sigma_\varepsilon$. These are the parameters o
 ## A fully Bayesian approach
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "notes"} -->
-If Weight is equal to a constant term plus a random variable, then Weight is also a random variable, right? Random plus constant equals to random. And how do we realize it's Normal? It's because the Normal distribution has so many good properties. Adding a constant term to a variable that follows a Normal distribution simply shifts the mean of the distribtuion. In this case, $0 + \beta_0 = \beta_0$ and so the mean of the new Normal distribution is $\beta_0$.
-
-All in all, this allow us to write the model above just as
-<!-- #endregion -->
-
 <!-- #region slideshow={"slide_type": "fragment"} -->
 ### Condensed Math
 $$
@@ -740,16 +711,8 @@ $$
 $$
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "skip"} -->
-This is very popular in Bayesian statistics and you'll find it everywhere.
-<!-- #endregion -->
-
 <!-- #region slideshow={"slide_type": "fragment"} -->
 ### The PyMC Code
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "skip"} -->
-Now we use PyMC to build our model. One of the features that distinguish PyMC is its expressiveness. It allows us to map the statistical formulation of the model into very clear and concise Python code. This is how it looks like:
 <!-- #endregion -->
 
 ```python slideshow={"slide_type": "-"}
@@ -759,8 +722,10 @@ with pm.Model() as model:
     pm.Normal("weight", mu=β0, sigma=sigma, observed=data["Weight"])
 ```
 
-<!-- #region slideshow={"slide_type": "skip"} -->
-If we have a second look at the math, we can see PyMC maps the stats to Python code straightforwardly. It's so neat!
+<!-- #region slideshow={"slide_type": "notes"} -->
+The condensed and distributional representation is very common in Bayesian statistics. It summarises both the information of the priors and the likelihood. It makes it very clear that this model uses a Normal likelihood function since Normal is the distribution chosen for the Weight.
+
+Then, we use PyMC to build our model. One of the features that distinguish PyMC is its expressiveness. It allows us to map the statistical formulation of the model into very clear and concise Python code. It's so neat!
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -772,17 +737,13 @@ with model:
     idata = pm.sample(chains=4, random_seed=1234)
 ```
 
-Modern Bayesian inference is really fast. With Markov Chain Monte Carlo, also called MCMC we get samples that approximate the posterior. We won't be discussing details of the sampler in this course, we assume you already know it, though we'll link some resources if you curious.
+<!-- #region slideshow={"slide_type": "notes"} -->
+Modern Bayesian inference is really fast. With Markov Chain Monte Carlo, also called MCMC, we get samples that approximate the posterior. We won't be discussing details of the sampler in this course, we assume you already know it, though we'll link some resources if you curious.
 
-The takeaway is most of the time, especially with linear models, if things are specified correctly sampling and hte data is quick and easy.
+The takeaway is most of the time, especially with linear models, if things are specified correctly sampling and hte data is quick and easy. 
 
-    * It was blazingly fast
-    * No warning or error messages
-
-<!-- #region slideshow={"slide_type": "skip"} -->
-Let's have a look at the traceplots so we have a first look at the posterior and we can analyze the convergence of our MCMC chains.
+It's also great to see there are no warning messages for us.
 <!-- #endregion -->
-
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## Analyze the posterior: MCMC checks
 <!-- #endregion -->
@@ -792,12 +753,13 @@ az.plot_trace(idata, compact=False, backend_kwargs={"tight_layout": True});
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-with MCMC its always a good idea to check your posterior. Let's produce a traceplot to evaluate chain quality.
+With MCMC its always a good idea to check your posterior. Let's produce a traceplot to evaluate chain quality.
 This plot is called a traceplot, what we  look for on the right is the "fuzzy caterpillar"
 
 * Sampling went so good!
 * No evident MCMC convergence issues
 * All chains converged to the same distribution
+
 Both posteriors have a bell shape, and the estimates from all chains are quite similar. The traces are all also very similar and they look very much like white noise, meaning there's no convergence or mixing issues. That's great!
 <!-- #endregion -->
 
@@ -811,121 +773,110 @@ az.summary(idata, round_to=2, kind="stats")
 
 <!-- #region slideshow={"slide_type": "skip"} -->
 `az.summary()` is the way to go if we want to obtain a quick summary of the posterior. The argument `kind="stats"` indicates we only want statistical summaries from the posterior and not sampling diagnostics.
-
-* Extract meaningful information from the model
-
-* $\beta_0$ has a mean of 397 and standard deviation of 20.
-* $\sigma$ has a mean of 252 and a standard deviation of 3.29
-* Their standard deviations are small compared with their mean values. That's good!
-* It's not all happiness though
-    * $\sigma$ is quite high
-    * There will be high uncertainty in predictions
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-How do we interpret these results?
+Let's interpret the results!
+
 First of all, the uncertainty around $\beta_0$ and $\sigma$ is low if we compare their respective standard deviations with their respective means. That's the good part!
 
-From a Bayesian model we get two results. The posterior estimate of the mean with $\beta_0$, but also the posterior estimate of individual fish observations
-
-$\sigma$ with the usual weights, we can conclude $\sigma$ is quite high. This will be translated into high uncertainty in the prediction of weight for new fish. 
-
+But if we also compare $\sigma$ with the usual weights, we can conclude $\sigma$ is quite high. This will be translated into high uncertainty in the prediction of weight for new fish. 
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## Just the empirical Mean
+## The empirical Mean
 
 <!-- #endregion -->
 
-$$
-\text{Weight} = \beta_0
-$$
+Just a single point
 
 ```python slideshow={"slide_type": "fragment"}
 empirical_mean = round(data["Weight"].mean(), 2)
 empirical_mean
 ```
 
-```python
-fig, ax = plt.subplots(figsize=(12, 8))
-ax.set_xlim(333, 460)
+```python hide_input=true
+fig, ax = plt.subplots(figsize=(14, 7))
+ax.set_xlim(315, 485)
 ax.axvline(empirical_mean, c="C1", label="Empirical Mean")
 ax.legend();
 ```
 
-If we ignore our Bayesian analysis for a second and just look at the mean this is what we get. Just a single point estimate for our sample. 
+<!-- #region slideshow={"slide_type": "notes"} -->
+If we ignore our Bayesian analysis for a second and just look at the mean this is what we get. Just a single point estimate for all the fish. No measure of uncertainty.
+<!-- #endregion -->
 
+<!-- #region slideshow={"slide_type": "slide"} -->
+## The Bayesian Mean
+<!-- #endregion -->
 
-## Bayesian Mean
+A whole probability distribution
 
-
-$$
-\text{Weight}_i = \beta_0 + \varepsilon_i
-$$
-
-```python
-fig, ax = plt.subplots(figsize=(12, 8))
+```python hide_input=true
+fig, ax = plt.subplots(figsize=(14, 7))
 az.plot_posterior(idata, var_names="β0", ax=ax)
 ax.axvline(empirical_mean, c="C1", label="Empirical Mean")
-ax.legend()
+ax.set_xlim(315, 485)
+ax.legend();
 ```
+
+<!-- #region slideshow={"slide_type": "notes"} -->
+On the other hand, the Bayesian model provides a whole probability distribution for the mean weight, the posterior of $\beta_0$. This allows us to account for the uncertainty in a principled way.
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Mean Uncertainty vs Individual Observation Uncertainty
+<!-- #endregion -->
 
 ```python
 with model:
-    ppc = pm.sample_posterior_predictive(idata)
+    pm.sample_posterior_predictive(idata, extend_inferencedata=True)
 ```
-
-## Mean Uncertainty vs individual observation uncertainty
-
-```python
-fig, ax = plt.subplots(figsize=(12, 8))
-az.plot_posterior(idata, var_names="β0", ax=ax)
-ax.axvline(empirical_mean, c="C1", label="Empirical Mean")
-az.plot_dist(ppc.posterior_predictive["weight"])
-ax.legend()
-```
-
-<!-- #region -->
-In our problem, where fish weight is not always close to the mean, this implies a very high uncertainty. This is reflected in the estimated $\sigma$, which is quite high compared to $\beta_0$.
-
-
-**Note to Tomas**
-My concern here is that this statement doesn't make too much sense if people don't know the difference in \sigma
-
-I'm not sure if we should include this plot but adding it here for discussion. I feel this also would be the right place to talk about "how do we intrepret parameters" as we can say "beta and beta sd tell us the uncertainty for a bucketload of fish" "\sigma and \sigma sd, give us uncertainty for each individual observation" but again I don't know if thats too much detail
-<!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-So if the respose is weight (measured in grams) and $\beta_0$ is the constant value that is mapped to the weight... well, $\beta_0$ must represent a weight! 
+Does the $\beta_0$ posterior mean the model is confident that all fish weigh between 357 and 433 grams? Nope! $\beta_0$ represents the mean of the weight. So that posterior is a distribution for the mean weight, not the individual weights. 
 
-The math of the model says it predicts the same weight, $\beta_0$, for all fish. 
+From a Bayesian model we get two results. The posterior estimate of the mean with $\beta_0$, but also the posterior estimate of individual fish, which is known as the **posterior predictive distribution**.
 
-Let's compare the posterior of $\beta_0$ with the mean weight, to see if we can conclude something.
-
-Without any other relevant information, the linear model uses the mean of the response as the prediction for the response for all observations.
-
-If we don't have any other information, using the mean of the response is a reasonable choice. 
-
-
-
+PyMC makes it very easier to obtain the posterior predictive distribution and incorporate it into the existing InferenceData object we got when we fitted the model.
 <!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Mean Uncertainty vs Individual Observation Uncertainty
+<!-- #endregion -->
+
+```python slideshow={"slide_type": "-"} hide_input=true
+fig, ax = plt.subplots(figsize=(14, 7))
+ax.axvline(empirical_mean, label="Empirical Mean", color="C1")
+az.plot_posterior(idata, var_names="β0", ax=ax, label="Mean weight posterior", color="C0")
+az.plot_dist(idata.posterior_predictive["weight"], label="Individual weight posterior", color="C6")
+ax.legend();
+```
+
+How does the posterior predictive distribution compares to the posterior of the mean weight? Let's have a look at this chart, which contains lots of information.
+
+We have the the empirical mean and the posterior for the mean weight, which we have already seen. The new distribution is the one we use to predict the weight of an individual fish (i.e. the posterior predictive distribution).
+
+The posterior predictive distribution is also centered around the mean of $\beta_0$, but its uncertainty is larger to account for the fact we're predicting at the individual level.
+
+Wait, holy crap! This is so uncertain it even allows negative values. 
+
+As humans we know negative values are impossible. If we could build a model that by design restricts the output to positive values only, that would be great. You know what? It's possible indeed! But we won't do that now. You'll see that happen in later lessons.
+
+This is not the end of the world either. We're just getting started and this is just evidence suggesting better modeling efforts are needed.
 
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## Visualize the fitted curve
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "notes"} -->
-We can go a step further and visualize what it means in the scatterplot of Length vs Weight. 
-<!-- #endregion -->
-
 ```python hide_input=true slideshow={"slide_type": "fragment"}
-fig, ax = plt.subplots(figsize=(8, 6))
+fig, ax = plt.subplots(figsize=(14, 7))
 ax.scatter(x=data["Length1"], y=data["Weight"], alpha=0.6)
 ax.set(xlabel="Length (centimeters)", ylabel="Weight (grams)", title="Fish length vs weight");
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-Now we overlay the model estimate...
+Before we finish this section, it's good to go a step further and visualize the model on top of the scatterplot of Length vs Weight. This is going to give us a better idea of how the fitted curve looks like.
 <!-- #endregion -->
 
 <!-- #region hide_input=true slideshow={"slide_type": "slide"} -->
@@ -933,7 +884,7 @@ Now we overlay the model estimate...
 <!-- #endregion -->
 
 ```python hide_input=true slideshow={"slide_type": "fragment"}
-fig, ax = plt.subplots(figsize=(8, 6))
+fig, ax = plt.subplots(figsize=(14, 7))
 ax.scatter(x=data["Length1"], y=data["Weight"], alpha=0.6)
 ax.set(xlabel="Length (centimeters)", ylabel="Weight (grams)", title="Fish length vs weight");
 
@@ -952,20 +903,11 @@ ax.legend(handles=handles, loc="upper left");
 ```
 
 <!-- #region slideshow={"slide_type": "skip"} -->
-NOTE: I would like to show both the chart and the bullet points at the same time.
-<!-- #endregion -->
+Surprise! The world's simplest model is a flat line. It predicts the same weight for all fish no matter their length, or any other aspect.
 
-<!-- #region slideshow={"slide_type": "fragment"} -->
-* The world's simplest model is a flat line
-    * It predicts the same weight for all fish no matter their length
-    * Equal to the sample mean plus prior smoothing
-* Having the full posterior allows us to visualize uncertainty
-<!-- #endregion -->
+As we've seen previously, this line is equal to the sample mean plus some smoothing due to the priors.
 
-<!-- #region slideshow={"slide_type": "notes"} -->
-From the chart it's quite clear the world's simplest model looks like a flat line. This line is equal to the sample mean plus some adjustment due to the prior.
-
-The curve is completely flat because the model ignores what we know about the relationship between fish length and weight. As a result, it predicts the same weight for all fish, without considering their length.
+One of the good aspects of going Bayesian is that we get uncertainty quantification and visualization for free. This is very important!
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -983,7 +925,7 @@ The curve is completely flat because the model ignores what we know about the re
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## Adding a slope
+# Adding a slope
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
