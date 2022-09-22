@@ -311,7 +311,7 @@ We drop the extra columns to make this tidy and remove the correlated columns
 species_n = data["Species"].value_counts()
 species_pct = (100 * species_n / species_n.sum()).round(2)
 
-fig, ax = plt.subplots(figsize=(14, 7))
+fig, ax = plt.subplots(figsize=(12, 7))
 color = [f"C{i}" for i in range(len(species_n))]
 ax.bar(species_n.index, species_n, color=color)
 for i, n in enumerate(species_n):
@@ -931,19 +931,29 @@ One of the good aspects of going Bayesian is that we get uncertainty quantificat
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## Adding a slope
 
-* We're happy we created our first model
-* The EDA shows other measurements give valuable information about the fish weight
-* How to add predictors to the model?
+<center>
+  <img src="imgs/SkateboardSlope.jpg" style="width: 75%;"/>
+</center>
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-We've created our first model and we're all happy with that. But that was only warm-up for what's coming. 
 
-From the EDA carried out, it's pretty obvious that other measurements of the fish are going to give valuable information about the weight. The question is, how do we add this information in the model?
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "fragment"} -->
-Let's review how the fitted regression looked like in the previous section.
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Adding a slope
+
+* We're happy we created our first model
+* The EDA shows other measurements give valuable information about the fish weight
+* Add predictors to the model
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "notes"} -->
+Creating our first model in the previous section was a great milestone. Although simple, it was a great opportunity to get us rolling. Nonetheless, this new section has many other exciting and challenging stuff prepared for us.
+
+From the Exploratory Data Analysis we carried out earlier, it's pretty obvious that other measurements of the fish contain valuable information about the weight. It would be great if we could make our model be aware of that. 
+
+In this section, we will learn how to incorporate predictors into the model so it has more information and hopefully makes better choices when predicting fish weight. 
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -951,7 +961,7 @@ Let's review how the fitted regression looked like in the previous section.
 <!-- #endregion -->
 
 ```python hide_input=true slideshow={"slide_type": "-"}
-fig, ax = plt.subplots(figsize=(8, 6))
+fig, ax = plt.subplots(figsize=(14, 7))
 ax.scatter(x=data["Length1"], y=data["Weight"], alpha=0.6)
 ax.set(xlabel="Length (centimeters)", ylabel="Weight (grams)", title="Fish length vs weight")
 
@@ -970,15 +980,13 @@ ax.legend(handles=handles, loc="upper left");
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-Now... tell me. Isn't it pretty obvious we can make it better? From the scatterplot it certainly looks like the line shouldn't be flat. The data says weight should change as length does. It's pretty clear there's a trend here. We see a **positive relationship between the length and the weight** of the fish: The longer the fish, the larger its weight.
+Let's have a second look at the intercept-only model we built in the previous section.
 
-<!-- 🤔: Why do we say "positive" relationship? Does it mean any good? Well, not necessarily. We say "positive" when larger values of the predictor are associated with larger values of the response. If it was that larger values of the predictor were associated with lower values of the response, we would have said it's a "negative" relationship. And that wouldn't necessarily mean something bad! -->
+The pattern we observe tells us that shorter fish are usually lighter, and longer fish are usually heavier. The improved model should incorporate this information somehow so it's not a flat line anymore.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-### Improve the intercept-only model
-
-* The previous model uses the following equation for Weight
+## Improve the intercept-only model
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "-"} -->
@@ -988,25 +996,19 @@ $$
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "fragment"} -->
-* How do we make the weight change as length changes?
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "fragment"} -->
-* We add a slope!
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "fragment"} -->
 $$
 \text{Weight}_i = \beta_0 + \beta_1 \text{Length}_i
 $$
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "slide"} -->
-### Bayesian linear regression
+<!-- #region slideshow={"slide_type": "notes"} -->
+The previous model says that the weight is equal to a constant value that we call intercept. How do we make the weight change as length changes? The answer: Add a slope!
+
+
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "-"} -->
-Adding priors and writing everything down we come up with the following model
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Bayesian linear regression
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "-"} -->
@@ -1021,11 +1023,7 @@ $$
 $$
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "fragment"} -->
-PyMC code comes very naturally
-<!-- #endregion -->
-
-```python slideshow={"slide_type": "-"}
+```python slideshow={"slide_type": "fragment"}
 length = data["Length1"].to_numpy()
 with pm.Model() as model:
     β0 = pm.Normal("β0", mu=0, sigma=200)
@@ -1035,8 +1033,12 @@ with pm.Model() as model:
     pm.Normal("weight", mu=mu, sigma=sigma, observed=data["Weight"])
 ```
 
+<!-- #region slideshow={"slide_type": "notes"} -->
+Adding priors and writing everything down we come up with the following model and then the PyMC code comes again very naturally.
+<!-- #endregion -->
+
 <!-- #region slideshow={"slide_type": "slide"} -->
-### Time to fit
+## It's time to fit again
 <!-- #endregion -->
 
 ```python slideshow={"slide_type": "-"}
@@ -1051,11 +1053,11 @@ az.summary(idata, round_to=2, kind="stats")
 * We predict an increase of 32 grams per additional centimeter of length
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-### Analyze the posterior: parameters
+## Analyze the posterior: parameters
 <!-- #endregion -->
 
 ```python slideshow={"slide_type": "-"}
-fig, axes = plt.subplots(1, 3, figsize=(12, 4))
+fig, axes = plt.subplots(1, 3, figsize=(14, 4))
 az.plot_posterior(idata, ax=axes);
 ```
 
@@ -1071,7 +1073,7 @@ Let's see how the well the curve actually fits the data
 b0_draws = idata.posterior["β0"][:, ::10].to_numpy().flatten()
 b1_draws = idata.posterior["β1"][:, ::10].to_numpy().flatten()
 
-fig, ax = plt.subplots(figsize=(8, 6))
+fig, ax = plt.subplots(figsize=(14, 7))
 ax.scatter(data["Length1"], data["Weight"], alpha=0.6)
 ax.set(xlabel="Length (centimeters)", ylabel="Weight (grams)", title="Fish length vs weight")
 
@@ -1100,7 +1102,7 @@ TODO: Add gif/meme person crying
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-### What did we do wrong?!
+## What did we do wrong?!
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "fragment"} -->
@@ -1117,8 +1119,8 @@ TODO: Add gif/meme person crying
 * We missed a key point: The relationship between length and weight is non-linear!
 <!-- #endregion -->
 
-```python hide_input=true slideshow={"slide_type": "slide"}
-fig, ax = plt.subplots(figsize=(8, 6))
+```python hide_input=false slideshow={"slide_type": "slide"}
+fig, ax = plt.subplots(figsize=(14, 7))
 ax.scatter(data["Length1"], data["Weight"], alpha=0.6)
 ax.set(xlabel="Length (centimeters)", ylabel="Weight (grams)", title="Fish length vs weight");
 ```
@@ -1152,8 +1154,8 @@ Transformations are simply another name for functions, mathematical functions. L
 To use a transformation we just apply the function to variable(s) in the model and use its result instead of the original one(s). For example, instead of using `Length` to predict `Weight`, we can use a function of `Length` we can call `f(Length)`. The same way, we can transform the response `Weight` into `f(Weight)`.
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"}
-fig, ax = plt.subplots()
+```python slideshow={"slide_type": "slide"} hide_input=true
+fig, ax = plt.subplots(figsize=(14, 7))
 ax.scatter(data["Length1"], data["Weight"], alpha=0.6)
 ax.set(xlabel="Length", ylabel="Weight");
 ```
@@ -1162,8 +1164,8 @@ ax.set(xlabel="Length", ylabel="Weight");
 Let's transform Length into `log(Length)`.
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"}
-fig, ax = plt.subplots()
+```python slideshow={"slide_type": "slide"} hide_input=true
+fig, ax = plt.subplots(figsize=(14, 7))
 ax.scatter(np.log(data["Length1"]), data["Weight"], alpha=0.6)
 ax.set(xlabel="log(Length)", ylabel="Weight");
 ```
@@ -1172,8 +1174,8 @@ ax.set(xlabel="log(Length)", ylabel="Weight");
 Hmm, still looks exponential. Let's try transforming the response variable now.
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"}
-fig, ax = plt.subplots()
+```python slideshow={"slide_type": "slide"} hide_input=false
+fig, ax = plt.subplots(figsize=(14, 7))
 ax.scatter(data["Length1"], np.log(data["Weight"]), alpha=0.6)
 ax.set(xlabel="Length", ylabel="log(Weight)");
 ```
@@ -1184,8 +1186,8 @@ Crap! We got a completely different shape. Still not linear though...
 What if we transform **both** variables at the same time?
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"}
-fig, ax = plt.subplots()
+```python slideshow={"slide_type": "slide"} hide_input=true
+fig, ax = plt.subplots(figsize=(14, 7))
 ax.scatter(np.log(data["Length1"]), np.log(data["Weight"]), alpha=0.6)
 ax.set(xlabel="log(Length)", ylabel="log(Weight)");
 ```
@@ -1247,11 +1249,11 @@ az.summary(idata, round_to=2, kind="stats")
 az.plot_trace(idata, compact=False, backend_kwargs={"tight_layout": True});
 ```
 
-```python slideshow={"slide_type": "slide"}
+```python slideshow={"slide_type": "slide"} hide_input=true
 b0_draws = idata.posterior["β0"][:, ::10].to_numpy().flatten()
 b1_draws = idata.posterior["β1"][:, ::10].to_numpy().flatten()
 
-fig, ax = plt.subplots()
+fig, ax = plt.subplots(figsize=(14, 7))
 ax.scatter(np.log(data["Length1"]), np.log(data["Weight"]), alpha=0.6)
 ax.set(xlabel="log(Length)", ylabel="log(Weight)")
 
@@ -1279,13 +1281,13 @@ Wait... But this is in the log space! How are we going to tell our boss about th
 Transformations are even more awesome than what we can anticipate. We just used log transforms to fit the model. But you know what's an even cooler feature? We can transform back!
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"}
+```python slideshow={"slide_type": "slide"} hide_input=true
 b0_draws = idata.posterior["β0"][:, ::50].to_numpy().flatten()
 b1_draws = idata.posterior["β1"][:, ::50].to_numpy().flatten()
 
-fig, ax = plt.subplots()
+fig, ax = plt.subplots(figsize=(14, 7))
 ax.scatter(data["Length1"], data["Weight"], alpha=0.6)
-ax.set(xlabel="Length", ylabel="Weight")
+ax.set(xlabel="Length", ylabel="Weight", ylim=(-50, 4000))
 
 x_grid = np.linspace(np.log(data["Length1"]).min(), np.log(data["Length1"]).max())
 for b0, b1 in zip(b0_draws, b1_draws):
@@ -1331,16 +1333,12 @@ Now here connect it with the idea of the fish species.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
----
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "slide"} -->
-## Section 60: Accounting for the species
+# Accounting for the species
 
 We saw the species encodes valuable information to predict fish weight. Let's have another look at it now.
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"}
+```python slideshow={"slide_type": "slide"} hide_input=true
 species, species_idx = np.unique(data["Species"], return_inverse=True)
 color = [f"C{i}" for i in species_idx]
 handles = [
@@ -1348,7 +1346,7 @@ handles = [
     for i, s in enumerate(species)
 ]
 
-fig, ax = plt.subplots()
+fig, ax = plt.subplots(figsize=(14, 7))
 fig.subplots_adjust(right=0.8)
 ax.scatter(
     x=np.log(data["Length1"]), 
@@ -1366,8 +1364,8 @@ ax.legend(
 );
 ```
 
-```python slideshow={"slide_type": "slide"}
-fig, ax = plt.subplots()
+```python slideshow={"slide_type": "slide"} hide_input=true
+fig, ax = plt.subplots(figsize=(14, 7))
 fig.subplots_adjust(right=0.8)
 ax.scatter(
     x=np.log(data["Length1"]), 
@@ -1401,7 +1399,7 @@ Some species are sistematically overestimated, and other are sistematically unde
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-### How to incorporate the species variable?
+## How to incorporate the species variable?
 
 Fortunately, PyMC is going to make it really easy for us to use categorical variables. But we're not here to copy and paste code, we wanto to really understand what's going on under the hood.
 
@@ -1430,8 +1428,8 @@ From here the idea is how one can derive multiple lines from a single line. The 
 **NOTE:** What if we add some dots on the chart so we actually show what we're trying to approximate?
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"}
-fig, ax = plt.subplots()
+```python slideshow={"slide_type": "slide"} hide_input=true
+fig, ax = plt.subplots(figsize=(14, 7))
 ax.plot([0, 10], [0, 10])
 ax.set(title="All groups represented by a single line");
 ```
@@ -1442,10 +1440,10 @@ This is our setting so far. A single line represents the behavior of all the gro
 In some cases this is fine, in others it's an extremely poor choice.
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"}
+```python slideshow={"slide_type": "slide"} hide_input=true
 handles = [Line2D([], [], label=f"Group {i + 1}", color=f"C{i}") for i in range(5)]
 
-fig, ax = plt.subplots()
+fig, ax = plt.subplots(figsize=(14, 7))
 fig.subplots_adjust(right=0.8)
 for delta in [0, 2, -3, -4, 6]:
     ax.plot([0, 10], [0 + delta, 10 + delta])
@@ -1465,10 +1463,10 @@ One of the most simple extensions when we split a line into multiple lines is to
 This implies much more flexibility than the previous approach, but it is still a little restrictive because the same slope is used in all cases.
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"}
+```python slideshow={"slide_type": "slide"} hide_input=true
 handles = [Line2D([], [], label=f"Group {i + 1}", color=f"C{i}") for i in range(5)]
 
-fig, ax = plt.subplots()
+fig, ax = plt.subplots(figsize=(14, 7))
 fig.subplots_adjust(right=0.8)
 for delta in [0, 2, -3, -4, 6]:
     ax.plot([0, 10], [0, 10 + delta])
@@ -1488,10 +1486,10 @@ It's also possible to split into multiple lines with different slope that share 
 This may make sense in some cases, but none in others.
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"}
+```python slideshow={"slide_type": "slide"} hide_input=true
 handles = [Line2D([], [], label=f"Group {i + 1}", color=f"C{i}") for i in range(5)]
 
-fig, ax = plt.subplots()
+fig, ax = plt.subplots(figsize=(14, 7))
 fig.subplots_adjust(right=0.8)
 for delta in [0, 2, -3, -4, 6]:
     ax.plot([0, 10], [0 + delta / 3, 10 + delta])
@@ -1557,7 +1555,7 @@ az.plot_trace(idata, compact=True, backend_kwargs={"tight_layout": True});
 ```
 
 ```python slideshow={"slide_type": "slide"}
-fig, axes = plt.subplots(1, 2, figsize=(9, 3.5), sharey=True)
+fig, axes = plt.subplots(1, 2, figsize=(12, 4.2), sharey=True)
 az.plot_forest(idata, var_names="beta_0", combined=True, ax=axes[0]);
 az.plot_forest(idata, var_names="beta_1", combined=True, ax=axes[1]);
 axes[0].set(title="Posterior of β0", yticklabels=reversed(species));
@@ -1568,7 +1566,7 @@ axes[1].set(title="Posterior of β1");
 There's a substantial overlap between the posterior of the slopes, $\beta_1$. This may suggest the lines are actually parallel.
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"}
+```python slideshow={"slide_type": "skip"}
 b0_draws = idata.posterior["beta_0"][:, ::10]
 b1_draws = idata.posterior["beta_1"][:, ::10]
 
@@ -1579,7 +1577,7 @@ b0_all = b0_mean.mean().item()
 b1_all = b1_mean.mean().item()
 ```
 
-```python slideshow={"slide_type": "slide"}
+```python slideshow={"slide_type": "slide"} hide_input=true
 fig, axes = plt.subplots(2, 4, figsize=(12, 7), sharex=True, sharey=True, tight_layout=True)
 
 x_grid = np.array((log_length.min() - 0.25, log_length.max() + 0.25))
