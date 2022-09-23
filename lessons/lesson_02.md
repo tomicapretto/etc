@@ -937,10 +937,6 @@ One of the good aspects of going Bayesian is that we get uncertainty quantificat
 </center>
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "notes"} -->
-
-<!-- #endregion -->
-
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## Adding a slope
 
@@ -1095,13 +1091,17 @@ ax.legend(handles=handles, loc="upper left");
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-Awesome, we got what we wanted. Now the model has a slope and it accounts for the fish length when predicting weight. The longer the fish, the larger the predicted weight. Also, the Bayesian approach gives credibility bands for free. I can't be more happy!
+Awesome, we got what we wanted. Now the model has a slope and it accounts for the fish length when predicting weight. The longer the fish, the larger the predicted weight. Makes total sense. Also, the Bayesian approach gives credibility bands for free. I can't be more happy!
 
-Oh, wait! Do you see that? Holy crap! The fit is actually terrible! And there's more! it predicts negative values!
+Oh, wait! Looks like there's something messed up. Holy crap, the fit is actually terrible! And there's more! it predicts negative values!
+<!-- #endregion -->
 
+<!-- #region slideshow={"slide_type": "skip"} -->
+**TODO:** Add image/gif person crying
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "skip"} -->
 **Note:** Highlight the horizontal line at y = 0 when saying "do you see that!?"
-
-TODO: Add gif/meme person crying
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -1113,9 +1113,9 @@ TODO: Add gif/meme person crying
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "fragment"} -->
-* We did it successfully.
-    * We wanted a linear fit
-    * We got a linear fit!
+* We were successful at it
+    * Wanted a linear fit
+    * Got a linear fit!
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "fragment"} -->
@@ -1128,15 +1128,19 @@ ax.scatter(data["Length1"], data["Weight"], alpha=0.6)
 ax.set(xlabel="Length (centimeters)", ylabel="Weight (grams)", title="Fish length vs weight");
 ```
 
+<!-- #region slideshow={"slide_type": "notes"} -->
+The scatterplot shows very clearly that larger lengths imply larger weights. However, it does not mean weight grows linearly with length. Actually, the shape resembles exponential growth.
+<!-- #endregion -->
+
 <!-- #region slideshow={"slide_type": "slide"} -->
 ### Section Recap
 
-* Simple linear regression is powerful.
-    * We could incorporate predictors into our predictive model.
-    * All of this with proper uncertainty quantification.
-* Linear fit was terrible in this case
-* EDA is important to ensure the linear approximation applies to the problem at hand.
-    * We knew to expect that from our EDA
+* Simple linear regression is powerful
+    * We added predictors into our predictive model
+    * All of this with proper uncertainty quantification
+* Linear fit was terrible
+* EDA is important to ensure the linear approximation applies to the problem at hand
+    * We knew to expect this bad result from our EDA
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -1145,7 +1149,7 @@ Every modeler's swiss army knife
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "skip"} -->
-Note: Not so convinced by the equivalence between transformation (a tool) and a swiss army knife (set of tools)
+**Note:** Not so convinced by the equivalence between transformation (a tool) and a swiss army knife (set of tools)
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -1153,7 +1157,7 @@ Note: Not so convinced by the equivalence between transformation (a tool) and a 
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "-"} -->
-* Linear regression doesn't seem to be the right fit for our problem
+* Looks like linear regression is not the right fit for our problem
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "fragment"} -->
@@ -1211,7 +1215,7 @@ ax.set(xlabel="Length", ylabel="Weight", title="Fish length vs weight");
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} hide_input=true -->
-This is the scatterplot between Length and Weight in their original scales. We also say these variables are untransformed. We're going to use the logarithm transformation and see it affects the plot.
+This is the scatterplot between Length and Weight in their original scales. It's also said these variables are untransformed. Since the plot shows an exponential-like pattern, it's sensible to use the logarithm trasnformation to linearize it. 
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -1226,7 +1230,7 @@ ax.set(xlabel="log(Length)", ylabel="Weight", title="log(Length) vs Weight");
 
 <!-- #region slideshow={"slide_type": "notes"} -->
 First, let's transform `Length` into `log(Length)`. Notice the change on the horizontal scale. 
-But it's pretty much the same shape. It still looks exponential. What can we do now? Let's keep trying.
+But it's pretty much the same shape. It still looks exponential. So this is not the result we're looking for. Let's keep trying.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -1240,7 +1244,7 @@ ax.set(xlabel="Length", ylabel="log(Weight)", title="Length vs log(Weight)");
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-Now we can try transforming the response variable. The horizontal axis is in the original scale, but what changed is the axis of the vertical scale.  
+Now we can try transforming the response variable. The horizontal axis is in the original scale, but what changes is the axis of the vertical scale.  
 
 Indeed, we can observe a different pattern now. But it's still not in good shape. We cannot approximate it with a straight line reasonably well. 
 <!-- #endregion -->
@@ -1258,9 +1262,11 @@ ax.set(xlabel="log(Length)", ylabel="log(Weight)", title="log(Length) vs log(Wei
 <!-- #region slideshow={"slide_type": "notes"} -->
 What if we transform **both** variables at the same time? 
 
-This is awesome! Turns out `log(Length)` and `log(Weight)` are indeed linearly related. This is all we needed! Let's jump into the next step: build a linear regression model on the transformed space.
+Turns out this is the answer we've been looking for. `log(Length)` and `log(Weight)` are indeed linearly related. This is awesome! 
 
 Is it always the case we need to transform both variables? The answer is no. Sometimes you transform one, sometimes the other, sometimes both. 
+
+Let's jump into the next step: build a linear regression model on the transformed space.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} hide_input=true -->
@@ -1322,15 +1328,25 @@ with pm.Model() as model:
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-Notice again how close PyMC resembles the math...So clean!
+The Bayesian formulation of the model is so similar to the one we wrote in the previous section. The only thing that changes are the variable, which are the result of the logarithm transformation now. 
+
+Again, see how close PyMC resembles the math... So clean!
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"}
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Sample, sample sample
+<!-- #endregion -->
+
+```python slideshow={"slide_type": "-"}
 with model:
     idata = pm.sample(chains=4, target_accept=0.85, random_seed=1234)
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
+**Note:** Do you think we need to show again how we call `pm.sample()`? There's nothing new here (unless we want to comment something about the speed for example).
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "slide"} -->
 ## Model fit on the transformed space
 <!-- #endregion -->
 
@@ -1359,11 +1375,11 @@ ax.legend(handles=handles, loc="upper left");
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-The fit is improved so much. Now the regression line looks like a much better representation of the relationship between the variables.
+This does look like the plot we've been looking so much. The fit tremendously. Now the regression is a much better representation of the relationship between the variables.
 
-We've got something that really improves the predictions of weight. Our boss will be so happy!
+You know what this means? We've got something that really improves the predictions of weight. Our boss will be so happy!
 
-As you may be thinking, this chart is in the log-transformed space. So, it means we simply pass a log(Length) value to the model and it gives us the predicted log(Weight). 
+As you may be thinking, this chart is in the log-transformed space. So, it means we simply pass a logarithm of the length to the model and it gives us the predicted logarithm of the weight. 
 
 Well, it's not that great actually. We can't pretend our company gets used to measure in log scales!
 <!-- #endregion -->
@@ -1393,7 +1409,11 @@ Well, it's not that great actually. We can't pretend our company gets used to me
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-Notes...
+We're so lucky to have transformations. The log transformation allowed us to use linear regression in this problem. 
+
+On the other hand, now we need to learn how to talk in log scales. It solved a problem but also gave us a new one. What a bummer!
+
+It's not all lost my friends. We've picked a great transformation, because it's invertible. It means we can invert or reverse the function applied, and get results back in the normal or untransformed space. All we need to do in this case is to use the exponential function.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
