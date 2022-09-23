@@ -1057,7 +1057,7 @@ az.summary(idata, round_to=2, kind="stats")
 ## Analyze the posterior: parameters
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "-"}
+```python slideshow={"slide_type": "-"} hide_input=true
 fig, axes = plt.subplots(1, 3, figsize=(12, 4))
 az.plot_posterior(idata, ax=axes);
 ```
@@ -1185,18 +1185,24 @@ No way, we've just got started and linear models can still take us much further.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "-"} -->
-* We use $f(\text{Length})$ instead of $\text{Length}$
+* Use $f(\text{Length})$ instead of $\text{Length}$
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
 What do we mean with transformations? What are them? How do we use them?
 
-Transformations are simply another name for functions, mathematical functions. Like square root function, logarithm function, exponential function, sine functions, or even polynomials. Whatever function you may think of, can be used as a transformation (disclaimer: that doesn't mean it's going to make sense!). We say "transformations" because they transform our variables into something else.
+Transformations are simply another name for functions, mathematical functions. Like square root function, logarithm function, exponential function, sine functions, or even polynomials. We say "transformations" because they transform our variables into something else.
 
 To use a transformation we just apply the function to variable(s) in the model and use its result instead of the original one(s). For example, instead of using `Length` to predict `Weight`, we can use a function of `Length` we can call `f(Length)`. The same way, we can transform the response `Weight` into `f(Weight)`.
 <!-- #endregion -->
 
+<!-- #region slideshow={"slide_type": "skip"} -->
+**Note:** Fade-in and fade-out between transformed scatterplots? I say these two, but it can be anything that creates a nice effect.
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "slide"} -->
 ## The original setting
+<!-- #endregion -->
 
 ```python slideshow={"slide_type": "-"} hide_input=true
 fig, ax = plt.subplots(figsize=FIGSIZE)
@@ -1205,61 +1211,70 @@ ax.set(xlabel="Length", ylabel="Weight", title="Fish length vs weight");
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} hide_input=true -->
-
+This is the scatterplot between Length and Weight in their original scales. We also say these variables are untransformed. We're going to use the logarithm transformation and see it affects the plot.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## Transform X
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"} hide_input=true
+```python slideshow={"slide_type": "-"} hide_input=true
 fig, ax = plt.subplots(figsize=FIGSIZE)
 ax.scatter(np.log(data["Length1"]), data["Weight"], alpha=0.6)
 ax.set(xlabel="log(Length)", ylabel="Weight", title="log(Length) vs Weight");
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-Let's transform `Length` into `log(Length)`. Hmm, still looks exponential. What can we do now?
+First, let's transform `Length` into `log(Length)`. Notice the change on the horizontal scale. 
+But it's pretty much the same shape. It still looks exponential. What can we do now? Let's keep trying.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## Transform Y
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"} hide_input=true
+```python slideshow={"slide_type": "-"} hide_input=true
 fig, ax = plt.subplots(figsize=FIGSIZE)
 ax.scatter(data["Length1"], np.log(data["Weight"]), alpha=0.6)
 ax.set(xlabel="Length", ylabel="log(Weight)", title="Length vs log(Weight)");
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-Let's try transforming the response variable now. 
+Now we can try transforming the response variable. The horizontal axis is in the original scale, but what changed is the axis of the vertical scale.  
 
-Crap! We got a completely different shape. Still not linear though... 
+Indeed, we can observe a different pattern now. But it's still not in good shape. We cannot approximate it with a straight line reasonably well. 
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## Transform X and Y
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"} hide_input=true
+```python slideshow={"slide_type": "-"} hide_input=true
 fig, ax = plt.subplots(figsize=FIGSIZE)
 ax.scatter(np.log(data["Length1"]), np.log(data["Weight"]), alpha=0.6)
 ax.set(xlabel="log(Length)", ylabel="log(Weight)", title="log(Length) vs log(Weight)");
 ```
 
-<!-- #region slideshow={"slide_type": "slide"} -->
-What if we transform **both** variables at the same time?
+<!-- #region slideshow={"slide_type": "notes"} -->
+What if we transform **both** variables at the same time? 
 
 This is awesome! Turns out `log(Length)` and `log(Weight)` are indeed linearly related. This is all we needed! Let's jump into the next step: build a linear regression model on the transformed space.
 
 Is it always the case we need to transform both variables? The answer is no. Sometimes you transform one, sometimes the other, sometimes both. 
 <!-- #endregion -->
 
-**Note:** Do we show the following model in the same section, or do we make it a new one?
-
-<!-- #region slideshow={"slide_type": "slide"} -->
+<!-- #region slideshow={"slide_type": "slide"} hide_input=true -->
 ## Regression on the transformed variables
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "-"} hide_input=true -->
+$$
+\text{Weight}_i = \beta_0 + \beta_1 \text{Length}_i + \varepsilon_i
+$$
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "-"} -->
+Gets transformed into
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "-"} -->
@@ -1269,9 +1284,13 @@ $$
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-Taking all the components together, the formula for the linear regression now model looks as follows.
+Taking all the components together, the formula for the linear regression is equivalent to the original formula we used before. The only difference is that we use the transformed variables now.
 
 It's exactly the same structure than before, we only changed the variables for the transformed ones. All the rest remains the same.
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "skip"} -->
+**Note:** Highlight the parts that change between formulas. Possibly, use arrows to connect parts (i.e. Weight_i with log(Weight_i))
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -1311,19 +1330,15 @@ with model:
     idata = pm.sample(chains=4, target_accept=0.85, random_seed=1234)
 ```
 
-```python slideshow={"slide_type": "slide"}
-az.summary(idata, round_to=2, kind="stats")
-```
-
-```python slideshow={"slide_type": "slide"}
-az.plot_trace(idata, compact=False, backend_kwargs={"tight_layout": True});
-```
+<!-- #region slideshow={"slide_type": "notes"} -->
+## Model fit on the transformed space
+<!-- #endregion -->
 
 ```python slideshow={"slide_type": "slide"} hide_input=true
 b0_draws = idata.posterior["β0"][:, ::10].to_numpy().flatten()
 b1_draws = idata.posterior["β1"][:, ::10].to_numpy().flatten()
 
-fig, ax = plt.subplots(figsize=(14, 7))
+fig, ax = plt.subplots(figsize=FIGSIZE)
 ax.scatter(np.log(data["Length1"]), np.log(data["Weight"]), alpha=0.6)
 ax.set(xlabel="log(Length)", ylabel="log(Weight)")
 
@@ -1343,19 +1358,53 @@ handles = [
 ax.legend(handles=handles, loc="upper left");
 ```
 
-<!-- #region slideshow={"slide_type": "slide"} -->
-The fit is so much better now. After much hard work we finally got it! Yay! 
+<!-- #region slideshow={"slide_type": "notes"} -->
+The fit is improved so much. Now the regression line looks like a much better representation of the relationship between the variables.
 
-Wait... But this is in the log space! How are we going to tell our boss about this?! 
+We've got something that really improves the predictions of weight. Our boss will be so happy!
 
-Transformations are even more awesome than what we can anticipate. We just used log transforms to fit the model. But you know what's an even cooler feature? We can transform back!
+As you may be thinking, this chart is in the log-transformed space. So, it means we simply pass a log(Length) value to the model and it gives us the predicted log(Weight). 
+
+Well, it's not that great actually. We can't pretend our company gets used to measure in log scales!
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"} hide_input=true
+<!-- #region slideshow={"slide_type": "fragment"} -->
+**Note:** Something showing both transformations are invertibles so we can actually reverse back into the original scale?
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "slide"} -->
+## You can always come back home
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "-"} -->
+* Transformations allowed us to use a linear regression model
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "-"} -->
+* It leaves an unexpected communication problem
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "-"} -->
+* The trick: use an invertible transformation
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "-"} -->
+* The function that reverses $\log(x)$ is $\exp(x)$
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "notes"} -->
+Notes...
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "slide"} -->
+## You can always come back to home
+<!-- #endregion -->
+
+```python slideshow={"slide_type": "-"} hide_input=true
 b0_draws = idata.posterior["β0"][:, ::50].to_numpy().flatten()
 b1_draws = idata.posterior["β1"][:, ::50].to_numpy().flatten()
 
-fig, ax = plt.subplots(figsize=(14, 7))
+fig, ax = plt.subplots(figsize=FIGSIZE)
 ax.scatter(data["Length1"], data["Weight"], alpha=0.6)
 ax.set(xlabel="Length", ylabel="Weight", ylim=(-50, 4000))
 
@@ -1375,7 +1424,7 @@ handles = [
 ax.legend(handles=handles, loc="upper left");
 ```
 
-<!-- #region slideshow={"slide_type": "slide"} -->
+<!-- #region slideshow={"slide_type": "notes"} -->
 Even though we're using a linear model, the fit is not linear in the original scale anymore. It's mind blowing! We start seeing how flexible this is!
 
 Nevertheless, we're not done yet. There's still things we can improve. The curve approximates the cloud quite well, much better than before, but there are large overestimations for longer fish. We can see the estimated curves are way above the blue dots. 
@@ -1384,6 +1433,8 @@ Now here connect it with the idea of the fish species.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
+## TODO
+
 * Lets look at predictions
     * For individual of species of fish they still suck
     * Is reasonable that one intercept and one slope will fit all the fish in the world?
