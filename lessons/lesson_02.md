@@ -13,7 +13,7 @@ jupyter:
     name: python3
 ---
 
-<!-- #region slideshow={"slide_type": "slide"} hide_input=true -->
+<!-- #region hide_input=true slideshow={"slide_type": "slide"} -->
 # Bayesian Regression Refresher
 <!-- #endregion -->
 
@@ -304,7 +304,7 @@ data.head()
 We drop the extra columns to make this tidy and remove the correlated columns
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "slide"} hide_input=true -->
+<!-- #region hide_input=true slideshow={"slide_type": "slide"} -->
 ## How frequent species are?
 <!-- #endregion -->
 
@@ -846,7 +846,7 @@ PyMC makes it very easier to obtain the posterior predictive distribution and in
 ## Mean Uncertainty vs Individual Observation Uncertainty
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "-"} hide_input=true
+```python hide_input=true slideshow={"slide_type": "-"}
 fig, ax = plt.subplots(figsize=FIGSIZE)
 ax.axvline(empirical_mean, label="Empirical Mean", color="C1")
 az.plot_posterior(idata, var_names="β0", ax=ax, label="Mean weight posterior", color="C0")
@@ -1053,7 +1053,7 @@ az.summary(idata, round_to=2, kind="stats")
 ## Analyze the posterior: parameters
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "-"} hide_input=true
+```python hide_input=true slideshow={"slide_type": "-"}
 fig, axes = plt.subplots(1, 3, figsize=(12, 4))
 az.plot_posterior(idata, ax=axes);
 ```
@@ -1090,18 +1090,18 @@ handles = [
 ax.legend(handles=handles, loc="upper left");
 ```
 
-<!-- #region slideshow={"slide_type": "notes"} -->
-Awesome, we got what we wanted. Now the model has a slope and it accounts for the fish length when predicting weight. The longer the fish, the larger the predicted weight. Makes total sense. Also, the Bayesian approach gives credibility bands for free. I can't be more happy!
-
-Oh, wait! Looks like there's something messed up. Holy crap, the fit is actually terrible! And there's more! it predicts negative values!
-<!-- #endregion -->
-
 <!-- #region slideshow={"slide_type": "skip"} -->
 **TODO:** Add image/gif person crying
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "skip"} -->
 **Note:** Highlight the horizontal line at y = 0 when saying "do you see that!?"
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "notes"} -->
+Awesome, we got what we wanted. Now the model has a slope and it accounts for the fish length when predicting weight. The longer the fish, the larger the predicted weight. Makes total sense. Also, the Bayesian approach gives credibility bands for free. I can't be more happy!
+
+Oh, wait! Looks like there's something messed up. Holy crap, the fit is actually terrible! And there's more! it predicts negative values!
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -1208,13 +1208,13 @@ To use a transformation we just apply the function to variable(s) in the model a
 ## The original setting
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "-"} hide_input=true
+```python hide_input=true slideshow={"slide_type": "-"}
 fig, ax = plt.subplots(figsize=FIGSIZE)
 ax.scatter(data["Length1"], data["Weight"], alpha=0.6)
 ax.set(xlabel="Length", ylabel="Weight", title="Fish length vs weight");
 ```
 
-<!-- #region slideshow={"slide_type": "notes"} hide_input=true -->
+<!-- #region hide_input=true slideshow={"slide_type": "notes"} -->
 This is the scatterplot between Length and Weight in their original scales. It's also said these variables are untransformed. Since the plot shows an exponential-like pattern, it's sensible to use the logarithm trasnformation to linearize it. 
 <!-- #endregion -->
 
@@ -1222,7 +1222,7 @@ This is the scatterplot between Length and Weight in their original scales. It's
 ## Transform X
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "-"} hide_input=true
+```python hide_input=true slideshow={"slide_type": "-"}
 fig, ax = plt.subplots(figsize=FIGSIZE)
 ax.scatter(np.log(data["Length1"]), data["Weight"], alpha=0.6)
 ax.set(xlabel="log(Length)", ylabel="Weight", title="log(Length) vs Weight");
@@ -1237,7 +1237,7 @@ But it's pretty much the same shape. It still looks exponential. So this is not 
 ## Transform Y
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "-"} hide_input=true
+```python hide_input=true slideshow={"slide_type": "-"}
 fig, ax = plt.subplots(figsize=FIGSIZE)
 ax.scatter(data["Length1"], np.log(data["Weight"]), alpha=0.6)
 ax.set(xlabel="Length", ylabel="log(Weight)", title="Length vs log(Weight)");
@@ -1253,7 +1253,7 @@ Indeed, we can observe a different pattern now. But it's still not in good shape
 ## Transform X and Y
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "-"} hide_input=true
+```python hide_input=true slideshow={"slide_type": "-"}
 fig, ax = plt.subplots(figsize=FIGSIZE)
 ax.scatter(np.log(data["Length1"]), np.log(data["Weight"]), alpha=0.6)
 ax.set(xlabel="log(Length)", ylabel="log(Weight)", title="log(Length) vs log(Weight)");
@@ -1269,11 +1269,11 @@ Is it always the case we need to transform both variables? The answer is no. Som
 Let's jump into the next step: build a linear regression model on the transformed space.
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "slide"} hide_input=true -->
+<!-- #region hide_input=true slideshow={"slide_type": "slide"} -->
 ## Regression on the transformed variables
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "-"} hide_input=true -->
+<!-- #region hide_input=true slideshow={"slide_type": "-"} -->
 $$
 \text{Weight}_i = \beta_0 + \beta_1 \text{Length}_i + \varepsilon_i
 $$
@@ -1350,7 +1350,7 @@ with model:
 ## Model fit on the transformed space
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"} hide_input=true
+```python hide_input=true slideshow={"slide_type": "slide"}
 b0_draws = idata.posterior["β0"][:, ::10].to_numpy().flatten()
 b1_draws = idata.posterior["β1"][:, ::10].to_numpy().flatten()
 
@@ -1420,7 +1420,7 @@ It's not all lost my friends. We've picked a great transformation, because it's 
 ## You can always come back to home
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "-"} hide_input=true
+```python hide_input=true slideshow={"slide_type": "-"}
 b0_draws = idata.posterior["β0"][:, ::50].to_numpy().flatten()
 b1_draws = idata.posterior["β1"][:, ::50].to_numpy().flatten()
 
@@ -1447,20 +1447,75 @@ ax.legend(handles=handles, loc="upper left");
 <!-- #region slideshow={"slide_type": "notes"} -->
 Even though we're using a linear model, the fit is not linear in the original scale anymore. It's mind blowing! We start seeing how flexible this is!
 
-Nevertheless, we're not done yet. There's still things we can improve. The curve approximates the cloud quite well, much better than before, but there are large overestimations for longer fish. We can see the estimated curves are way above the blue dots. 
+Nevertheless, we're not done yet. There's still things we can improve. The curve approximates the cloud quite well, much better than before, but there are large overestimations for longer fish. We can see the estimated curve is way above the blue dots. 
 
-Now here connect it with the idea of the fish species.
+For example, the longest fish has a length of 59 centimeters, weights 1650 grams, but the model predicts slightly more than 3500 grams! That's a very large difference. 
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "slide"} -->
-## TODO
+<!-- #region slideshow={"slide_type": "skip"} -->
+**Note:** Line highlighting large differences between predicted and observed values
+<!-- #endregion -->
 
-* Lets look at predictions
-    * For individual of species of fish they still suck
-    * Is reasonable that one intercept and one slope will fit all the fish in the world?
-        * Would you predict the same weight?
-        * Not accounting for species
-  * _Insert picture of each one of the fish_
+```python slideshow={"slide_type": "skip"}
+max_idx = np.argmax(log_length)
+print(f"Longest fish observed weight: {round(np.exp(log_weight[max_idx]), 2)}")
+print(f"Longest fish mean predicted weight: {round(np.exp(b0_mean + b1_mean * log_length[max_idx]), 2)}")
+```
+
+<!-- #region slideshow={"slide_type": "slide"} -->
+## You'd better measure the error
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "-"} -->
+$$
+\text{Residual} = \text{Prediction} - \text{Observed value}
+$$
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "-"} -->
+$$
+e_i = \hat{y}_i - y_i
+$$
+<!-- #endregion -->
+
+When we compare predictions with the actual observed values we're referring to a quantity known as residuals. Residuals are a tool to measure the error in our predictions. 
+
+We get many residuals, as many as observations. If our model fits well, these residuals will have a zero mean and be independent of the predictor.
+
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Visualize the residuals
+<!-- #endregion -->
+
+```python slideshow={"slide_type": "skip"}
+log_y_hat = b0_mean + b1_mean * log_length
+log_residuals = log_y_hat - log_weight
+```
+
+```python slideshow={"slide_type": "-"} hide_input=true
+fig, ax = plt.subplots(figsize=FIGSIZE)
+ax.scatter(log_length, log_residuals);
+ax.axhline(0, ls="--", color="0.5")
+ax.set(
+    xlabel="log(Length)", 
+    ylabel="Mean prediction - log(Weight)", 
+    title="Residual analysis"
+);
+```
+
+<!-- #region slideshow={"slide_type": "notes"} -->
+Let's have a look at the residuals. On the horizontal axis we still have the log of the fish length. But on the vertical axis we have the residuals now. The values on this vertical axis tell by how much our predictions are off the actual weight.
+
+We can spot the following issues
+
+* There are 3 groups of dots
+    * In two smaller groups groups, the model overestimates the weight
+    * In the bigger group, the model underestimates the weight
+* There's clearly a non-random pattern
+    * It's not easy to detect what's exactly going on
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "skip"} -->
+**Note:** Something showing the three groups (like a polygon)
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -1471,15 +1526,39 @@ Now here connect it with the idea of the fish species.
     * They can make linear regression applicable in cases where the relationship of the natural variables is not linear
     * It's not the end of the world if we don't observe a linear pattern at first sight
 * Knowing the flexibility of transformations empowers us as data scientists
+* Evaluating model fit makes us better 
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "skip"} -->
+Alright, this section came to its end! If you have a little of a bitter taste because of the residual analysis, you should definitely go straight to the next section where we finally discover what's going on.
+
+What's more important is to highlight what we've learnt so far. Model building is an iterative process and our own work is a proof of that. We also saw how important transformations are. They allow us to use linear regression when relationships are not linear in principle. It makes linear regression much more powerful and flexible. Finally, we also saw that constantly evaluating the model fit is part of the iterative process. It may leave a sour taste to find something is not going as expected, but in the end, it's what will take us to the best of the results.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
 # Accounting for the species
-
-We saw the species encodes valuable information to predict fish weight. Let's have another look at it now.
+...
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"} hide_input=true
+<!-- #region slideshow={"slide_type": "slide"} hide_input=true -->
+<center>
+  <img src="imgs/SeveralFish.jpg" style="width: 80%"/>
+</center>
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "notes"} -->
+Let's play a game. I randomly select two fish, tell you their length, and ask you to guess their weight. With this information only, it's highly likely you guess the same weight for both since you don't know any other trait of the fish that's helpful to figure out their weight.
+
+However, you're on your lucky day and I decided to reveal a little more about the fish. Specifically, I show you a picture of them. The first fish is the one in the lower left corner, and the second is the one to its right. Would you still guess the same weight? Well, probably the answer is no. Among other facts, these two fish belong to different species. And that's key information to determine its weight.
+
+So what's the point of the game? To realize a model based on a single intercept and slope cannot be the best thing for all species.
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "slide"} -->
+## All species are not the same
+<!-- #endregion -->
+
+```python hide_input=true slideshow={"slide_type": "-"}
 species, species_idx = np.unique(data["Species"], return_inverse=True)
 color = [f"C{i}" for i in species_idx]
 handles = [
@@ -1505,7 +1584,16 @@ ax.legend(
 );
 ```
 
-```python slideshow={"slide_type": "slide"} hide_input=true
+<!-- #region slideshow={"slide_type": "notes"} -->
+* Colors make up well separated groups
+* It's impossible to come up with a line that goes through all of them at the same time
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Globally good, individually poor
+<!-- #endregion -->
+
+```python hide_input=true slideshow={"slide_type": "-"}
 fig, ax = plt.subplots(figsize=FIGSIZE)
 fig.subplots_adjust(right=0.8)
 ax.scatter(
@@ -1533,15 +1621,56 @@ b1_mean = b1_draws.mean().item()
 ax.plot(x_grid, b0_mean + b1_mean * x_grid, color="0.4");
 ```
 
-<!-- #region slideshow={"slide_type": "slide"} -->
-While the fit seems good overall, it's quite poor if we account for the species. 
-
-Some species are sistematically overestimated, and other are sistematically underestimated. This is not good... How can we fix it?
+<!-- #region slideshow={"slide_type": "-"} -->
+* The fit seems good overall
+* The fit is quite poor if we look at species individually
+* Some species are sistematically overestimated
+* Others are sistematically underestimated
+* Does it remind you of something?
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## How to incorporate the species variable?
+## The part we missed
+<!-- #endregion -->
 
+```python slideshow={"slide_type": "-"} hide_input=true
+species, species_idx = np.unique(data["Species"], return_inverse=True)
+color = [f"C{i}" for i in species_idx]
+handles = [
+    Line2D([], [], label=s, lw=0, marker="o", ms=8, color=f"C{i}", alpha=0.7)
+    for i, s in enumerate(species)
+]
+fig, ax = plt.subplots(figsize=FIGSIZE)
+fig.subplots_adjust(right=0.8)
+ax.scatter(log_length, log_residuals, color=color, alpha=0.7)
+ax.axhline(0, ls="--", color="0.5")
+ax.set(
+    xlabel="log(Length)", 
+    ylabel="Mean prediction - log(Weight)", 
+    title="Residual analysis"
+)
+ax.legend(
+    handles=handles, 
+    title="Species", 
+    loc="center left", 
+    bbox_to_anchor=(0.8, 0.5),
+    bbox_transform=fig.transFigure 
+);
+```
+
+<!-- #region slideshow={"slide_type": "-"} -->
+That's the missing part! We knew we were missing something in the previous residual analysis, and we've just found it.
+
+Now it's pretty clear that groups identify different species. In particular, Smelt and Pike look like very different from the rest, they're always overestimated by the single intercept single slope model. Also, Parkki and Bream were usually underestimated, which is also a bad sign. And the fit was reasonably well for Perch and Roach, because their residuals are more or less centered around 0.
+
+It's pretty clear now that our model needs to account for the species if we want to get more accurate predictions. Let's do it!
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "slide"} -->
+## How to?
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "notes"} -->
 Fortunately, PyMC is going to make it really easy for us to use categorical variables. But we're not here to copy and paste code, we wanto to really understand what's going on under the hood.
 
 The first challenge is that species is a feature of different nature. How? Let's see for example Length. It's a numeric variable. Not only because it uses numbers for its values, but also because operations with those numbers are meaningful. The total lengh of two fish is the length of the first fish plus the length of the second fish. And it all makes sense.
@@ -1556,6 +1685,10 @@ Adding a categorical predictor is like splitting a single line into multiple lin
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
+## How to: A range of options
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "-"} -->
 * Wait, how can we make straight lines different?
     * Tweak the intercept: We end up with parallel lines
     * Tweak the slope: We end up with non-parallel lines that all share the same origin
@@ -1563,25 +1696,33 @@ Adding a categorical predictor is like splitting a single line into multiple lin
     * These explanations are coupled with charts.
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "slide"} -->
+<!-- #region slideshow={"slide_type": "notes"} -->
 From here the idea is how one can derive multiple lines from a single line. The goal is to build intuition around what happens when we incorporate a categorical predictor as well as in how many ways we can do that.
 
 **NOTE:** What if we add some dots on the chart so we actually show what we're trying to approximate?
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"} hide_input=false
+<!-- #region slideshow={"slide_type": "slide"} -->
+## All species are the same
+<!-- #endregion -->
+
+```python hide_input=true slideshow={"slide_type": "-"}
 fig, ax = plt.subplots(figsize=FIGSIZE)
 ax.plot([0, 10], [0, 10])
 ax.set(title="All groups represented by a single line");
 ```
 
-<!-- #region slideshow={"slide_type": "slide"} -->
+<!-- #region slideshow={"slide_type": "notes"} -->
 This is our setting so far. A single line represents the behavior of all the groups. **The information from all groups is pooled into a single line.** No matter how different two groups are, they are represented by the same line.
 
 In some cases this is fine, in others it's an extremely poor choice.
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"} hide_input=true
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Different, but parallel
+<!-- #endregion -->
+
+```python hide_input=true slideshow={"slide_type": "slide"}
 handles = [Line2D([], [], label=f"Group {i + 1}", color=f"C{i}") for i in range(5)]
 
 fig, ax = plt.subplots(figsize=FIGSIZE)
@@ -1598,13 +1739,17 @@ ax.legend(
 );
 ```
 
-<!-- #region slideshow={"slide_type": "slide"} -->
+<!-- #region slideshow={"slide_type": "notes"} -->
 One of the most simple extensions when we split a line into multiple lines is to use parallel lines. Like the ones we can see here. These lines share the slope, but they have a different intercept. 
 
 This implies much more flexibility than the previous approach, but it is still a little restrictive because the same slope is used in all cases.
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"} hide_input=true
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Weirdly non-parallel
+<!-- #endregion -->
+
+```python hide_input=true slideshow={"slide_type": "-"}
 handles = [Line2D([], [], label=f"Group {i + 1}", color=f"C{i}") for i in range(5)]
 
 fig, ax = plt.subplots(figsize=FIGSIZE)
@@ -1621,13 +1766,17 @@ ax.legend(
 );
 ```
 
-<!-- #region slideshow={"slide_type": "slide"} -->
+<!-- #region slideshow={"slide_type": "notes"} -->
 It's also possible to split into multiple lines with different slope that share the intercept. Again, this is more flexible than the single line approach, but there's still the restriction that all the lines must share one of the parameters.
 
 This may make sense in some cases, but none in others.
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"} hide_input=true
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Maximum flexibility
+<!-- #endregion -->
+
+```python hide_input=true slideshow={"slide_type": "-"}
 handles = [Line2D([], [], label=f"Group {i + 1}", color=f"C{i}") for i in range(5)]
 
 fig, ax = plt.subplots(figsize=FIGSIZE)
@@ -1644,13 +1793,13 @@ ax.legend(
 );
 ```
 
-<!-- #region slideshow={"slide_type": "slide"} -->
+<!-- #region slideshow={"slide_type": "notes"} -->
 Finally, the most flexible approach. We split the single line into multiple lines that are completely independent. They don't need to share either the intercept or the slope. 
 
 **NOTE:** Maybe say something about no pooling vs partial pooling when estimating these lines? We'll touch partial pooling only at the end of the course.
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "slide"} -->
+<!-- #region slideshow={"slide_type": "notes"} -->
 We move forward with the most flexible model (varying intercept and slopes model).
 <!-- #endregion -->
 
@@ -1668,7 +1817,7 @@ $$
 for $j=1, \cdots, 7$.
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"}
+```python slideshow={"slide_type": "-"}
 log_length = np.log(data["Length1"].to_numpy())
 log_weight = np.log(data["Weight"].to_numpy())
 species, species_idx = np.unique(data["Species"], return_inverse=True)
@@ -1691,7 +1840,7 @@ with model:
 az.summary(idata, round_to=2, kind="stats")
 ```
 
-```python slideshow={"slide_type": "slide"} hide_input=false
+```python hide_input=false slideshow={"slide_type": "slide"}
 az.plot_trace(idata, compact=True, backend_kwargs={"tight_layout": True});
 ```
 
@@ -1703,8 +1852,12 @@ axes[0].set(title="Posterior of β0", yticklabels=reversed(species));
 axes[1].set(title="Posterior of β1");
 ```
 
-<!-- #region slideshow={"slide_type": "slide"} -->
+<!-- #region slideshow={"slide_type": "notes"} -->
 There's a substantial overlap between the posterior of the slopes, $\beta_1$. This may suggest the lines are actually parallel.
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "skip"} -->
+## ...
 <!-- #endregion -->
 
 ```python slideshow={"slide_type": "skip"}
@@ -1718,7 +1871,7 @@ b0_all = b0_mean.mean().item()
 b1_all = b1_mean.mean().item()
 ```
 
-```python slideshow={"slide_type": "slide"} hide_input=true
+```python hide_input=true slideshow={"slide_type": "-"}
 fig, axes = plt.subplots(2, 4, figsize=FIGSIZE, sharex=True, sharey=True, tight_layout=True)
 
 x_grid = np.array((log_length.min() - 0.25, log_length.max() + 0.25))
@@ -1765,13 +1918,15 @@ axes.ravel()[-1].remove()
 fig.legend(title="Species", handles=handles, bbox_to_anchor=(0.95, 0.425));
 ```
 
-<!-- #region slideshow={"slide_type": "slide"} -->
+<!-- #region slideshow={"slide_type": "notes"} -->
 The dashed line represents the global regression model. Think of it as the average line. The black line in each panel is the mean line of that species.
 
 Curiously, turns out the estimated lines are quite parallel. Even though we don't impose that in the model. This is consistent with what we saw when analyzing the posterior of $\beta_1$ above.
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"} hide_input=true
+## ...
+
+```python hide_input=true slideshow={"slide_type": "-"}
 fig, axes = plt.subplots(2, 4, figsize=FIGSIZE, sharex=False, sharey=False, tight_layout=True)
 
 x_grid = np.linspace(log_length.min(), log_length.max())
@@ -1818,7 +1973,7 @@ axes.ravel()[-1].remove()
 fig.legend(title="Species", handles=handles, bbox_to_anchor=(0.95, 0.425));
 ```
 
-<!-- #region slideshow={"slide_type": "slide"} -->
+<!-- #region slideshow={"slide_type": "notes"} -->
 We can get results back in the original scale as well! That's very powerful! What were straight lines in a complicated to understand space, are now exponential-like curves that are much more easy to understand.
 
 On the other hand, due to scaling issues we can't appreciate the quality of the fit as well as we could. This is because some species tend to be shorter or longer than others and we're using a common horizontal axis.
@@ -1826,7 +1981,11 @@ On the other hand, due to scaling issues we can't appreciate the quality of the 
 So let's drop the common axis and zoom in into the region where each species has observations...
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"} hide_input=true
+<!-- #region slideshow={"slide_type": "slide"} -->
+## ...
+<!-- #endregion -->
+
+```python hide_input=true slideshow={"slide_type": "-"}
 fig, axes = plt.subplots(2, 4, figsize=FIGSIZE, tight_layout=True)
 
 handles = []
@@ -1871,7 +2030,7 @@ fig.legend(title="Species", handles=handles, bbox_to_anchor=(0.95, 0.425));
 fig.savefig("imgs/l02_fitted_model.png", facecolor="w")
 ```
 
-<!-- #region slideshow={"slide_type": "slide"} -->
+<!-- #region slideshow={"slide_type": "notes"} -->
 Predictions improved so much!
 
 The line we're fitting approximates the real data very well!
@@ -1969,7 +2128,7 @@ az.summary(idata, round_to=2,  kind="stats")
 It becomes harder to analyze such a big table. This is where the importance of good visualization becomes more and more relevant.
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"} hide_input=true
+```python hide_input=true slideshow={"slide_type": "slide"}
 fig, axes = plt.subplots(1, 3, figsize=(14, 4.2), sharey=True)
 az.plot_forest(idata, var_names="beta_0", combined=True, ax=axes[0]);
 az.plot_forest(idata, var_names="beta_1", combined=True, ax=axes[1]);
