@@ -1670,8 +1670,25 @@ It's pretty clear now that our model needs to account for the species if we want
 ## How to?
 <!-- #endregion -->
 
+<!-- #region slideshow={"slide_type": "-"} -->
+* It's very easy with PyMC
+    * But we also want to understand what's going on
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "-"} -->
+* Challenge: Species is a feature of a different nature
+    * It's categorical
+    * Can't do math with labels
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "-"} -->
+* Adding a categorical predictor is like splitting a single line into multiple lines
+    * Single group: single line
+    * Multiple groups: multiple lines
+<!-- #endregion -->
+
 <!-- #region slideshow={"slide_type": "notes"} -->
-Fortunately, PyMC is going to make it really easy for us to use categorical variables. But we're not here to copy and paste code, we wanto to really understand what's going on under the hood.
+Fortunately, PyMC is going to make it really easy for us to use categorical variables. But we're not here to copy and paste code, we want to really understand what's going on under the hood.
 
 The first challenge is that species is a feature of different nature. How? Let's see for example Length. It's a numeric variable. Not only because it uses numbers for its values, but also because operations with those numbers are meaningful. The total lengh of two fish is the length of the first fish plus the length of the second fish. And it all makes sense.
 
@@ -1689,17 +1706,26 @@ Adding a categorical predictor is like splitting a single line into multiple lin
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "-"} -->
-* Wait, how can we make straight lines different?
-    * Tweak the intercept: We end up with parallel lines
-    * Tweak the slope: We end up with non-parallel lines that all share the same origin
-    * Tweak both intercept and slope: We end up with non-parallel lines that are completely independent of each other.
-    * These explanations are coupled with charts.
+* Tweak the intercept
+    * Parallel lines with a different origin
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "-"} -->
+* Tweak the slope
+    * Non-parallel lines with a common origin
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "-"} -->
+* Tweak both intercept and slope
+    * Non-parallel lines with different origins
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-From here the idea is how one can derive multiple lines from a single line. The goal is to build intuition around what happens when we incorporate a categorical predictor as well as in how many ways we can do that.
+How can we split a single line into multiple ones? Turns out there's actually a range of options.
 
-**NOTE:** What if we add some dots on the chart so we actually show what we're trying to approximate?
+...
+
+It's much easier to understand the concept when we can see it. So let's do it folks!
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -1713,9 +1739,9 @@ ax.set(title="All groups represented by a single line");
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-This is our setting so far. A single line represents the behavior of all the groups. **The information from all groups is pooled into a single line.** No matter how different two groups are, they are represented by the same line.
+This is our setting so far. A single line represents the behavior of all the groups. The information from all groups is **completely pooled** into a single line. No matter how different two groups are, they are represented by the same line.
 
-In some cases this is fine, in others it's an extremely poor choice.
+In some cases this is fine, in others such as our case, it's an poor choice. 
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -1740,13 +1766,13 @@ ax.legend(
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-One of the most simple extensions when we split a line into multiple lines is to use parallel lines. Like the ones we can see here. These lines share the slope, but they have a different intercept. 
+One of the most common extensions when splitting a line into multiple lines is to use parallel lines. Right like the lines here. These share a common slope, but they have a different intercepts. 
 
 This implies much more flexibility than the previous approach, but it is still a little restrictive because the same slope is used in all cases.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## Weirdly non-parallel
+## Non-parallel, but weird
 <!-- #endregion -->
 
 ```python hide_input=true slideshow={"slide_type": "-"}
@@ -1767,9 +1793,7 @@ ax.legend(
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-It's also possible to split into multiple lines with different slope that share the intercept. Again, this is more flexible than the single line approach, but there's still the restriction that all the lines must share one of the parameters.
-
-This may make sense in some cases, but none in others.
+It's also possible to split into multiple lines that have different slopes and a common intercept. In paper, this is more flexible than the single line approach, but there's still the restriction that all the lines must share one of the parameters, the intercept. This may make sense in some cases, but not in others.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -1796,11 +1820,10 @@ ax.legend(
 <!-- #region slideshow={"slide_type": "notes"} -->
 Finally, the most flexible approach. We split the single line into multiple lines that are completely independent. They don't need to share either the intercept or the slope. 
 
-**NOTE:** Maybe say something about no pooling vs partial pooling when estimating these lines? We'll touch partial pooling only at the end of the course.
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "notes"} -->
-We move forward with the most flexible model (varying intercept and slopes model).
+<!-- #region slideshow={"slide_type": "skip"} -->
+**NOTE:** Maybe say something about no pooling vs partial pooling when estimating these lines? We'll touch partial pooling only at the end of the course.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -1830,6 +1853,10 @@ with pm.Model(coords=coords) as model:
     mu = beta_0[species_idx] + beta_1[species_idx]  * log_length
     pm.Normal("log(weight)", mu=mu, sigma=sigma, observed=log_weight)
 ```
+
+<!-- #region slideshow={"slide_type": "notes"} -->
+We move forward with the most flexible model (varying intercept and slopes model).
+<!-- #endregion -->
 
 ```python slideshow={"slide_type": "slide"}
 with model:
