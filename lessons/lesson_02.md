@@ -68,7 +68,7 @@ When we ship our products, there is a very important piece of information we nee
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## Spoilers, Yes there is
+## Spoilers, Yes there are
 
 <center>
   <img src="imgs/l02_fitted_model.png" />
@@ -145,12 +145,6 @@ Cherry on the cake, it also allows you - the modeler - to communicate your resul
 None of this should feel new.
 
  This lesson is meant to be a review and complement to what was already covered there and most of the content should look familiar already. If you're too surprised about what we are seeing because it looks so confusing, it may indicate that you could take the Introductory Course before moving forward with Advanced Regression. We'll provide some resources if you prefer self learning
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "notes"} -->
-## Exploratory Data Analysis
-* Why we should look at the data before modeling
-* why blindly modelin
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -250,7 +244,7 @@ So far so good! Pandas let us know that all the columns have the appropriate dat
 ## Summary statistics
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "fragment"}
+```python slideshow={"slide_type": "-"}
 data.describe().round(2)
 ```
 
@@ -301,7 +295,7 @@ data.head()
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-We drop the extra columns to make this tidy and remove the correlated columns
+We drop the extra columns to make this tidy and remove the correlated columns.
 <!-- #endregion -->
 
 <!-- #region hide_input=true slideshow={"slide_type": "slide"} -->
@@ -323,9 +317,9 @@ ax.set(xlabel="Species", ylabel="Number of fish", title="Number of fish by speci
 <!-- #region slideshow={"slide_type": "notes"} -->
 We have gained lots of insights so far and that's aswesome. But we're still missing key part: the species. It's time to show off our data visualization skills!
 
-We can get started by exploring the number of records we have for each species using a nice chart.
+We can get started by exploring the number of records we have for each species using a barchart.
 
-The first thing we notice is the height of the bars are quite different. This means the number of records per species varies a lot. The most common species is (by far) Perch and it shows 56 records. Other species appear less frequently. Perkki and Whitefish are the most extreme cases with 11 and 6 records only.
+The first thing we notice is the height of the bars are quite different. This means the number of records per species varies a lot. The most common species is (by far) Perch and it has 56 records. Other species appear less frequently. Perkki and Whitefish are the most extreme cases with 11 and 6 records only.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -340,7 +334,7 @@ pd.concat(
 ).rename_axis("Species").reset_index()
 ```
 
-<!-- #region slideshow={"slide_type": "fragment"} -->
+<!-- #region slideshow={"slide_type": "-"} -->
 * Perch and Bream represent around 60% of all the fish
 * Whitefish appears very rarely
     * Perch is 10 times as frequent as Whitefish!
@@ -351,7 +345,7 @@ In this table view, we see the top-two species together make up around 60% of th
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## How much do fish weigh?
+## What's the weight of fish?
 <!-- #endregion -->
 
 ```python hide_input=true slideshow={"slide_type": "-"}
@@ -363,7 +357,7 @@ ax.set(xlabel="Weight (grams)", ylabel="Count", title="Distribution of fish weig
 <!-- #region slideshow={"slide_type": "notes"} -->
 We already got some insights about the weight. For example, we know the average fish weighs 400 grams. But that doesn't mean that 400 grams is a good number to represent all the fish! 
 
-Also, we're Bayesians and we love distributions. So why don't just see the entire the distribution of all the weights?
+As Bayesians, we love distributions. So why not see the entire distribution as well?
 
 Here we see taller bins for lower weights and shorter ones for higher weights. In other words, smaller weights are more common. 
 
@@ -395,7 +389,7 @@ ax.set(xlabel="Weight (grams)", ylabel="Count", title="Distribution of fish weig
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-And that's not all! We can also add extra layers of information. For example, we can visualize percentiles on top of the distribution to get richer insights.
+And that's not all folks! We can also add extra layers of information. For example, we can visualize percentiles on top of the distribution to get richer insights.
  
 We overlay the 80% percentile and it confirms with numbers what we've been seeing so far: the dataset contains mostly small fish. 8 out of 10 fish in the data weigh 700 grams or less!
 <!-- #endregion -->
@@ -426,22 +420,32 @@ There's a related question we need to ask: Is the weight of the fish related to 
 
 Our intuition and experience suggest so. But, we have data, right? So let's use it!
 
-**Note:** Highlight as we describe each of the components
-
 * How to read the chart
     * The dot represents the median weight
     * The thicker line represents 25% and 75% percentiles
     * The thinner line represents the minimum and the maximum values
 
-As we expected, weight varies from species to species. Some species are similar (see Whitefish and Bream) and some others are waaay different (see Pike and Smelt). The spread of these distributions are different as well. For example, Parkki fish have very similar weights, while Bream varies a lot more.
+As we expected, weight varies from species to species. Some species are similar (see Whitefish and Bream) and some others are waaay different (see Pike and Smelt). The spread of these distributions is different as well. For example, Parkki fish have very similar weights, while Bream varies a lot more.
 
 The **main takeaway** is that the species is something we need to really consider when building our regression model. We expect to adjust weight predictions based on the species. If a model predicts the same weight for all fish no matter the species, well, that's a red flag! It's inconsistent with what we've just found.
 
 So great to have this figured out! Thanks very much EDA!
 <!-- #endregion -->
 
+<!-- #region slideshow={"slide_type": "skip"} -->
+**Note:** Highlight components of the chart as we describe them
+<!-- #endregion -->
+
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## Relationship among fish measurements
+<!-- #endregion -->
+
+```python hide_input=false slideshow={"slide_type": "fragment"}
+sns.pairplot(data, vars=["Length1", "Height", "Width", "Weight"], diag_kws={"bins": 30});
+```
+
+<!-- #region slideshow={"slide_type": "skip"} -->
+**Note:** Highlight individual scatterplots when saying "Height and Width" and "Height and Weight". Even better, draw a straight and a curved line on each.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
@@ -450,34 +454,26 @@ We've been doing an intensive exploration so far. It's been exciting and insight
 On top of that, we have information about several other charactersitics of the fish like the length, height, and width. If we had to guess we would say longer, taller, and wider fish weigh more, right? That's pretty reasonable form a biological (and why not, culinary) perspective.
 
 But we have data, folks! Let's use it!
-<!-- #endregion -->
 
-```python hide_input=false slideshow={"slide_type": "fragment"}
-sns.pairplot(data, vars=["Length1", "Height", "Width", "Weight"], diag_kws={"bins": 30});
-```
-
-<!-- #region slideshow={"slide_type": "notes"} -->
 The chart confirm our guess was right. All the variables are positively associated. Larger values of one variable are associated with larger values of the other. For example, longer fish are usually taller, wider, and heavier.
 
 There's a another very interesting finding here. Some relationships are linear, while others are not. For example, Height and Width show a linear pattern, but Height and Weight don't.
 
 What's even more curious is there seems to be clouds of points that are very well separated from each other. What can this be? Let's double-click on it!
-
-**Note:** Highlight individual scatterplots when saying "Height and Width" and "Height and Weight". Even better, draw a straight and a curved line on each.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
 ### Relationship among fish measurements
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "fragment"}
+```python slideshow={"slide_type": "-"}
 sns.pairplot(data, vars=["Length1", "Height", "Width", "Weight"], hue="Species");
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
 Bingo! Once we map the species to the color of the dots we see clusters with dots of the same color. How can we read it? Length, height, and width are quite informative about the weight of the fish. But, on top of that, knowing the species adds even more information!
 
-This is so exciting! We started from nothing and after all this work we have so much information about our data! I cannot wait until we start using all of this in our model!
+This is so exciting! We started from nothing and after all this work we have so much information about our data! I cannot to start using all of this in our model!
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -492,7 +488,7 @@ This is so exciting! We started from nothing and after all this work we have so 
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-# Making a plan for models
+# Making a plan
 Higher probability of a good modeling results when we use informed priors 
 <!-- #endregion -->
 
@@ -506,11 +502,11 @@ Higher probability of a good modeling results when we use informed priors
 </center>
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-In this case our EDA informed our priors about how make a Bayesian model.
+We already gained lots of insights about the fish. This puts us in a much better position to start modeling. We have quite strong priors to judge if model inferences make sense or not. That's the power of Exploratory Data Analysis!
 
-We already extracted lots of information about the fish. This puts us in a much better position to start modeling. We're quite well informed to judge if model inferences make sense or not. That's the power of Exploratory Data Analysis!
+We have one last job to do: we're making a plan! 
 
-We have one last job to do: we're making a plan! We want to trace a path that we're going to follow when developing our Bayesian Regression model.
+Planning will make things much easier and more predictable developing our Bayesian Regression model. It's a guide that will take us from zero to hero.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -526,7 +522,7 @@ ax.set(xlabel="Weight (grams)", ylabel="Count", title="Distribution of fish weig
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-First of all, we are going to create a **baseline model**. This model won't incorporate any information but the fish weight. Yes, it sounds quite crazy! But that's what we're going to do to get started. The only feature of the fish the model is going to see is their weight. Just like what we can see in the following histogram.
+First of all, we are going to create a **baseline model**. This model won't incorporate any information but the fish weight. Yes, it sounds quite crazy! But that's what we're going to do to get started. The only feature of the fish the model is going to see is their weight. Just like what we can see in this histogram.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -542,9 +538,9 @@ ax.set(xlabel="Length (centimeters)", ylabel="Weight (grams)", title="Fish lengt
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-Don't we know much more about the fish?!
+Don't we know much more about the fish?! Of course we do!
 
-Of course, yes! That's our next step: adding predictors. We'll first add the fish length. We can anticipate this will give us a much richer model, which now can see how long fish are and use it to predict weight. Following our graphical story, this is equivalent to having access to the following scatterplot. Here we can see the length of the fish gives us valuable information about the weight.
+That's what the next step is about: adding predictors. We'll first add the fish length. We can anticipate this will give us a much richer model, which now can see how long the fish are and use it to predict weight. Following our graphical analogy, this is equivalent to having access to the scatterplot. Here we can see the length of the fish tells quite much about the weight.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -579,7 +575,9 @@ ax.legend(
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-And if you're wondering about the species we mentioned so many times, that's what's coming next! We'll be adding the species as a predictor in our model. As we can see in the following chart, we expect it to add even more information on top of what the fish length already gives. 
+And if you're wondering about the species we mentioned so many times, that's what's coming next! 
+
+We're going to be adding the species as a predictor in our model. As we can see in the chart, we expect this feature adds even more information on top of what the fish length already gives. 
 
 Finally, we'll see how we can incorporate the other fish measurements into the model. Our exploration suggests that not only the length is informative of the fish weight. We also have width and height, right? We'll cover how to add them very close to the end of the lesson.
 <!-- #endregion -->
@@ -588,28 +586,32 @@ Finally, we'll see how we can incorporate the other fish measurements into the m
 ## This is just the Bayesian Workflow
 <!-- #endregion -->
 
+<!-- #region slideshow={"slide_type": "-"} -->
 <center>
   <img src="imgs/Bayesian_workflow.png" style="height:700px" />
 </center>
+<!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-We're following a simplified version of the Bayesian workflow, which is a structured series of steps to achieve consciouisly achieve a great modeling result. From experience we can tell you this works better than a "random search" You'll see this many times in throughout the course,
+We're following a simplified version of the Bayesian workflow, which is a structured series of steps to achieve consciouisly achieve a great modeling result. From experience we can tell you this works better than a "random search". You'll see this many times in throughout the course.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## Section Recap
 
-* We recommend following Bayesian Workflow
+* It's always better to plan ahead
+* We'll grow our model one step at a time
+    * No predictors
+    * A single predictor
+    * Two predictors (length + species)
+    * How to keep growing it
+* This is just the Bayesian Workflow
   * Doing so helps you be more efficient but also saves you time if you run into issues
   * Enables justification of complexity as we go
-* For our fish model we anticipate building three models
-  * No covariate regression e.g. No predictors
-  * Single covariate
-  * Single covariate with categorical (@tomas to come up with something)
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-It's been a very intense exploration. But it's been worth it! After this much work, we were able to provide ourselves with so many resources that make us feel much more confident about the modeling work that comes next.
+It's been a very intense warm-up. But it's worth it! After this much work we're so much better prepared to start modeling.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -651,7 +653,7 @@ $$
 <!-- #region slideshow={"slide_type": "notes"} -->
 Nobody has gone crazy here. The model we're going to build in this section is that simple. It sees the fish as if they all weigh the same. 
 
-In math, the simplest idea is translated into $\text{Weight}_i = \text{Constant value}$. This is simply the mathematical way to say that all fish, indexed by $i$, weight the same (thus the "Constant value").
+In math, the simplest idea is translated into $\text{Weight}_i = \text{Constant value}$. This is simply the mathematical way to say that all fish, indexed by $i$, weigh the same (thus the "Constant value").
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -681,16 +683,15 @@ $$
 <!-- #region slideshow={"slide_type": "notes"} -->
 We can go further and translate the formulation above into a more statistical model notation.
 
-
 It's lots of information! Let's digest it one by one, step by step. See the first line
 
 $$\text{Weight}_i = \beta_0 + \varepsilon_i$$
 
-In statistics we usually use the greek letter $\beta_0$ to denote what represents a constant value in linear models. It maps straightforwardly to the $\text{Constant value}$ we've written above. 
+In statistics we usually use the greek letter $\beta_0$ the constant value in linear models. It maps straightforwardly to the $\text{Constant value}$ we've written above. 
 
 Next, $\varepsilon_i$ is the error term. It's there to account for the fact that the model is not a perfect representation of the real world phenomena, but a simplification that implies a certain degree of error. This error is a random variable, and as such, is modeled using a probability distribution. Which distribution we decide to use is critical and determines the properties of the model.
 
-$\varepsilon_i \sim \text{Normal}(0, \sigma)$ represents probability distribution used to model the error. It says the error follows a Normal distribution and that's why this type of model is known as **Normal linear regression** (we'll come to why it's linear later ;)). We assume the error mean is zero and has a standard deviation of $\sigma$.
+$\varepsilon_i \sim \text{Normal}(0, \sigma)$ represents probability distribution used to model the error. It says the error follows a Normal distribution and that's why this type of model is known as **Normal linear regression**. We assume the error mean is zero and has a standard deviation of $\sigma$.
 
 Then it comes one of the parts that distinguishes us as Bayesian data scientists: priors! We need to pick a prior for the parameters in the model $\beta_0$ and $\sigma$. We take a classic approach and use a Normal prior centered around 0 for $\beta_0$ and a HalfNormal prior for $\sigma$. Remember, HalfNormal is like the Normal distribution but for positive values only, as needed for a standard deviation.
 
@@ -724,7 +725,7 @@ with pm.Model() as model:
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-The condensed and distributional representation is very common in Bayesian statistics. It summarises both the information of the priors and the likelihood. It makes it very clear that this model uses a Normal likelihood function since Normal is the distribution chosen for the Weight.
+The condensed and distributional representation is very common in Bayesian statistics. Everything is represented with probability distributions. It summarises both the information of the priors and the likelihood. It makes it very clear that this model uses a Normal likelihood function since Normal is the distribution chosen for the Weight.
 
 Then, we use PyMC to build our model. One of the features that distinguish PyMC is its expressiveness. It allows us to map the statistical formulation of the model into very clear and concise Python code. It's so neat!
 <!-- #endregion -->
@@ -739,9 +740,9 @@ with model:
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-Modern Bayesian inference is really fast. With Markov Chain Monte Carlo, also called MCMC, we get samples that approximate the posterior. We won't be discussing details of the sampler in this course, we assume you already know it, though we'll link some resources if you curious.
+Modern Bayesian inference is really fast. With Markov Chain Monte Carlo, also called MCMC, we get samples that approximate the posterior. We won't be discussing details of the sampler in this course, we assume you already know it, though we'll link some resources if you're curious.
 
-The takeaway is most of the time, especially with linear models, if things are specified correctly sampling and hte data is quick and easy. 
+The takeaway is most of the time, especially with linear models, sampling is quick and easy.
 
 It's also great to see there are no warning messages for us.
 <!-- #endregion -->
@@ -754,11 +755,11 @@ az.plot_trace(idata, compact=False, backend_kwargs={"tight_layout": True});
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-With MCMC its always a good idea to check your posterior. Let's produce a traceplot to evaluate chain quality.
-This plot is called a traceplot, what we  look for on the right is the "fuzzy caterpillar"
+With MCMC it's always a good idea to check your posterior. So we create a traceplot to evaluate chain quality.
+What we look for on the traces on the right is the "fuzzy caterpillar".
 
 * Sampling went so good!
-* No evident MCMC convergence issues
+* No sign of MCMC convergence issues
 * All chains converged to the same distribution
 
 Both posteriors have a bell shape, and the estimates from all chains are quite similar. The traces are all also very similar and they look very much like white noise, meaning there's no convergence or mixing issues. That's great!
@@ -781,15 +782,12 @@ Let's interpret the results!
 
 First of all, the uncertainty around $\beta_0$ and $\sigma$ is low if we compare their respective standard deviations with their respective means. That's the good part!
 
-But if we also compare $\sigma$ with the usual weights, we can conclude $\sigma$ is quite high. This will be translated into high uncertainty in the prediction of weight for new fish. 
+But if we also compare $\sigma$ with the usual weights, we can conclude $\sigma$ is quite high. This will make predictions for new fish very uncertain!
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## The empirical Mean
-
+## The empirical mean: A single point
 <!-- #endregion -->
-
-Just a single point
 
 ```python slideshow={"slide_type": "fragment"}
 empirical_mean = round(data["Weight"].mean(), 2)
@@ -804,14 +802,12 @@ ax.legend();
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-If we ignore our Bayesian analysis for a second and just look at the mean this is what we get. Just a single point estimate for all the fish. No measure of uncertainty.
+If we ignore our Bayesian analysis for a second and just look at the mean this is what we get. Just a single point estimate for all the fish. No measure of uncertainty. It's hard to tell which values are more likely.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## The Bayesian Mean
+## The Bayesian mean: A whole distribution
 <!-- #endregion -->
-
-A whole probability distribution
 
 ```python hide_input=true
 fig, ax = plt.subplots(figsize=FIGSIZE)
@@ -829,13 +825,15 @@ On the other hand, the Bayesian model provides a whole probability distribution 
 ## Mean Uncertainty vs Individual Observation Uncertainty
 <!-- #endregion -->
 
-```python
+```python slideshow={"slide_type": "-"}
 with model:
     pm.sample_posterior_predictive(idata, extend_inferencedata=True)
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-Does the $\beta_0$ posterior mean the model is confident that all fish weigh between 357 and 433 grams? Nope! $\beta_0$ represents the mean of the weight. So that posterior is a distribution for the mean weight, not the individual weights. 
+Does the $\beta_0$ posterior mean that the model is confident that all fish weigh between 357 and 433 grams? 
+
+No! $\beta_0$ represents the mean of the weight distribution. So the $\beta_0$ posterior is a distribution for the mean of the weight, not for each weight individually.
 
 From a Bayesian model we get two results. The posterior estimate of the mean with $\beta_0$, but also the posterior estimate of individual fish, which is known as the **posterior predictive distribution**.
 
@@ -854,17 +852,17 @@ az.plot_dist(idata.posterior_predictive["weight"], label="Individual weight post
 ax.legend();
 ```
 
-How does the posterior predictive distribution compares to the posterior of the mean weight? Let's have a look at this chart, which contains lots of information.
+How does the posterior predictive distribution compares to the posterior of the mean weight? Let's have a closer look.
 
-We have the the empirical mean and the posterior for the mean weight, which we have already seen. The new distribution is the one we use to predict the weight of an individual fish (i.e. the posterior predictive distribution).
+We have the the empirical mean and the posterior for the mean weight, which we have already seen. The new distribution is the one we need to use to predict the weight of individual fish. This is known as the posterior predictive distribution.
 
-The posterior predictive distribution is also centered around the mean of $\beta_0$, but its uncertainty is larger to account for the fact we're predicting at the individual level.
+The posterior predictive distribution is also centered around the mean of $\beta_0$, but its uncertainty is much larger! This is a feature that accounts for the fact we're predicting at the individual level.
 
-Wait, holy crap! This is so uncertain it even allows negative values. 
+However, our model is so uncertain about individual weights that it predicts even negative values. Holy crap!
 
 As humans we know negative values are impossible. If we could build a model that by design restricts the output to positive values only, that would be great. You know what? It's possible indeed! But we won't do that now. You'll see that happen in later lessons.
 
-This is not the end of the world either. We're just getting started and this is just evidence suggesting better modeling efforts are needed.
+Anyway, it's not the end of the world either! We're just getting started and we should take this as an indication to keep iterating to come up with a better model.
 
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## Visualize the fitted curve
@@ -912,10 +910,10 @@ One of the good aspects of going Bayesian is that we get uncertainty quantificat
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-### Section Recap
+## Section Recap
 
 * Straight lines are powerful building blocks for statistical modeling
-* The simplest linear regression model we can build is a flat line.
+* The simplest linear regression model we can build is a flat line
     * It omits all the information from any available predictor
     * It assigns the same weight for all the fish
     * It is known as the intercept only model
@@ -942,7 +940,7 @@ One of the good aspects of going Bayesian is that we get uncertainty quantificat
 
 * We're happy we created our first model
 * The EDA shows other measurements give valuable information about the fish weight
-* Add predictors to the model
+* Let's add predictors to the model!
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
@@ -954,7 +952,7 @@ In this section, we will learn how to incorporate predictors into the model so i
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-### Intercept only model review
+## Intercept only model review
 <!-- #endregion -->
 
 ```python hide_input=true slideshow={"slide_type": "-"}
@@ -999,9 +997,7 @@ $$
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-The previous model says that the weight is equal to a constant value that we call intercept. How do we make the weight change as length changes? The answer: Add a slope!
-
-
+The previous model says the weight is equal to a constant value called intercept. How do we make the weight change as length changes? The answer: Add a slope!
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -1090,18 +1086,22 @@ handles = [
 ax.legend(handles=handles, loc="upper left");
 ```
 
-<!-- #region slideshow={"slide_type": "skip"} -->
-**TODO:** Add image/gif person crying
+<!-- #region slideshow={"slide_type": "notes"} -->
+Awesome, we got what we wanted. Now the model has a slope and it accounts for the fish length when predicting weight. The longer the fish, the larger the predicted weight. Makes total sense. Also, the Bayesian approach gives credibility bands for free. I can't be more happy!
+
+Oh, wait! Looks like there's something messed up. Holy crap, the fit is actually terrible! And there's more! it predicts negative values!
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "skip"} -->
 **Note:** Highlight the horizontal line at y = 0 when saying "do you see that!?"
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "notes"} -->
-Awesome, we got what we wanted. Now the model has a slope and it accounts for the fish length when predicting weight. The longer the fish, the larger the predicted weight. Makes total sense. Also, the Bayesian approach gives credibility bands for free. I can't be more happy!
+<!-- #region slideshow={"slide_type": "slide"} -->
+## What did we do wrong?!
+<!-- #endregion -->
 
-Oh, wait! Looks like there's something messed up. Holy crap, the fit is actually terrible! And there's more! it predicts negative values!
+<!-- #region slideshow={"slide_type": "skip"} -->
+**TODO:** Add image/gif person crying
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -1136,7 +1136,7 @@ The scatterplot shows very clearly that larger lengths imply larger weights. How
 ### Section Recap
 
 * Simple linear regression is powerful
-    * We added predictors into our predictive model
+    * We added predictors into our model
     * All of this with proper uncertainty quantification
 * Linear fit was terrible
 * EDA is important to ensure the linear approximation applies to the problem at hand
@@ -1215,7 +1215,7 @@ ax.set(xlabel="Length", ylabel="Weight", title="Fish length vs weight");
 ```
 
 <!-- #region hide_input=true slideshow={"slide_type": "notes"} -->
-This is the scatterplot between Length and Weight in their original scales. It's also said these variables are untransformed. Since the plot shows an exponential-like pattern, it's sensible to use the logarithm trasnformation to linearize it. 
+Let's quickly review where we are so far. This is the scatterplot between Length and Weight in their original scales. It's also said these variables are untransformed. Since the plot shows an exponential-like pattern, it's sensible to use the logarithm trasnformation to linearize it. 
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -1229,7 +1229,7 @@ ax.set(xlabel="log(Length)", ylabel="Weight", title="log(Length) vs Weight");
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-First, let's transform `Length` into `log(Length)`. Notice the change on the horizontal scale. 
+First, let's transform `Length` into `log(Length)`. Notice here the change on the horizontal scale. 
 But it's pretty much the same shape. It still looks exponential. So this is not the result we're looking for. Let's keep trying.
 <!-- #endregion -->
 
@@ -1292,7 +1292,7 @@ $$
 <!-- #region slideshow={"slide_type": "notes"} -->
 Taking all the components together, the formula for the linear regression is equivalent to the original formula we used before. The only difference is that we use the transformed variables now.
 
-It's exactly the same structure than before, we only changed the variables for the transformed ones. All the rest remains the same.
+It's exactly the same structure than before, we only changed replaced the untransformed variables with the transformed ones. All the rest remains the same.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "skip"} -->
@@ -1328,7 +1328,7 @@ with pm.Model() as model:
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-The Bayesian formulation of the model is so similar to the one we wrote in the previous section. The only thing that changes are the variable, which are the result of the logarithm transformation now. 
+The Bayesian formulation of the model is so similar to the one we wrote in the previous section. The only things changing are the variables. These are now the result of the log transformation. 
 
 Again, see how close PyMC resembles the math... So clean!
 <!-- #endregion -->
@@ -1375,9 +1375,11 @@ ax.legend(handles=handles, loc="upper left");
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-This does look like the plot we've been looking so much. The fit tremendously. Now the regression is a much better representation of the relationship between the variables.
+Let's double check the regression model with the transformed variables.
 
-You know what this means? We've got something that really improves the predictions of weight. Our boss will be so happy!
+This does look like the plot we've been looking so much. Now the regression line is a much better representation of the relationship between the variables.
+
+Do you know what it means? We've got something that really improves the predictions of weight. Our boss will be so happy!
 
 As you may be thinking, this chart is in the log-transformed space. So, it means we simply pass a logarithm of the length to the model and it gives us the predicted logarithm of the weight. 
 
@@ -1409,11 +1411,11 @@ Well, it's not that great actually. We can't pretend our company gets used to me
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-We're so lucky to have transformations. The log transformation allowed us to use linear regression in this problem. 
+We're so lucky to have transformations. The log transformation allowed us to use linear regression when it seemed not to be possible.
 
-On the other hand, now we need to learn how to talk in log scales. It solved a problem but also gave us a new one. What a bummer!
+On the other hand, it looks like now we need to learn how to talk in log scales. It solved a problem but also gave us a new one. What a bummer!
 
-It's not all lost my friends. We've picked a great transformation, because it's invertible. It means we can invert or reverse the function applied, and get results back in the normal or untransformed space. All we need to do in this case is to use the exponential function.
+You have nothing to worry about, you can always come back home. We've picked a great transformation, because it's invertible. It means we can invert or reverse the function applied, and get results back in the normal or untransformed space. All we need to do in this case is to use the exponential function.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -1445,11 +1447,11 @@ ax.legend(handles=handles, loc="upper left");
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-Even though we're using a linear model, the fit is not linear in the original scale anymore. It's mind blowing! We start seeing how flexible this is!
+This is the regression curve in the original space. Even though we're using a linear model, the fit is not linear in the original scale anymore. Mind blowing!
 
 Nevertheless, we're not done yet. There's still things we can improve. The curve approximates the cloud quite well, much better than before, but there are large overestimations for longer fish. We can see the estimated curve is way above the blue dots. 
 
-For example, the longest fish has a length of 59 centimeters, weights 1650 grams, but the model predicts slightly more than 3500 grams! That's a very large difference. 
+For example, the longest fish has a length of 59 centimeters, weighs 1650 grams, but the model predicts slightly more than 3500 grams! That's a very large difference. 
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "skip"} -->
@@ -1463,7 +1465,7 @@ print(f"Longest fish mean predicted weight: {round(np.exp(b0_mean + b1_mean * lo
 ```
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## You'd better measure the error
+## We'd better measure the error
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "-"} -->
@@ -1480,7 +1482,7 @@ $$
 
 When we compare predictions with the actual observed values we're referring to a quantity known as residuals. Residuals are a tool to measure the error in our predictions. 
 
-We get many residuals, as many as observations. If our model fits well, these residuals will have a zero mean and be independent of the predictor.
+With a model we get many residuals. As many as observations. If our model fits well, these residuals will have a zero mean and be independent of the predictor. Non-random patterns in the residuals indicate something going wrong with our model.
 
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## Visualize the residuals
@@ -1508,9 +1510,9 @@ Let's have a look at the residuals. On the horizontal axis we still have the log
 We can spot the following issues
 
 * There are 3 groups of dots
-    * In two smaller groups groups, the model overestimates the weight
+    * In the smaller groups, the model overestimates the weight
     * In the bigger group, the model underestimates the weight
-* There's clearly a non-random pattern
+* This is clearly a non-random pattern
     * It's not easy to detect what's exactly going on
 <!-- #endregion -->
 
@@ -1532,7 +1534,7 @@ We can spot the following issues
 <!-- #region slideshow={"slide_type": "skip"} -->
 Alright, this section came to its end! If you have a little of a bitter taste because of the residual analysis, you should definitely go straight to the next section where we finally discover what's going on.
 
-What's more important is to highlight what we've learnt so far. Model building is an iterative process and our own work is a proof of that. We also saw how important transformations are. They allow us to use linear regression when relationships are not linear in principle. It makes linear regression much more powerful and flexible. Finally, we also saw that constantly evaluating the model fit is part of the iterative process. It may leave a sour taste to find something is not going as expected, but in the end, it's what will take us to the best of the results.
+What's more important is to highlight what we've learnt so far. Model building is an iterative process and our own work is a proof of that. We also saw how important transformations are. They allow us to use linear regression when relationships are not linear in principle. It makes linear regression much more powerful and flexible. Finally, we also saw that constantly evaluating the model fit is part of the iterative process. It's not nice to find something that is not going as expected, but in the end, it's what will take us to the best of the results.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -1661,7 +1663,7 @@ ax.legend(
 <!-- #region slideshow={"slide_type": "-"} -->
 That's the missing part! We knew we were missing something in the previous residual analysis, and we've just found it.
 
-Now it's pretty clear that groups identify different species. In particular, Smelt and Pike look like very different from the rest, they're always overestimated by the single intercept single slope model. Also, Parkki and Bream were usually underestimated, which is also a bad sign. And the fit was reasonably well for Perch and Roach, because their residuals are more or less centered around 0.
+Now it's pretty clear that groups identify different species. In particular, Smelt and Pike look like very different from the rest, they're always overestimated by the single intercept single slope model. Also, Parkki and Bream were usually underestimated, which is also a bad sign. On the other hand, the fit was reasonably well for Perch and Roach because their residuals are more or less centered around 0.
 
 It's pretty clear now that our model needs to account for the species if we want to get more accurate predictions. Let's do it!
 <!-- #endregion -->
@@ -1690,7 +1692,7 @@ It's pretty clear now that our model needs to account for the species if we want
 <!-- #region slideshow={"slide_type": "notes"} -->
 Fortunately, PyMC is going to make it really easy for us to use categorical variables. But we're not here to copy and paste code, we want to really understand what's going on under the hood.
 
-The first challenge is that species is a feature of different nature. How? Let's see for example Length. It's a numeric variable. Not only because it uses numbers for its values, but also because operations with those numbers are meaningful. The total lengh of two fish is the length of the first fish plus the length of the second fish. And it all makes sense.
+The first challenge is that species is a feature of a different nature. How? Let's see for example Length. It's a numeric variable. Not only because it uses numbers for its values, but also because operations with those numbers are meaningful. The total lenght of two fish is the length of the first fish plus the length of the second fish. And it all makes sense.
 
 Species is of different nature, though. It's categorical. Not only because its values are not numbers, but also because they don't have a numeric interpretation. We can't do `"Bream" + "Pike"` and expect to obtain a sensible result. 
 
@@ -1698,7 +1700,7 @@ So... how does it work? Well, it's not such a big issue. Previsouly, we had a si
 
 Turns out the answer is **yes!**
 
-Adding a categorical predictor is like splitting a single line into multiple lines, one per group. This means that each species can show a different behavior. We get a more flexible model!
+Adding a categorical predictor is like splitting a single line into multiple lines, one per group. This means that each species can show a different behavior. We get a more flexible model this way!
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -1739,9 +1741,9 @@ ax.set(title="All groups represented by a single line");
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-This is our setting so far. A single line represents the behavior of all the groups. The information from all groups is **completely pooled** into a single line. No matter how different two groups are, they are represented by the same line.
+This is our setting so far. A single line represents all the groups. The information from all groups is **completely pooled** into a single line. This assumes all groups are so similar it's not needed to have a dedicated line for each.
 
-In some cases this is fine, in others such as our case, it's an poor choice. 
+In some cases this is fine, in others such as our case, it's a poor choice. 
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -1766,9 +1768,9 @@ ax.legend(
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-One of the most common extensions when splitting a line into multiple lines is to use parallel lines. Right like the lines here. These share a common slope, but they have a different intercepts. 
+One of the most common extensions when splitting a line into multiple lines is to use parallel lines. Just like the lines we see here. These share a common slope, but they have a different intercepts. 
 
-This implies much more flexibility than the previous approach, but it is still a little restrictive because the same slope is used in all cases.
+This is much more flexible than the previous approach, but it is still a little restrictive because the same slope is used in all cases.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -1793,7 +1795,7 @@ ax.legend(
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-It's also possible to split into multiple lines that have different slopes and a common intercept. In paper, this is more flexible than the single line approach, but there's still the restriction that all the lines must share one of the parameters, the intercept. This may make sense in some cases, but not in others.
+It's also possible to split into multiple lines that have different slopes and a common intercept. In paper, this is more flexible than the single line approach, but there's still the restriction that all the lines must share one of the parameters, the intercept. Again, this might make sense in some cases, but not in others.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -1820,13 +1822,18 @@ ax.legend(
 <!-- #region slideshow={"slide_type": "notes"} -->
 Finally, the most flexible approach. We split the single line into multiple lines that are completely independent. They don't need to share either the intercept or the slope. 
 
+From all the options available, this is the one we will use for our model. Each species will have its own intercept and its own slope.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "skip"} -->
 **NOTE:** Maybe say something about no pooling vs partial pooling when estimating these lines? We'll touch partial pooling only at the end of the course.
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "slide"} -->
+<!-- #region slideshow={"slide_type": "slide"} hide_input=true -->
+## The model
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "-"} -->
 $$
 \begin{aligned}
 \beta_{0,j} & \sim \text{Normal}(0, \sigma_{\beta_0}) \\
@@ -1840,6 +1847,10 @@ $$
 for $j=1, \cdots, 7$.
 <!-- #endregion -->
 
+<!-- #region slideshow={"slide_type": "-"} -->
+ 
+<!-- #endregion -->
+
 ```python slideshow={"slide_type": "-"}
 log_length = np.log(data["Length1"].to_numpy())
 log_weight = np.log(data["Weight"].to_numpy())
@@ -1847,15 +1858,23 @@ species, species_idx = np.unique(data["Species"], return_inverse=True)
 coords = {"species": species}
 
 with pm.Model(coords=coords) as model:
-    beta_0 = pm.Normal("beta_0", mu=0, sigma=5, dims="species")
-    beta_1 = pm.Normal("beta_1", mu=0, sigma=5, dims="species")
-    sigma = pm.HalfNormal("sigma", sigma=5)
-    mu = beta_0[species_idx] + beta_1[species_idx]  * log_length
+    β0 = pm.Normal("β0", mu=0, sigma=5, dims="species")
+    β1 = pm.Normal("β1", mu=0, sigma=5, dims="species")
+    sigma = pm.HalfNormal("σ", sigma=5)
+    mu = β0[species_idx] + β1[species_idx] * log_length
     pm.Normal("log(weight)", mu=mu, sigma=sigma, observed=log_weight)
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-We move forward with the most flexible model (varying intercept and slopes model).
+Let's see the model now. The specification has a subtle, but fundamental, difference. Both the intercept and the slope paremeters are now indexed by $j$, the letter we use to represent the species. All this just means there are multiple intercepts and slopes.
+
+We can see this reflected both in the statistical formulation and the PyMC model. See we're using `coords` now, which allows us to tell PyMC how many species are there and label them with their names. All the rest is pretty similar to what we had before.
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "skip"} -->
+**Note:** Highlight the $\beta_{0,j}$ and `β0[species_idx]` with the same color, and $\beta_{1, j}$ and `β1[species_idx]` with another one.
+
+**Question:** I'm not sure how much we need to explain about the model code (coords, indexing, etc)
 <!-- #endregion -->
 
 ```python slideshow={"slide_type": "slide"}
@@ -1863,36 +1882,60 @@ with model:
     idata = pm.sample(chains=4, target_accept=0.85, random_seed=1234)
 ```
 
-```python slideshow={"slide_type": "slide"}
+<!-- #region slideshow={"slide_type": "skip"} -->
+**Note:** Skip the model fitting? 
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "slide"} -->
+## See the summary
+<!-- #endregion -->
+
+```python slideshow={"slide_type": "-"}
 az.summary(idata, round_to=2, kind="stats")
 ```
 
-```python hide_input=false slideshow={"slide_type": "slide"}
-az.plot_trace(idata, compact=True, backend_kwargs={"tight_layout": True});
-```
+<!-- #region slideshow={"slide_type": "notes"} -->
+The summary table grew up quite a lot. What used to be only three parameters (intercept, slope and, and sigma) is now 15 (!). With this table alone it takes a while to recognize similarities and differences between the intercepts and slopes of the species. Let's try a visual alternative.
+<!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"}
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Better use a foresplot
+<!-- #endregion -->
+
+```python slideshow={"slide_type": "-"} hide_input=true
 fig, axes = plt.subplots(1, 2, figsize=(14, 4.2), sharey=True)
-az.plot_forest(idata, var_names="beta_0", combined=True, ax=axes[0]);
-az.plot_forest(idata, var_names="beta_1", combined=True, ax=axes[1]);
-axes[0].set(title="Posterior of β0", yticklabels=reversed(species));
+az.plot_forest(idata, var_names="β0", combined=True, linewidth=2.8, ax=axes[0])
+az.plot_forest(idata, var_names="β1", combined=True, linewidth=2.8, ax=axes[1])
+axes[0].set(title="Posterior of β0", yticklabels=reversed(species))
 axes[1].set(title="Posterior of β1");
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-There's a substantial overlap between the posterior of the slopes, $\beta_1$. This may suggest the lines are actually parallel.
+The foresplot shows the information from the table in a much better way. It makes it easier to appreciate  similarities and differences between species. 
+
+First, let's have a look at the intercepts. We can observe a difference from species to species. The overlap tells not all of them are completely different, but it's clear they're not all the same. For example, see the posteriors of Bream and Pike, they differ quite a lot.
+
+On the other hand, there's a larger overlap between the posterior of the slopes. They mainly differ in spread, not in location. This suggests the parallel assumption could also work.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "skip"} -->
-## ...
+**Note:** It does not show the mean value for each posterior. I don't know why.  
+**Note:** Show the code?
+
+**Note:** When I say "see the posteriors of Bream and Pike, they differ quite a lot" highlight those two.  
+**Note:** Say something about the difference in spread (i.e. different sample sizes per group)
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Visualize the model
 <!-- #endregion -->
 
 ```python slideshow={"slide_type": "skip"}
-b0_draws = idata.posterior["beta_0"][:, ::10]
-b1_draws = idata.posterior["beta_1"][:, ::10]
+b0_draws = idata.posterior["β0"][:, ::10]
+b1_draws = idata.posterior["β1"][:, ::10]
 
-b0_mean = idata.posterior["beta_0"].mean(("chain", "draw"))
-b1_mean = idata.posterior["beta_1"].mean(("chain", "draw"))
+b0_mean = idata.posterior["β0"].mean(("chain", "draw"))
+b1_mean = idata.posterior["β1"].mean(("chain", "draw"))
 
 b0_all = b0_mean.mean().item()
 b1_all = b1_mean.mean().item()
@@ -1946,12 +1989,22 @@ fig.legend(title="Species", handles=handles, bbox_to_anchor=(0.95, 0.425));
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-The dashed line represents the global regression model. Think of it as the average line. The black line in each panel is the mean line of that species.
+It's time to visually inspect the fit. We have seven lines now, one for each species. It's a good idea to split the plot into multiple panels, so it's easier to analyze the fit for each species.
 
-Curiously, turns out the estimated lines are quite parallel. Even though we don't impose that in the model. This is consistent with what we saw when analyzing the posterior of $\beta_1$ above.
+In this visualization, the colored lines are draws from the posterior distribution, the solid black line is the mean posterior for each species, and the dashed black line is the same in all panels and it shows the global regression line. You can think of it as the average line across all species.
+
+There's great news shown here: the fit for individual species improved tremendously! That's a very big step forward!
+
+Curiously, it turns out the estimated lines are quite parallel, even though we don't impose that in the model. This is related to what we found in the foresplot a moment ago.
 <!-- #endregion -->
 
-## ...
+<!-- #region slideshow={"slide_type": "skip"} -->
+**Note:** Say something about spread bc of sample size?
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Visualize the model in original scale
+<!-- #endregion -->
 
 ```python hide_input=true slideshow={"slide_type": "-"}
 fig, axes = plt.subplots(2, 4, figsize=FIGSIZE, sharex=False, sharey=False, tight_layout=True)
@@ -2001,15 +2054,15 @@ fig.legend(title="Species", handles=handles, bbox_to_anchor=(0.95, 0.425));
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-We can get results back in the original scale as well! That's very powerful! What were straight lines in a complicated to understand space, are now exponential-like curves that are much more easy to understand.
+Of course we can get results back in the original scale as well. That's very powerful! What were straight lines in a complicated to understand space, are now exponential-like curves that are much more easy to understand.
 
 On the other hand, due to scaling issues we can't appreciate the quality of the fit as well as we could. This is because some species tend to be shorter or longer than others and we're using a common horizontal axis.
 
-So let's drop the common axis and zoom in into the region where each species has observations...
+So let's drop the common axes and zoom in into the region where each species has observations...
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## ...
+## Visualize the model in original scale (zoomed version)
 <!-- #endregion -->
 
 ```python hide_input=true slideshow={"slide_type": "-"}
@@ -2058,33 +2111,41 @@ fig.savefig("imgs/l02_fitted_model.png", facecolor="w")
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-Predictions improved so much!
+Yeah, this is awesome. It's pretty clear now that our model is capturing the data pattern so much better now. 
 
-The line we're fitting approximates the real data very well!
+Do you know what it means? Much better predictions and more accurate estimation of fish. More money is on its way!
+<!-- #endregion -->
 
-All of this with principled uncertainty quantification thanks to the Bayesian approach.
+<!-- #region slideshow={"slide_type": "skip"} -->
+**Exercise:** Repeat the residual analysis, now with the full model accounting for species. What's the difference with the original analysis? Why?
 
-It's quite intuitive to see that we're more certain in regions of smaller spread.
+**Note:** Should we add predictions?
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-* **Predictions?**
-<!-- #endregion -->
+## Section Recap
 
-<!-- #region slideshow={"slide_type": "slide"} -->
-### Section Recap
-
-* Regression models are extremely flexible.
-    * We can incorporate predictors of different nature (numeric and categoric)
+* Regression models are extremely flexible
+    * We can incorporate predictors of different nature
 * Adding a categorical predictor is equivalent to splitting the regression line into multiple lines
-    * We'll have as many lines as groups in the categorical predictor.
-    * In our problem we have as many lines as species in the dataset.
-* These lines are estimated independently for each species
-    * ?Hierarchical modeling goes a step further and share information among groups.
+    * We'll have as many lines as groups in the categorical predictor
+    * In our problem we have as many lines as species in the dataset
+* Having a different line for each species gives more flexibility
+    * Allows more realistic scenarios
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "skip"} -->
+
+
+**Note:** Something saying this used completely unpooled estimation? Or maybe it's better to reveal that once we cover hierarchical modeling?
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## Section 70: Bayesian Workflow and Growing Pains
+# Bayesian Workflow and Growing Pains
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Bayesian Workflow and Growing Pains
 
 * Along the lesson we saw simple straight models many times.
     * The numerical predictor (the length of the fish) is paired with a slope parameter.
@@ -2103,6 +2164,8 @@ It's quite intuitive to see that we're more certain in regions of smaller spread
   * If we control for this variable we can see the effect of this other variable
 <!-- #endregion -->
 
+## More predictors
+
 <!-- #region slideshow={"slide_type": "slide"} -->
 $$
 \begin{aligned}
@@ -2118,7 +2181,11 @@ $$
 for $j=1, \cdots, 7$.
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "slide"}
+<!-- #region slideshow={"slide_type": "slide"} -->
+## More predictors
+<!-- #endregion -->
+
+```python slideshow={"slide_type": "-"}
 log_length = np.log(data["Length1"].to_numpy())
 log_height = np.log(data["Width"].to_numpy())
 log_weight = np.log(data["Weight"].to_numpy())
@@ -2126,14 +2193,14 @@ species, species_idx = np.unique(data["Species"], return_inverse=True)
 coords = {"species": species}
 
 with pm.Model(coords=coords) as model:
-    beta_0 = pm.Normal("beta_0", mu=0, sigma=5, dims="species")
-    beta_1 = pm.Normal("beta_1", mu=0, sigma=5, dims="species")
-    beta_2 = pm.Normal("beta_2", mu=0, sigma=5, dims="species")
+    β0 = pm.Normal("β0", mu=0, sigma=5, dims="species")
+    β1 = pm.Normal("β1", mu=0, sigma=5, dims="species")
+    β2 = pm.Normal("β2", mu=0, sigma=5, dims="species")
     sigma = pm.HalfNormal("sigma", sigma=5)
     mu = (
-        beta_0[species_idx] 
-        + beta_1[species_idx] * log_length 
-        + beta_2[species_idx] * log_height
+        β0[species_idx] 
+        + β1[species_idx] * log_length 
+        + β2[species_idx] * log_height
     )
     pm.Normal("log(weight)", mu=mu, sigma=sigma, observed=log_weight)
 ```
@@ -2147,27 +2214,19 @@ with model:
 az.plot_trace(idata, compact=True, backend_kwargs={"tight_layout": True});
 ```
 
-```python slideshow={"slide_type": "slide"}
-az.summary(idata, round_to=2,  kind="stats")
-```
-
 <!-- #region slideshow={"slide_type": "slide"} -->
 It becomes harder to analyze such a big table. This is where the importance of good visualization becomes more and more relevant.
 <!-- #endregion -->
 
-```python hide_input=true slideshow={"slide_type": "slide"}
+```python hide_input=false slideshow={"slide_type": "slide"}
 fig, axes = plt.subplots(1, 3, figsize=(14, 4.2), sharey=True)
-az.plot_forest(idata, var_names="beta_0", combined=True, ax=axes[0]);
-az.plot_forest(idata, var_names="beta_1", combined=True, ax=axes[1]);
-az.plot_forest(idata, var_names="beta_2", combined=True, ax=axes[2]);
+az.plot_forest(idata, var_names="β0", combined=True, linewidth=2.8, ax=axes[0]);
+az.plot_forest(idata, var_names="β1", combined=True, linewidth=2.8, ax=axes[1]);
+az.plot_forest(idata, var_names="β2", combined=True, linewidth=2.8, ax=axes[2]);
 axes[0].set(title="Posterior of β0", yticklabels=reversed(species));
 axes[1].set(title="Posterior of β1");
 axes[2].set(title="Posterior of β2");
 ```
-
-<!-- #region slideshow={"slide_type": "slide"} -->
-Idea: Compare uncertainties in b0, b1 and b2. Associate that with number of observations per species.
-<!-- #endregion -->
 
 ### Section Recap
 
@@ -2188,19 +2247,4 @@ Idea: Compare uncertainties in b0, b1 and b2. Associate that with number of obse
     * Model with single predictor -> A non-flat line
     * Model with numerical and categorical predictor -> Multiple non-flat lines, one for each species.
 
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "slide"} -->
-* What defines a slide?
-    * H1?
-* Fragments
-    * To move forward partially
-* HTML to adjust picture size.
-* For matplotlib you adjust the figure size.
-* Math? Just like jupyter notebooks
-* All files locally.
-* How to render using VS Code? Or do I need Jupyter Notebook?
-    * Jupyter Notebook
-* Hide input extension notebook
-* Figure out the comma issue
 <!-- #endregion -->
