@@ -6,7 +6,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.13.8
+      jupytext_version: 1.14.1
   kernelspec:
     display_name: Python 3 (ipykernel)
     language: python
@@ -599,15 +599,15 @@ We're following a simplified version of the Bayesian workflow, which is a struct
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## Section Recap
 
-* It's always better to plan ahead
-* We'll grow our model one step at a time
+* We'll build our model one step at a time in the following steps
     * No predictors
     * A single predictor
     * Two predictors (length + species)
     * How to keep growing it
-* This is just the Bayesian Workflow
-  * Doing so helps you be more efficient but also saves you time if you run into issues
-  * Enables justification of complexity as we go
+* This is the Bayesian Workflow
+  * Modeling workflow are smoother when deliberately planned   as opposed to random guessing
+  * Following the workflow will save you time
+  * Complexity is only added when *needed*
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
@@ -627,9 +627,7 @@ But as with many things in life, we need to walk before we can run. This is to m
 So now we start very simple. So simple we decided to name this model as "The world's simplest model".
 
 In this section we'll cover the following points:
-<!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "fragment"} -->
 * The intuition behind this model
 * How the intuition translates to math
 * The implementation in PyMC
@@ -643,7 +641,7 @@ In this section we'll cover the following points:
 All fish weigh the same
 
 <!-- #region slideshow={"slide_type": "fragment"} -->
-### The idea in math
+### The simplest model ever
 <!-- #endregion -->
 
 $$
@@ -852,6 +850,7 @@ az.plot_dist(idata.posterior_predictive["weight"], label="Individual weight post
 ax.legend();
 ```
 
+<!-- #region slideshow={"slide_type": "notes"} -->
 How does the posterior predictive distribution compares to the posterior of the mean weight? Let's have a closer look.
 
 We have the the empirical mean and the posterior for the mean weight, which we have already seen. The new distribution is the one we need to use to predict the weight of individual fish. This is known as the posterior predictive distribution.
@@ -863,6 +862,7 @@ However, our model is so uncertain about individual weights that it predicts eve
 As humans we know negative values are impossible. If we could build a model that by design restricts the output to positive values only, that would be great. You know what? It's possible indeed! But we won't do that now. You'll see that happen in later lessons.
 
 Anyway, it's not the end of the world either! We're just getting started and we should take this as an indication to keep iterating to come up with a better model.
+<!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## Visualize the fitted curve
@@ -920,27 +920,12 @@ One of the good aspects of going Bayesian is that we get uncertainty quantificat
 * Parameters in the linear function have an interpretable meaning
     * We discovered the learned intercept is equal to the mean response
 * In Bayesian Regression we get uncertainty quantification for free
-    * Even for as things as simple as the mean
+    * Even for estimations as simple as the mean
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
 # Adding a slope
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "slide"} -->
-## Adding a slope
-
-<center>
-  <img src="imgs/SkateboardSlope.jpg" style="width: 75%;"/>
-</center>
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "slide"} -->
-## Adding a slope
-
-* We're happy we created our first model
-* The EDA shows other measurements give valuable information about the fish weight
-* Let's add predictors to the model!
+Lines that go somewhere
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
@@ -952,7 +937,29 @@ In this section, we will learn how to incorporate predictors into the model so i
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## Intercept only model review
+## Flat lines are boring
+
+<center>
+  <img src="imgs/SkateboardSlope.jpg" style="width: 75%;"/>
+</center>
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "notes"} -->
+When thinking of linear regression most people don't envision a flat line and with good reason. In real life things tend to get bigger, or get smaller, they don't tend to stay the same. We want models that do the same, that help us estimate the growth, or decline, of the things we see around us.
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "skip"} -->
+## A quick check in
+
+* We're happy we have our first model
+* The EDA shows other measurements give valuable information about the fish weight
+* Let's add predictors to the model!
+
+**Note** This doesnt add to to much extra information that can be introduced in the prior two slides. Proposing we remove it. I already moved the notes up
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Revising our Intercept only model
 <!-- #endregion -->
 
 ```python hide_input=true slideshow={"slide_type": "-"}
@@ -1018,6 +1025,7 @@ $$
 
 ```python slideshow={"slide_type": "fragment"}
 length = data["Length1"].to_numpy()
+
 with pm.Model() as model:
     β0 = pm.Normal("β0", mu=0, sigma=200)
     β1 = pm.Normal("β1", mu=0, sigma=10)
@@ -1043,7 +1051,9 @@ with model:
 az.summary(idata, round_to=2, kind="stats")
 ```
 
+<!-- #region slideshow={"slide_type": "fragment"} -->
 * We predict an increase of 32 grams per additional centimeter of length
+<!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## Analyze the posterior: parameters
@@ -1086,14 +1096,14 @@ handles = [
 ax.legend(handles=handles, loc="upper left");
 ```
 
+<!-- #region slideshow={"slide_type": "skip"} -->
+**Note:** Highlight the horizontal line at y = 0 when saying "do you see that!?"
+<!-- #endregion -->
+
 <!-- #region slideshow={"slide_type": "notes"} -->
 Awesome, we got what we wanted. Now the model has a slope and it accounts for the fish length when predicting weight. The longer the fish, the larger the predicted weight. Makes total sense. Also, the Bayesian approach gives credibility bands for free. I can't be more happy!
 
 Oh, wait! Looks like there's something messed up. Holy crap, the fit is actually terrible! And there's more! it predicts negative values!
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "skip"} -->
-**Note:** Highlight the horizontal line at y = 0 when saying "do you see that!?"
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -1105,7 +1115,7 @@ Oh, wait! Looks like there's something messed up. Holy crap, the fit is actually
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## What did we do wrong?!
+## We got what we asked for
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "fragment"} -->
@@ -1122,6 +1132,10 @@ Oh, wait! Looks like there's something messed up. Holy crap, the fit is actually
 * We missed a key point: The relationship between length and weight is non-linear!
 <!-- #endregion -->
 
+<!-- #region slideshow={"slide_type": "-"} -->
+## Not a straight line
+<!-- #endregion -->
+
 ```python hide_input=true slideshow={"slide_type": "slide"}
 fig, ax = plt.subplots(figsize=FIGSIZE)
 ax.scatter(data["Length1"], data["Weight"], alpha=0.6)
@@ -1130,6 +1144,8 @@ ax.set(xlabel="Length (centimeters)", ylabel="Weight (grams)", title="Fish lengt
 
 <!-- #region slideshow={"slide_type": "notes"} -->
 The scatterplot shows very clearly that larger lengths imply larger weights. However, it does not mean weight grows linearly with length. Actually, the shape resembles exponential growth.
+
+In the next section we'll talk about how to apply transformations to the data, where they work, and see what issues still remain
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -1139,8 +1155,9 @@ The scatterplot shows very clearly that larger lengths imply larger weights. How
     * We added predictors into our model
     * All of this with proper uncertainty quantification
 * Linear fit was terrible
-* EDA is important to ensure the linear approximation applies to the problem at hand
     * We knew to expect this bad result from our EDA
+    * EDA continues to be important throughout the process
+
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -1163,6 +1180,8 @@ Every modeler's swiss army knife
 <!-- #region slideshow={"slide_type": "fragment"} -->
 * We just need to look at it from a different angle
 <!-- #endregion -->
+
+**Note** Insert a picture here most likely rather than text
 
 <!-- #region slideshow={"slide_type": "notes"} -->
 
@@ -1279,7 +1298,7 @@ $$
 $$
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "-"} -->
+<!-- #region slideshow={"slide_type": "fragment"} -->
 Gets transformed into
 <!-- #endregion -->
 
@@ -1289,18 +1308,18 @@ $$
 $$
 <!-- #endregion -->
 
+<!-- #region slideshow={"slide_type": "skip"} -->
+**Note:** Highlight the parts that change between formulas. Possibly, use arrows to connect parts (i.e. Weight_i with log(Weight_i))
+<!-- #endregion -->
+
 <!-- #region slideshow={"slide_type": "notes"} -->
 Taking all the components together, the formula for the linear regression is equivalent to the original formula we used before. The only difference is that we use the transformed variables now.
 
 It's exactly the same structure than before, we only changed replaced the untransformed variables with the transformed ones. All the rest remains the same.
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "skip"} -->
-**Note:** Highlight the parts that change between formulas. Possibly, use arrows to connect parts (i.e. Weight_i with log(Weight_i))
-<!-- #endregion -->
-
 <!-- #region slideshow={"slide_type": "slide"} -->
-## The Bayesian way
+## Fully transformed regression
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "-"} -->
@@ -1350,7 +1369,7 @@ with model:
 ## Model fit on the transformed space
 <!-- #endregion -->
 
-```python hide_input=true slideshow={"slide_type": "slide"}
+```python hide_input=true slideshow={"slide_type": "-"}
 b0_draws = idata.posterior["β0"][:, ::10].to_numpy().flatten()
 b1_draws = idata.posterior["β1"][:, ::10].to_numpy().flatten()
 
@@ -1398,15 +1417,15 @@ Well, it's not that great actually. We can't pretend our company gets used to me
 * Transformations allowed us to use a linear regression model
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "-"} -->
+<!-- #region slideshow={"slide_type": "fragment"} -->
 * It leaves an unexpected communication problem
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "-"} -->
+<!-- #region slideshow={"slide_type": "fragment"} -->
 * The trick: use an invertible transformation
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "-"} -->
+<!-- #region slideshow={"slide_type": "fragment"} -->
 * The function that reverses $\log(x)$ is $\exp(x)$
 <!-- #endregion -->
 
@@ -1419,7 +1438,7 @@ You have nothing to worry about, you can always come back home. We've picked a g
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## You can always come back to home
+## The reverted transform fit on the original data
 <!-- #endregion -->
 
 ```python hide_input=true slideshow={"slide_type": "-"}
@@ -1480,12 +1499,14 @@ e_i = \hat{y}_i - y_i
 $$
 <!-- #endregion -->
 
+<!-- #region slideshow={"slide_type": "notes"} -->
 When we compare predictions with the actual observed values we're referring to a quantity known as residuals. Residuals are a tool to measure the error in our predictions. 
 
 With a model we get many residuals. As many as observations. If our model fits well, these residuals will have a zero mean and be independent of the predictor. Non-random patterns in the residuals indicate something going wrong with our model.
+<!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## Visualize the residuals
+## Plotting the residuals
 <!-- #endregion -->
 
 ```python slideshow={"slide_type": "skip"}
@@ -1539,10 +1560,14 @@ What's more important is to highlight what we've learnt so far. Model building i
 
 <!-- #region slideshow={"slide_type": "slide"} -->
 # Accounting for the species
-...
+Accounting for categories
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "slide"} hide_input=true -->
+<!-- #region slideshow={"slide_type": "slide"} -->
+## All fish aren't the same
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "-"} hide_input=true -->
 <center>
   <img src="imgs/SeveralFish.jpg" style="width: 80%"/>
 </center>
@@ -1623,7 +1648,7 @@ b1_mean = b1_draws.mean().item()
 ax.plot(x_grid, b0_mean + b1_mean * x_grid, color="0.4");
 ```
 
-<!-- #region slideshow={"slide_type": "-"} -->
+<!-- #region slideshow={"slide_type": "notes"} -->
 * The fit seems good overall
 * The fit is quite poor if we look at species individually
 * Some species are sistematically overestimated
@@ -1660,7 +1685,7 @@ ax.legend(
 );
 ```
 
-<!-- #region slideshow={"slide_type": "-"} -->
+<!-- #region slideshow={"slide_type": "notes"} -->
 That's the missing part! We knew we were missing something in the previous residual analysis, and we've just found it.
 
 Now it's pretty clear that groups identify different species. In particular, Smelt and Pike look like very different from the rest, they're always overestimated by the single intercept single slope model. Also, Parkki and Bream were usually underestimated, which is also a bad sign. On the other hand, the fit was reasonably well for Perch and Roach because their residuals are more or less centered around 0.
@@ -1669,7 +1694,7 @@ It's pretty clear now that our model needs to account for the species if we want
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## How to?
+## How to do we fix this?
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "-"} -->
@@ -1689,6 +1714,8 @@ It's pretty clear now that our model needs to account for the species if we want
     * Multiple groups: multiple lines
 <!-- #endregion -->
 
+**Reviewer Note**: This is very text heavy. We want to show this more smoothly. I'm not entirely sure yet at the moment but will think on it
+
 <!-- #region slideshow={"slide_type": "notes"} -->
 Fortunately, PyMC is going to make it really easy for us to use categorical variables. But we're not here to copy and paste code, we want to really understand what's going on under the hood.
 
@@ -1704,7 +1731,7 @@ Adding a categorical predictor is like splitting a single line into multiple lin
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## How to: A range of options
+## We have a range of options
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "-"} -->
@@ -1750,7 +1777,7 @@ In some cases this is fine, in others such as our case, it's a poor choice.
 ## Different, but parallel
 <!-- #endregion -->
 
-```python hide_input=true slideshow={"slide_type": "slide"}
+```python hide_input=true slideshow={"slide_type": "-"}
 handles = [Line2D([], [], label=f"Group {i + 1}", color=f"C{i}") for i in range(5)]
 
 fig, ax = plt.subplots(figsize=FIGSIZE)
@@ -1776,6 +1803,8 @@ This is much more flexible than the previous approach, but it is still a little 
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## Non-parallel, but weird
 <!-- #endregion -->
+
+**Reviewers note:** Why is it weird?
 
 ```python hide_input=true slideshow={"slide_type": "-"}
 handles = [Line2D([], [], label=f"Group {i + 1}", color=f"C{i}") for i in range(5)]
@@ -1851,7 +1880,7 @@ for $j=1, \cdots, 7$.
  
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "-"}
+```python slideshow={"slide_type": "fragment"}
 log_length = np.log(data["Length1"].to_numpy())
 log_weight = np.log(data["Weight"].to_numpy())
 species, species_idx = np.unique(data["Species"], return_inverse=True)
@@ -1865,16 +1894,18 @@ with pm.Model(coords=coords) as model:
     pm.Normal("log(weight)", mu=mu, sigma=sigma, observed=log_weight)
 ```
 
-<!-- #region slideshow={"slide_type": "notes"} -->
-Let's see the model now. The specification has a subtle, but fundamental, difference. Both the intercept and the slope paremeters are now indexed by $j$, the letter we use to represent the species. All this just means there are multiple intercepts and slopes.
-
-We can see this reflected both in the statistical formulation and the PyMC model. See we're using `coords` now, which allows us to tell PyMC how many species are there and label them with their names. All the rest is pretty similar to what we had before.
-<!-- #endregion -->
-
 <!-- #region slideshow={"slide_type": "skip"} -->
 **Note:** Highlight the $\beta_{0,j}$ and `β0[species_idx]` with the same color, and $\beta_{1, j}$ and `β1[species_idx]` with another one.
 
 **Question:** I'm not sure how much we need to explain about the model code (coords, indexing, etc)
+<!-- #endregion -->
+
+## More Sampling
+
+<!-- #region slideshow={"slide_type": "notes"} -->
+Let's see the model now. The specification has a subtle, but fundamental, difference. Both the intercept and the slope paremeters are now indexed by $j$, the letter we use to represent the species. All this just means there are multiple intercepts and slopes.
+
+We can see this reflected both in the statistical formulation and the PyMC model. See we're using `coords` now, which allows us to tell PyMC how many species are there and label them with their names. All the rest is pretty similar to what we had before.
 <!-- #endregion -->
 
 ```python slideshow={"slide_type": "slide"}
@@ -1887,7 +1918,7 @@ with model:
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## See the summary
+## Inspecting the summary resumts
 <!-- #endregion -->
 
 ```python slideshow={"slide_type": "-"}
@@ -1899,7 +1930,7 @@ The summary table grew up quite a lot. What used to be only three parameters (in
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## Better use a foresplot
+## Forestplots are gerat
 <!-- #endregion -->
 
 ```python slideshow={"slide_type": "-"} hide_input=true
@@ -1911,7 +1942,7 @@ axes[1].set(title="Posterior of β1");
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-The foresplot shows the information from the table in a much better way. It makes it easier to appreciate  similarities and differences between species. 
+The forestplot shows the information from the table in a much better way. It makes it easier to appreciate  similarities and differences between species. 
 
 First, let's have a look at the intercepts. We can observe a difference from species to species. The overlap tells not all of them are completely different, but it's clear they're not all the same. For example, see the posteriors of Bream and Pike, they differ quite a lot.
 
@@ -2062,7 +2093,7 @@ So let's drop the common axes and zoom in into the region where each species has
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## Visualize the model in original scale (zoomed version)
+## Visualize the model in original scale (but a bit closer)
 <!-- #endregion -->
 
 ```python hide_input=true slideshow={"slide_type": "-"}
