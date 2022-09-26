@@ -1879,7 +1879,7 @@ with model:
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## Inspecting the summary resumts
+## Inspecting the summary results
 <!-- #endregion -->
 
 ```python slideshow={"slide_type": "-"}
@@ -1891,7 +1891,7 @@ The summary table grew up quite a lot. What used to be only three parameters (in
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## Forestplots are gerat
+## Forestplots are great
 <!-- #endregion -->
 
 ```python slideshow={"slide_type": "-"} hide_input=true
