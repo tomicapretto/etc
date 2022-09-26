@@ -1694,67 +1694,28 @@ It's pretty clear now that our model needs to account for the species if we want
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## How to do we fix this?
+## What can we do?
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "-"} -->
-* It's very easy with PyMC
-    * But we also want to understand what's going on
-<!-- #endregion -->
+* We have category, which is specifies, the questions are...
 
-<!-- #region slideshow={"slide_type": "-"} -->
-* Challenge: Species is a feature of a different nature
-    * It's categorical
-    * Can't do math with labels
-<!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "-"} -->
-* Adding a categorical predictor is like splitting a single line into multiple lines
-    * Single group: single line
-    * Multiple groups: multiple lines
-<!-- #endregion -->
-
-**Reviewer Note**: This is very text heavy. We want to show this more smoothly. I'm not entirely sure yet at the moment but will think on it
+1. Are all fish exactly the same?
+  * We just showed its not
+2. Do all fish have the same weight at the same length at **one point**?
+4. Do fish have different weights at the same length, but the relation to weight is the same?
+3. Or are fish just different?
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-Fortunately, PyMC is going to make it really easy for us to use categorical variables. But we're not here to copy and paste code, we want to really understand what's going on under the hood.
-
 The first challenge is that species is a feature of a different nature. How? Let's see for example Length. It's a numeric variable. Not only because it uses numbers for its values, but also because operations with those numbers are meaningful. The total lenght of two fish is the length of the first fish plus the length of the second fish. And it all makes sense.
 
 Species is of different nature, though. It's categorical. Not only because its values are not numbers, but also because they don't have a numeric interpretation. We can't do `"Bream" + "Pike"` and expect to obtain a sensible result. 
 
-So... how does it work? Well, it's not such a big issue. Previsouly, we had a single group consisting of all fish, right? In that case, we had a single regression line. Now, we have multiple groups. Can't we just have multiple regression lines, one for each group? 
+So... how does it work? Well, it's not such a big issue. Previously, we had a single group consisting of all fish, right? In that case, we had a single regression line. Now, we have multiple groups. Can't we just have multiple regression lines, one for each group? 
 
 Turns out the answer is **yes!**
 
 Adding a categorical predictor is like splitting a single line into multiple lines, one per group. This means that each species can show a different behavior. We get a more flexible model this way!
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "slide"} -->
-## We have a range of options
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "-"} -->
-* Tweak the intercept
-    * Parallel lines with a different origin
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "-"} -->
-* Tweak the slope
-    * Non-parallel lines with a common origin
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "-"} -->
-* Tweak both intercept and slope
-    * Non-parallel lines with different origins
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "notes"} -->
-How can we split a single line into multiple ones? Turns out there's actually a range of options.
-
-...
-
-It's much easier to understand the concept when we can see it. So let's do it folks!
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -1859,7 +1820,7 @@ From all the options available, this is the one we will use for our model. Each 
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} hide_input=true -->
-## The model
+## Different Slopes, Different Intercepts
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "-"} -->
