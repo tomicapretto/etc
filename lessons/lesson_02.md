@@ -2144,19 +2144,106 @@ az.plot_posterior(
 <!-- #endregion -->
 
 ```python
-fish_test = fish_reduced.sample(frac=0.1, random_state=RANDOM_SEED).sort_index()
-test_idx = fish_test.index
-fish_train = fish_reduced.loc[fish_reduced.index.difference(test_idx)]
+df_test = data.sample(frac=0.1, random_state=1234).sort_index()
+df_train = data.loc[data.index.difference(df_test.index)]
 ```
 
 ```python
-species_idx, species = fish_train.Species.factorize(sort=True)
-COORDS["species"] = species
+log_length = np.log(df_train["Length1"].to_numpy())
+log_weight = np.log(df_train["Weight"].to_numpy())
+species, species_idx = np.unique(df_train["Species"], return_inverse=True)
+coords = {"species": species}
+
+with pm.Model(coords=coords) as model:
+    log_length_ = pm.MutableData("log_length", log_length)
+    log_weight_ = pm.MutableData("log_weight", log_weight)
+    species_idx_ = pm.MutableData("species_idx", species_idx)
+    
+    β0 = pm.Normal("β0", mu=0, sigma=5, dims="species")
+    β1 = pm.Normal("β1", mu=0, sigma=5, dims="species")
+    sigma = pm.HalfNormal("σ", sigma=5)
+    mu = β0[species_idx_] + β1[species_idx_] * log_length_
+    pm.Normal("log(weight)", mu=mu, sigma=sigma, observed=log_weight_)
+```
+
+<!-- #region slideshow={"slide_type": "skip"} -->
+**Note:** Highlight `MutableData`
+<!-- #endregion -->
+
+```python
+with model:
+    idata = pm.sample(chains=4, random_seed=1234)
 ```
 
 ```python
-fish_test
+az.plot_trace(idata, backend_kwargs={"tight_layout": True});
 ```
+
+### New data for prediction
+
+```python
+df_test
+```
+
+### Update values of predictors
+
+```python
+df_test
+```
+
+```python
+# Map the species in the test data to the original index values from the train dataset
+name_to_idx_map = {name: index for index, name in pd.Series(species).to_dict().items()}
+species_idx_test = df_test["Species"].map(name_to_idx_map).to_numpy()
+```
+
+```python
+species_idx_test
+```
+
+Update the data objects in the PyMC model
+
+```python
+with model:
+    pm.set_data(
+        {
+            "log_length": np.log(df_test["Length1"].to_numpy()),
+            "species_idx": species_idx_test,
+        }
+    )
+```
+
+The handling of the species index requires a bit more care, to make sure to map the species in the test data to the original index values from the train dataset. That's the two lines you see below, and after that it's just a matter of letting PyMC now that the data values have been updated, thanks to the handy pm.set_data function.
+
+Once that's done, we can just call sample_posterior_predictive. The only difference is that we're telling PyMC these are really predictions (predictions=True), and we want them appended to our existing InferenceData object (extend_inferencedata=True).
+
+```python
+with model:
+    idata = pm.sample_posterior_predictive(
+        idata,
+        predictions=True,
+        extend_inferencedata=True,
+        random_seed=1234,
+    )
+```
+
+```python
+idata
+```
+
+```python
+axes = az.plot_posterior(
+    idata.predictions,
+    ref_val=df_test["Weight"].tolist(),
+    transform=np.exp,
+)
+plt.tight_layout()
+```
+
+* Use pm.set_data to update the values of predictors
+* pm.sample_posterior_predictive(predictions=True, extend_inferencedata=True) uses the updated values to predict outcomes and appends them to the original InferenceData object
+* az.plot_posterior is an easy and concise way to check the quality of and uncertainty in those predictions
+
 
 Last step: remember what we said at the beginning? There are different price tiers for weights, and those tiers can get really expensive, so we want to know the probability of an item being above any theshold:
 
