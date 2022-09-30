@@ -6,7 +6,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.14.1
+      jupytext_version: 1.13.8
   kernelspec:
     display_name: Python 3 (ipykernel)
     language: python
@@ -103,7 +103,7 @@ But if you're too surprised about what we are seeing because it looks so confusi
 
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## Exploratory Data Analysis
-* Why its critical to look at your data no matter what kind of model you're building
+* Why it's critical to look at your data no matter what kind of model you're building
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -149,7 +149,7 @@ None of this should feel new.
 
 <!-- #region slideshow={"slide_type": "slide"} -->
 # Exploratory Data Analysis
-Building a map for what were going to model
+Building a map for what we're going to model
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -157,7 +157,7 @@ Building a map for what were going to model
 
 
 <center>
-  <img src="imgs/MountainProgression.jpg" />
+  <img src="imgs/MountainProgression.jpg" style="width: 60%" />
 </center>
 <!-- #endregion -->
 
@@ -167,7 +167,6 @@ We start a challenging adventure. We want to fit a linear regression model to pr
 
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## Is linear regression the right choice?
-** insert image **
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
@@ -334,14 +333,12 @@ pd.concat(
 ).rename_axis("Species").reset_index()
 ```
 
-<!-- #region slideshow={"slide_type": "-"} -->
-* Perch and Bream represent around 60% of all the fish
-* Whitefish appears very rarely
-    * Perch is 10 times as frequent as Whitefish!
-<!-- #endregion -->
-
 <!-- #region slideshow={"slide_type": "notes"} -->
 In this table view, we see the top-two species together make up around 60% of the fish in the data. That's quite a lot! To have an idea of how are the differences between species, we can compare Perch with Whitefish and see Perch is 10 times more common than Whitefish. That's a huge difference!
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "skip"} -->
+**Note:** Highlight numbers as we mention them. Make table bigger?
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -489,7 +486,7 @@ This is so exciting! We started from nothing and after all this work we have so 
 
 <!-- #region slideshow={"slide_type": "slide"} -->
 # Making a plan
-Higher probability of a good modeling results when we use informed priors 
+Higher probability of a good modeling results when we use informed priors
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -641,7 +638,7 @@ In this section we'll cover the following points:
 All fish weigh the same
 
 <!-- #region slideshow={"slide_type": "fragment"} -->
-### The simplest model ever
+## The simplest model ever
 <!-- #endregion -->
 
 $$
@@ -868,7 +865,7 @@ Anyway, it's not the end of the world either! We're just getting started and we 
 ## Visualize the fitted curve
 <!-- #endregion -->
 
-```python hide_input=true slideshow={"slide_type": "fragment"}
+```python hide_input=true slideshow={"slide_type": "-"}
 fig, ax = plt.subplots(figsize=FIGSIZE)
 ax.scatter(x=data["Length1"], y=data["Weight"], alpha=0.6)
 ax.set(xlabel="Length (centimeters)", ylabel="Weight (grams)", title="Fish length vs weight");
@@ -882,7 +879,7 @@ Before we finish this section, it's good to go a step further and visualize the 
 ## Visualize the fitted curve
 <!-- #endregion -->
 
-```python hide_input=true slideshow={"slide_type": "fragment"}
+```python hide_input=true slideshow={"slide_type": "-"}
 fig, ax = plt.subplots(figsize=FIGSIZE)
 ax.scatter(x=data["Length1"], y=data["Weight"], alpha=0.6)
 ax.set(xlabel="Length (centimeters)", ylabel="Weight (grams)", title="Fish length vs weight");
@@ -1100,7 +1097,7 @@ ax.legend(handles=handles, loc="upper left");
 **Note:** Highlight the horizontal line at y = 0 when saying "do you see that!?"
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "notes"} -->
+<!-- #region slideshow={"slide_type": "notes"} hide_input=false -->
 Awesome, we got what we wanted. Now the model has a slope and it accounts for the fish length when predicting weight. The longer the fish, the larger the predicted weight. Makes total sense. Also, the Bayesian approach gives credibility bands for free. I can't be more happy!
 
 Oh, wait! Looks like there's something messed up. Holy crap, the fit is actually terrible! And there's more! it predicts negative values!
@@ -1110,8 +1107,10 @@ Oh, wait! Looks like there's something messed up. Holy crap, the fit is actually
 ## What did we do wrong?!
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "skip"} -->
-**TODO:** Add image/gif person crying
+<!-- #region slideshow={"slide_type": "-"} -->
+<center>
+  <img src="imgs/Crying.gif" style="width: 75%;"/>
+</center>
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -1119,7 +1118,7 @@ Oh, wait! Looks like there's something messed up. Holy crap, the fit is actually
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "fragment"} -->
-* Linear regression is about fitting straight lines to data
+* Linear regression is about fitting **straight lines** to data
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "fragment"} -->
@@ -1132,11 +1131,11 @@ Oh, wait! Looks like there's something messed up. Holy crap, the fit is actually
 * We missed a key point: The relationship between length and weight is non-linear!
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "-"} -->
+<!-- #region slideshow={"slide_type": "slide"} -->
 ## Not a straight line
 <!-- #endregion -->
 
-```python hide_input=true slideshow={"slide_type": "slide"}
+```python hide_input=true slideshow={"slide_type": "-"}
 fig, ax = plt.subplots(figsize=FIGSIZE)
 ax.scatter(data["Length1"], data["Weight"], alpha=0.6)
 ax.set(xlabel="Length (centimeters)", ylabel="Weight (grams)", title="Fish length vs weight");
@@ -1174,14 +1173,22 @@ Every modeler's swiss army knife
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "-"} -->
+<center>
+  <img src="imgs/PuttingGlasses.jpg" style="width: 75%;"/>
+</center>
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "skip"} -->
 * Looks like linear regression is not the right fit for our problem
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "fragment"} -->
+<!-- #region slideshow={"slide_type": "skip"} -->
 * We just need to look at it from a different angle
 <!-- #endregion -->
 
-**Note** Insert a picture here most likely rather than text
+<!-- #region slideshow={"slide_type": "skip"} -->
+**Note** I'm not convinced by the image at all. I was thinking of something that resembles a transformation or something being looked from a different angle. Even a projection. But I couldn't find something that convinced me.
+<!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
 
@@ -1203,12 +1210,16 @@ No way, we've just got started and linear models can still take us much further.
     * Exponential $f(x) = e^x$
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "-"} -->
+<!-- #region slideshow={"slide_type": "fragment"} -->
 * They transform our variables into something else
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "-"} -->
+<!-- #region slideshow={"slide_type": "fragment"} -->
 * Use $f(\text{Length})$ instead of $\text{Length}$
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "skip"} -->
+**Note:** Fade-in and fade-out between transformed scatterplots? I say these two, but it can be anything that creates a nice effect.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
@@ -1217,10 +1228,6 @@ What do we mean with transformations? What are them? How do we use them?
 Transformations are simply another name for functions, mathematical functions. Like square root function, logarithm function, exponential function, sine functions, or even polynomials. We say "transformations" because they transform our variables into something else.
 
 To use a transformation we just apply the function to variable(s) in the model and use its result instead of the original one(s). For example, instead of using `Length` to predict `Weight`, we can use a function of `Length` we can call `f(Length)`. The same way, we can transform the response `Weight` into `f(Weight)`.
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "skip"} -->
-**Note:** Fade-in and fade-out between transformed scatterplots? I say these two, but it can be anything that creates a nice effect.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -1353,7 +1360,7 @@ Again, see how close PyMC resembles the math... So clean!
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## Sample, sample sample
+## Sample, sample, sample
 <!-- #endregion -->
 
 ```python slideshow={"slide_type": "-"}
@@ -1369,7 +1376,7 @@ with model:
 ## Model fit on the transformed space
 <!-- #endregion -->
 
-```python hide_input=true slideshow={"slide_type": "-"}
+```python hide_input=true
 b0_draws = idata.posterior["β0"][:, ::10].to_numpy().flatten()
 b1_draws = idata.posterior["β1"][:, ::10].to_numpy().flatten()
 
@@ -1403,10 +1410,6 @@ Do you know what it means? We've got something that really improves the predicti
 As you may be thinking, this chart is in the log-transformed space. So, it means we simply pass a logarithm of the length to the model and it gives us the predicted logarithm of the weight. 
 
 Well, it's not that great actually. We can't pretend our company gets used to measure in log scales!
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "fragment"} -->
-**Note:** Something showing both transformations are invertibles so we can actually reverse back into the original scale?
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -1514,7 +1517,7 @@ log_y_hat = b0_mean + b1_mean * log_length
 log_residuals = log_y_hat - log_weight
 ```
 
-```python slideshow={"slide_type": "-"} hide_input=true
+```python hide_input=true slideshow={"slide_type": "-"}
 fig, ax = plt.subplots(figsize=FIGSIZE)
 ax.scatter(log_length, log_residuals);
 ax.axhline(0, ls="--", color="0.5")
@@ -1567,7 +1570,7 @@ Accounting for categories
 ## All fish aren't the same
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "-"} hide_input=true -->
+<!-- #region hide_input=true slideshow={"slide_type": "-"} -->
 <center>
   <img src="imgs/SeveralFish.jpg" style="width: 80%"/>
 </center>
@@ -1660,7 +1663,7 @@ ax.plot(x_grid, b0_mean + b1_mean * x_grid, color="0.4");
 ## The part we missed
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "-"} hide_input=true
+```python hide_input=true slideshow={"slide_type": "-"}
 species, species_idx = np.unique(data["Species"], return_inverse=True)
 color = [f"C{i}" for i in species_idx]
 handles = [
@@ -1700,8 +1703,7 @@ It's pretty clear now that our model needs to account for the species if we want
 * We have category, which is specifies, the questions are...
 
 
-1. Are all fish exactly the same?
-  * We just showed its not
+1. Are all fish exactly the same? We just showed its not
 2. Do all fish have the same weight at the same length at **one point**?
 4. Do fish have different weights at the same length, but the relation to weight is the same?
 3. Or are fish just different?
@@ -1762,10 +1764,8 @@ This is much more flexible than the previous approach, but it is still a little 
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## Non-parallel, but weird
+## Non-parallel, same intercept
 <!-- #endregion -->
-
-**Reviewers note:** Why is it weird?
 
 ```python hide_input=true slideshow={"slide_type": "-"}
 handles = [Line2D([], [], label=f"Group {i + 1}", color=f"C{i}") for i in range(5)]
@@ -1819,7 +1819,7 @@ From all the options available, this is the one we will use for our model. Each 
 **NOTE:** Maybe say something about no pooling vs partial pooling when estimating these lines? We'll touch partial pooling only at the end of the course.
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "slide"} hide_input=true -->
+<!-- #region hide_input=true slideshow={"slide_type": "slide"} -->
 ## Different Slopes, Different Intercepts
 <!-- #endregion -->
 
@@ -1894,7 +1894,7 @@ The summary table grew up quite a lot. What used to be only three parameters (in
 ## Forestplots are great
 <!-- #endregion -->
 
-```python slideshow={"slide_type": "-"} hide_input=true
+```python hide_input=true slideshow={"slide_type": "-"}
 fig, axes = plt.subplots(1, 2, figsize=(14, 4.2), sharey=True)
 az.plot_forest(idata, var_names="β0", combined=True, linewidth=2.8, ax=axes[0])
 az.plot_forest(idata, var_names="β1", combined=True, linewidth=2.8, ax=axes[1])
@@ -2126,14 +2126,43 @@ Do you know what it means? Much better predictions and more accurate estimation 
     * Allows more realistic scenarios
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "skip"} -->
+<!-- #region slideshow={"slide_type": "slide"} -->
+# Predictions and business insights
 
+* Use of MutableData
+* Use of posterior_predictive_distribution
+* Use of `pm.set_data()`.
 
-**Note:** Something saying this used completely unpooled estimation? Or maybe it's better to reveal that once we cover hierarchical modeling?
+```python
+
+az.plot_posterior(
+    idata_unpooled_oos.predictions,
+    ref_val=fish_test["Weight"].tolist(),
+    transform=np.exp,
+);
+```
 <!-- #endregion -->
+
+```python
+fish_test = fish_reduced.sample(frac=0.1, random_state=RANDOM_SEED).sort_index()
+test_idx = fish_test.index
+fish_train = fish_reduced.loc[fish_reduced.index.difference(test_idx)]
+```
+
+```python
+species_idx, species = fish_train.Species.factorize(sort=True)
+COORDS["species"] = species
+```
+
+```python
+fish_test
+```
+
+Last step: remember what we said at the beginning? There are different price tiers for weights, and those tiers can get really expensive, so we want to know the probability of an item being above any theshold:
 
 <!-- #region slideshow={"slide_type": "slide"} -->
 # Bayesian Workflow and Growing Pains
+The sky is the limit
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
