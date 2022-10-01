@@ -2292,54 +2292,58 @@ How good are these predictions? Glad you asked. Remember we cut our fake out-of-
 * Use `pm.set_data` to update the values of predictors
 * `pm.sample_posterior_predictive(predictions=True, extend_inferencedata=True)` uses the updated values to predict outcomes and appends them to the original `InferenceData` object
 * `az.plot_posterior` is an easy and concise way to check the quality of and uncertainty in those predictions
+
+WIP
 <!-- #endregion -->
 
+<!-- #region slideshow={"slide_type": "slide"} -->
 # From predictions to business insights
 What the business actually cares about
+<!-- #endregion -->
 
-
+<!-- #region slideshow={"slide_type": "slide"} -->
 ## Back to price tiers
+<!-- #endregion -->
 
-
-Last step: remember what we said at the beginning? There are different price tiers for weights, and those tiers can get really expensive, so we want to know the probability of an item being above any theshold:
-
-
+<!-- #region slideshow={"slide_type": "-"} -->
 * $P(\text{Weight} \ge 250)$?
 * $P(\text{Weight} \ge 500)$?
 * $P(\text{Weight} \ge 750)$?
 * $P(\text{Weight} \ge 1000)$?
+<!-- #endregion -->
 
-
+<!-- #region slideshow={"slide_type": "notes"} -->
 Last step: remember what we said at the beginning? There are different price tiers for weights, and those tiers can get really expensive, so we want to know the probability of an item being above any theshold. 
 
 Since we have posterior samples, we can actually compute those probabilities for any new fish we observe. That's so cool!
+<!-- #endregion -->
 
+<!-- #region slideshow={"slide_type": "slide"} -->
+## It's all about the counting, counting, counting
+<!-- #endregion -->
 
-## Never forget to count
-
-```python
+```python slideshow={"slide_type": "-"}
 predictions = np.exp(idata.predictions)
 predictions >= 250
 ```
 
-```python
+```python slideshow={"slide_type": "-"}
 (predictions >= 250).mean(dim=("chain", "draw")).round(2)
 ```
 
+<!-- #region slideshow={"slide_type": "notes"} -->
 How do we compute probabilities from the posterior samples? We just count! The probability of an event is the number of samples satifying that event divided by the total number of samples. 
 
 For example, the probability of fish weighing more than 250 grams is equal to the number of samples where the predicted weight is above 250 grams divided by the total number of samples. 
 
 What we've just described is exactly the same as computing the mean of the boolean values that result from the comparison. So we take the mean across chains and draws to obtain the probability that each of the new fish weight is above 250 grams. This gives us one probability for each fish.
+<!-- #endregion -->
 
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Probability of being above threshold
+<!-- #endregion -->
 
-### Probability of being above threshold
-
-```python
-predictions
-```
-
-```python
+```python slideshow={"slide_type": "-"} hide_input=true
 fish_zero_predictions = predictions["log(weight)"].sel({"log(weight)_dim_0": 0})
 _, ax = plt.subplots(figsize=(9, 5))
 ax = az.plot_posterior(fish_zero_predictions, color="k", ax=ax)
@@ -2363,6 +2367,7 @@ for k, threshold in enumerate([250, 500, 750, 1000]):
     ax.set(xlabel="Weight", ylabel="Density")
 ```
 
+<!-- #region slideshow={"slide_type": "notes"} -->
 But remember that there are four thresholds (250, 500, 750, 1000), so let's generalize this approach to the other three thresholds. We'll also plot these probabilities of being about thresholds, because, well, as often, it's easier to visualize those probabilities.
 
 For instance, if we look at the first new fish we observe, we can visualize probabilities that way.
@@ -2370,16 +2375,19 @@ For instance, if we look at the first new fish we observe, we can visualize prob
 This fish is pretty cool, isn't it? Our uncertainty is very low: it's almost sure that it weighs more than 250 and less than 500. Our price estimation for shipping that fish should be quite precise -- you start to see the interest of estimating uncertainty and relating it to business constraints?
 
 But let's not stop there: let's do this analysis for all the new fishes!
+<!-- #endregion -->
 
-
+<!-- #region slideshow={"slide_type": "slide"} -->
 ## New fishes' probability to be above thresholds
+<!-- #endregion -->
 
-
+<!-- #region slideshow={"slide_type": "skip"} -->
 Let's generalize our latest plot and compute each fish's probability to be above thresholds.
 
-The plotting code is a bit more intricate, but don't focus on it. The most important is that you understand what we're plotting, not how
+The plotting code is a bit more intricate, but don't focus on it. The most important is that you understand what we're plotting, not how.
+<!-- #endregion -->
 
-```python
+```python slideshow={"slide_type": "-"} hide_input=true
 axes = az.plot_posterior(predictions, color="k")
 
 for k, threshold in enumerate([250, 500, 750, 1000]):
@@ -2406,13 +2414,14 @@ plt.suptitle("Probability to weigh more than thresholds", fontsize=26, fontweigh
 plt.tight_layout()
 ```
 
+<!-- #region slideshow={"slide_type": "notes"} -->
 Now we have actionable business insights! What can we do?
 
 * Go the to the budget-planning department so they can make sure the company has enough cash in case a new batch of items are expected to weigh particularly high.
 * Talk to the department which orders the fish in the first place, to see if they can optimize orders and make sure the new fishes don't go above the highest, most expensive threshold.
 * Look into postal service suppliers, whose pricing structure is more appropriate to the inherent variability of our business.
 * Based on our history of orders and sales, use a model to minimize the amount we're paying and maximize the amount we earn. This is called Bayesian decision-making optimization and is a more advanced topic, but you can read this post from Thomas and Ravin if you're curious.
-
+<!-- #endregion -->
 
 ## Section recap
 
@@ -2428,9 +2437,7 @@ Now we have actionable business insights! What can we do?
 The sky is the limit
 <!-- #endregion -->
 
-**Exercise:** Make predictions using the dataset with two continuous predictors. Compare predictions with those obtained with the simpler model. Are the results similar? Why?
-
-<!-- #region slideshow={"slide_type": "slide"} -->
+<!-- #region slideshow={"slide_type": "skip"} -->
 ## Bayesian Workflow and Growing Pains
 
 * Along the lesson we saw simple straight models many times.
@@ -2450,9 +2457,11 @@ The sky is the limit
   * If we control for this variable we can see the effect of this other variable
 <!-- #endregion -->
 
-## More predictors
-
 <!-- #region slideshow={"slide_type": "slide"} -->
+## More predictors
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "-"} -->
 $$
 \begin{aligned}
 \beta_{0,j} & \sim \text{Normal}(0, \sigma_{\beta_0}) \\
@@ -2491,7 +2500,7 @@ with pm.Model(coords=coords) as model:
     pm.Normal("log(weight)", mu=mu, sigma=sigma, observed=log_weight)
 ```
 
-```python slideshow={"slide_type": "slide"}
+```python slideshow={"slide_type": "-"}
 with model:
     idata = pm.sample(chains=4, target_accept=0.85, random_seed=1234)
 ```
@@ -2500,11 +2509,11 @@ with model:
 az.plot_trace(idata, compact=True, backend_kwargs={"tight_layout": True});
 ```
 
-<!-- #region slideshow={"slide_type": "slide"} -->
+<!-- #region slideshow={"slide_type": "notes"} -->
 It becomes harder to analyze such a big table. This is where the importance of good visualization becomes more and more relevant.
 <!-- #endregion -->
 
-```python hide_input=false slideshow={"slide_type": "slide"}
+```python hide_input=true slideshow={"slide_type": "slide"}
 fig, axes = plt.subplots(1, 3, figsize=(14, 4.2), sharey=True)
 az.plot_forest(idata, var_names="β0", combined=True, linewidth=2.8, ax=axes[0]);
 az.plot_forest(idata, var_names="β1", combined=True, linewidth=2.8, ax=axes[1]);
@@ -2514,7 +2523,8 @@ axes[1].set(title="Posterior of β1");
 axes[2].set(title="Posterior of β2");
 ```
 
-### Section Recap
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Section Recap
 
 * The simple linear function can be extended to handle multiple predictors
     * Each numerical predictor is associated with one slope.
@@ -2524,6 +2534,11 @@ axes[2].set(title="Posterior of β2");
 * The interpretation of the slope parameters is similar.
     * We just need to be a little more cautious.
 * PyMC allows to recycle existing code and express complex statistical models in an intuitive fashion.
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "skip"} -->
+**Exercise:** Make predictions using the dataset with two continuous predictors. Compare predictions with those obtained with the simpler model. Are the results similar? Why?
+<!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## Lesson recap
