@@ -17,6 +17,9 @@
 .reveal h1::first-line {
     color: #0078EE;
 }
+.reveal h1 {
+    color: #0078EE;
+}
 .reveal h1:before { /* Remove if buggy with slide with H1 (alignment or size) */
     content: '';
     float: right;
