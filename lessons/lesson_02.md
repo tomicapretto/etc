@@ -2261,9 +2261,9 @@ idata.predictions
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-Once that's done we need to ask PyMC for predictions. The way to do that is with `pm.sample_posterior_predictive`, which obtain samples from the posterior predictive distribution. 
+Once that's done we need to ask PyMC for predictions. The way to do that is with `pm.sample_posterior_predictive`, which takes draws from the posterior predictive distribution. 
 
-There are a couple of things to highlight here. First, we're telling PyMC these are really predictions (`predictions`=True), and we want them appended to our existing InferenceData object (`extend_inferencedata=True`).
+There are a couple of things to highlight here. First, we're telling PyMC these are really predictions (`predictions=True`), and we want them appended to our existing InferenceData object (`extend_inferencedata=True`).
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -2289,15 +2289,13 @@ How good are these predictions? Glad you asked. Remember we cut our fake out-of-
 ## Section recap
 
 * Models are useful both to describe relations and make predictions
-* Use `pm.set_data` to update the values of predictors
+* We use `pm.set_data` to update the values of predictors
 * `pm.sample_posterior_predictive(predictions=True, extend_inferencedata=True)` uses the updated values to predict outcomes and appends them to the original `InferenceData` object
 * `az.plot_posterior` is an easy and concise way to check the quality of and uncertainty in those predictions
-
-WIP
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-# From predictions to business insights
+# From predictions to insights
 What the business actually cares about
 <!-- #endregion -->
 
@@ -2313,13 +2311,13 @@ What the business actually cares about
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-Last step: remember what we said at the beginning? There are different price tiers for weights, and those tiers can get really expensive, so we want to know the probability of an item being above any theshold. 
+This is our last step. Do you remember what we said at the beginning? There are different price tiers for weights, and those tiers can get really expensive, so we want to know the probability of an item being above any theshold. 
 
 Since we have posterior samples, we can actually compute those probabilities for any new fish we observe. That's so cool!
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
-## It's all about the counting, counting, counting
+## Just count
 <!-- #endregion -->
 
 ```python slideshow={"slide_type": "-"}
@@ -2332,7 +2330,7 @@ predictions >= 250
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-How do we compute probabilities from the posterior samples? We just count! The probability of an event is the number of samples satifying that event divided by the total number of samples. 
+How do we compute probabilities from the posterior samples? Just count! The probability of an event is the number of samples satifying that event divided by the total number of samples. 
 
 For example, the probability of fish weighing more than 250 grams is equal to the number of samples where the predicted weight is above 250 grams divided by the total number of samples. 
 
@@ -2372,7 +2370,7 @@ But remember that there are four thresholds (250, 500, 750, 1000), so let's gene
 
 For instance, if we look at the first new fish we observe, we can visualize probabilities that way.
 
-This fish is pretty cool, isn't it? Our uncertainty is very low: it's almost sure that it weighs more than 250 and less than 500. Our price estimation for shipping that fish should be quite precise -- you start to see the interest of estimating uncertainty and relating it to business constraints?
+This fish is pretty cool, isn't it? Our uncertainty is very low: it's almost sure that it weighs more than 250 and less than 500. Our price estimation for shipping that fish should be quite precise. Do you start to see the interest in estimating uncertainty and relating it to business constraints?
 
 But let's not stop there: let's do this analysis for all the new fishes!
 <!-- #endregion -->
@@ -2425,36 +2423,34 @@ Now we have actionable business insights! What can we do?
 
 ## Section recap
 
-* Once you have posterior samples or predictions, you can:
-    * Communicate uncertainty with probabilities to stakeholders
+* Once we have posterior samples or predictions, we can:
     * Inform business decision-making based on probabilities of events
-* Most of the time, this will just be counting the cases fitting a particular scenario
-* Custom plots are very valuable in these cases, especially for non-stats stakeholders
+    * Use probabilities to communicate uncertainty to stakeholders
+* Since we have samples, this will be just counting the cases fitting a particular scenario
+* Custom vizualisations are highly valuable, especially for non-technical stakeholders
 * Bayesian decision-making optimization is the next step for these issues
 
 <!-- #region slideshow={"slide_type": "slide"} -->
 # Bayesian Workflow and Growing Pains
-The sky is the limit
+Sky is the limit
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "skip"} -->
-## Bayesian Workflow and Growing Pains
+<!-- #region slideshow={"slide_type": "notes"} -->
+Alright! We've come a long way today. Our journey was full of exciting challenges and we got to learn so many interesting things. We started from the very beginning and, one step at a time, we managed to build a Bayesian Linear Regression model that provides actionable insights for our company. 
+<!-- #endregion -->
 
-* Along the lesson we saw simple straight models many times.
-    * The numerical predictor (the length of the fish) is paired with a slope parameter.
-    * At this point, we know very well how to interpret it.
-* What if we wanted to add the height of the fish to the model as well? How do we do that?
-    * More technically, how do we add another numerical predictor to the model? 
-    * How does this impact the equation of the model?
-* Turns out it's not complicated at all!
-    * Multiple predictors means there are multiple slopes.
-    * Each numerical predictor has an associated slope. 
-    * If we have length and height we'll have a total of two slopes.
-* How does it look like?
-    * Math
-    * Intuition: A plane
-* How is it interpreted?
-  * If we control for this variable we can see the effect of this other variable
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Where to go now
+
+**Add some image**
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "notes"} -->
+You're succesfully making it through this entire lesson. Congratulations! You should be so proud of you! 
+
+If you're asking yourself "Where should I go from now?", or "How can I include other fish measurements in the model?", this section is definitely for you. 
+
+This section is to give help you with some directions. We're going to see how to incorporate other predictors in the model, and how nicely everything fits within the Bayesian framework.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -2474,6 +2470,20 @@ $$
 $$
 
 for $j=1, \cdots, 7$.
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "notes"} -->
+Let's say one of our colleagues asks what measurements of the fish that are being used to predict the weight. After the meeting, we're quite convinced we need to add more predictors. But how?
+
+Turns out it's not difficult at all. For example, if we wanted to add Height, we just repeat what we've done with Length: we add a slope! 
+
+Just notice we're not using the original Height, but the result of the log transformation as we did with Length. 
+
+As result, we have a linear regression model that has not one, not two, but three predictors. We are using Length, Height and Species to predict the Weight. How? Each species has different length and height slopes. 
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "skip"} -->
+**Note:** Highlight beta_2 when saying "multiplied by its own regression coefficient"
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -2505,15 +2515,29 @@ with model:
     idata = pm.sample(chains=4, target_accept=0.85, random_seed=1234)
 ```
 
-```python slideshow={"slide_type": "slide"}
+<!-- #region slideshow={"slide_type": "notes"} -->
+The modifications to the code come quite naturally as well. We can borrow what we did with the Length variable and see it's the same thing again. We just need to add the prior distribution for $\beta_2$ and use it to multiply the logarithm of the height.
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "slide"} -->
+## What's the posterior like now
+<!-- #endregion -->
+
+```python slideshow={"slide_type": "-"}
 az.plot_trace(idata, compact=True, backend_kwargs={"tight_layout": True});
 ```
 
 <!-- #region slideshow={"slide_type": "notes"} -->
-It becomes harder to analyze such a big table. This is where the importance of good visualization becomes more and more relevant.
+The traceplots indicate good sampling and we can see all chains converge to the same posterior. Great! 
+
+However, it becomes harder to analyze such a big traceplot. Especially since there are no labels that allow us to understand to which species the KDEs belong.
 <!-- #endregion -->
 
-```python hide_input=true slideshow={"slide_type": "slide"}
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Forestplot to the rescue
+<!-- #endregion -->
+
+```python hide_input=true slideshow={"slide_type": "-"}
 fig, axes = plt.subplots(1, 3, figsize=(14, 4.2), sharey=True)
 az.plot_forest(idata, var_names="β0", combined=True, linewidth=2.8, ax=axes[0]);
 az.plot_forest(idata, var_names="β1", combined=True, linewidth=2.8, ax=axes[1]);
@@ -2523,17 +2547,45 @@ axes[1].set(title="Posterior of β1");
 axes[2].set(title="Posterior of β2");
 ```
 
+<!-- #region slideshow={"slide_type": "notes"} -->
+With just a little more work we can get a custom forestplot. While not as colorfoul as the previous alternative, it's so much more informative about the posterior of the parameters. It's much easier to map posteriors to species now. Good visualizations are so important!
+
+The key insight is that all the Height slopes, for all species, are non-zero. In other words, the posterior says the weight of the fish also changes with height. Since the slopes are all positive, larger heights will return larger weight predictions.
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Have we improved predictive power?
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "-"} -->
+* The model now uses more information to predict the weight of the fish 
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "-"} -->
+* It does not necessarily mean improved predictive capacity
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "-"} -->
+* Do you dare to figure it out?
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "notes"} -->
+
+<!-- #endregion -->
+
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## Section Recap
 
 * The simple linear function can be extended to handle multiple predictors
-    * Each numerical predictor is associated with one slope.
-    * The more predictors the larger number of parameters in the model.
-* The straight line evolves into a plane.
-    * The plane is the natural extension of the straight line.
-* The interpretation of the slope parameters is similar.
-    * We just need to be a little more cautious.
-* PyMC allows to recycle existing code and express complex statistical models in an intuitive fashion.
+    * Each numerical predictor is associated with one slope
+    * The more predictors the larger number of parameters in the model
+* The interpretation of the slope parameters is similar
+    * We just need to be a little more cautious
+* PyMC allows to recycle existing code and express complex statistical models in an intuitive fashion
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "skip"} -->
+**Note:** I think we are not explaining well how to interpret the slopes of the model, and that's important. I'm too tired now to do it, but leaving the comment as a reminder and also to invite others to express their opinion.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "skip"} -->
@@ -2547,5 +2599,8 @@ axes[2].set(title="Posterior of β2");
     * Interept only model -> A flat line
     * Model with single predictor -> A non-flat line
     * Model with numerical and categorical predictor -> Multiple non-flat lines, one for each species.
+    
 
+
+**WIP**
 <!-- #endregion -->
