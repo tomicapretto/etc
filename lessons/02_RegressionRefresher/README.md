@@ -2,6 +2,15 @@
 
 ## Concepts Introduced
 
+- Exploratory data analysis
+- Linear regression
+    - No predictors
+    - Numeric predictors
+    - Numeric and categoric predictors
+- Transformations
+- Predictions
+- Uncertainty evaluation
+
 ## Section Summaries
 
 ### 10. Introduction
