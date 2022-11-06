@@ -1893,10 +1893,6 @@ $$
 for $j=1, \cdots, 7$.
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "-"} -->
- 
-<!-- #endregion -->
-
 ```python slideshow={"slide_type": "fragment"}
 log_length = np.log(data["Length1"].to_numpy())
 log_weight = np.log(data["Weight"].to_numpy())
@@ -2495,6 +2491,18 @@ for k, threshold in enumerate([250, 500, 750, 1000]):
 plt.suptitle("Probability to weigh more than thresholds", fontsize=26, fontweight="bold")
 plt.tight_layout()
 ```
+
+<!-- #region slideshow={"slide_type": "slide"} -->
+## Actionable insights
+<!-- #endregion -->
+
+<!-- #region slideshow={"slide_type": "-"} -->
+* Present results to the budget planning department
+    * Estimate how much money is needed to make payments
+* Review historical data
+    * Compare predictions with actual payments
+    * Improve the estimation of the total budget
+<!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
 Now we have actionable business insights! What can we do?
