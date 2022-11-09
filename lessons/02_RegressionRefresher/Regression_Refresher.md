@@ -367,10 +367,6 @@ pd.concat(
 In this table view, we see the top-two species together make up around 60% of the fish in the data. That's quite a lot! To have an idea of how are the differences between species, we can compare Perch with Whitefish and see Perch is 10 times more common than Whitefish. That's a huge difference!
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "skip"} -->
-**Note:** Highlight numbers as we mention them. Make table bigger?
-<!-- #endregion -->
-
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## What's the weight of fish?
 <!-- #endregion -->
@@ -459,10 +455,6 @@ The **main takeaway** is that the species is something we need to really conside
 So great to have this figured out! Thanks very much EDA!
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "skip"} -->
-**Note:** Highlight components of the chart as we describe them
-<!-- #endregion -->
-
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## Relationship among fish measurements
 <!-- #endregion -->
@@ -470,10 +462,6 @@ So great to have this figured out! Thanks very much EDA!
 ```python hide_input=false slideshow={"slide_type": "fragment"}
 sns.pairplot(data, vars=["Length1", "Height", "Width", "Weight"], diag_kws={"bins": 30});
 ```
-
-<!-- #region slideshow={"slide_type": "skip"} -->
-**Note:** Highlight individual scatterplots when saying "Height and Width" and "Height and Weight". Even better, draw a straight and a curved line on each.
-<!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
 We've been doing an intensive exploration so far. It's been exciting and insightful! Now we are in a much better position to start building our model. We know much more about the weight of the fish and how it varies from species to species. That's awesome!
@@ -1123,10 +1111,6 @@ handles = [
 ax.legend(handles=handles, loc="upper left");
 ```
 
-<!-- #region slideshow={"slide_type": "skip"} -->
-**Note:** Highlight the horizontal line at y = 0 when saying "do you see that!?"
-<!-- #endregion -->
-
 <!-- #region hide_input=false slideshow={"slide_type": "notes"} -->
 Awesome, we got what we wanted. Now the model has a slope and it accounts for the fish length when predicting weight. The longer the fish, the larger the predicted weight. Makes total sense. Also, the Bayesian approach gives credibility bands for free. I can't be more happy!
 
@@ -1214,10 +1198,6 @@ In the next section we'll talk about how to apply transformations to the data, w
 Every modeler's swiss army knife
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "skip"} -->
-**Note:** Not so convinced by the equivalence between transformation (a tool) and a swiss army knife (set of tools)
-<!-- #endregion -->
-
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## Transformations
 <!-- #endregion -->
@@ -1234,10 +1214,6 @@ Every modeler's swiss army knife
 
 <!-- #region slideshow={"slide_type": "skip"} -->
 * We just need to look at it from a different angle
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "skip"} -->
-**Note** I'm not convinced by the image at all. I was thinking of something that resembles a transformation or something being looked from a different angle. Even a projection. But I couldn't find something that convinced me.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
@@ -1266,10 +1242,6 @@ No way, we've just got started and linear models can still take us much further.
 
 <!-- #region slideshow={"slide_type": "fragment"} -->
 * Use $f(\text{Length})$ instead of $\text{Length}$
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "skip"} -->
-**Note:** Fade-in and fade-out between transformed scatterplots? I say these two, but it can be anything that creates a nice effect.
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "notes"} -->
@@ -1526,10 +1498,6 @@ Nevertheless, we're not done yet. There's still things we can improve. The curve
 For example, the longest fish has a length of 59 centimeters, weighs 1650 grams, but the model predicts slightly more than 3500 grams! That's a very large difference. 
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "skip"} -->
-**Note:** Line highlighting large differences between predicted and observed values
-<!-- #endregion -->
-
 ```python slideshow={"slide_type": "skip"}
 max_idx = np.argmax(log_length)
 print(f"Longest fish observed weight: {round(np.exp(log_weight[max_idx]), 2)}")
@@ -1588,10 +1556,6 @@ We can spot the following issues
     * In the bigger group, the model underestimates the weight
 * This is clearly a non-random pattern
     * It's not easy to detect what's exactly going on
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "skip"} -->
-**Note:** Something showing the three groups (like a polygon)
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -1871,10 +1835,6 @@ Finally, the most flexible approach. We split the single line into multiple line
 From all the options available, this is the one we will use for our model. Each species will have its own intercept and its own slope.
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "skip"} -->
-**NOTE:** Maybe say something about no pooling vs partial pooling when estimating these lines? We'll touch partial pooling only at the end of the course.
-<!-- #endregion -->
-
 <!-- #region hide_input=true slideshow={"slide_type": "slide"} -->
 ## Different Slopes, Different Intercepts
 <!-- #endregion -->
@@ -1906,12 +1866,6 @@ with pm.Model(coords=coords) as model:
     mu = β0[species_idx] + β1[species_idx] * log_length
     pm.Normal("log(weight)", mu=mu, sigma=sigma, observed=log_weight)
 ```
-
-<!-- #region slideshow={"slide_type": "skip"} -->
-**Note:** Highlight the $\beta_{0,j}$ and `β0[species_idx]` with the same color, and $\beta_{1, j}$ and `β1[species_idx]` with another one.
-
-**Question:** I'm not sure how much we need to explain about the model code (coords, indexing, etc)
-<!-- #endregion -->
 
 ## More Sampling
 
@@ -1960,14 +1914,6 @@ The forestplot shows the information from the table in a much better way. It mak
 First, let's have a look at the intercepts. We can observe a difference from species to species. The overlap tells not all of them are completely different, but it's clear they're not all the same. For example, see the posteriors of Bream and Pike, they differ quite a lot.
 
 On the other hand, there's a larger overlap between the posterior of the slopes. They mainly differ in spread, not in location. This suggests the parallel assumption could also work.
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "skip"} -->
-**Note:** It does not show the mean value for each posterior. I don't know why.  
-**Note:** Show the code?
-
-**Note:** When I say "see the posteriors of Bream and Pike, they differ quite a lot" highlight those two.  
-**Note:** Say something about the difference in spread (i.e. different sample sizes per group)
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -2040,10 +1986,6 @@ In this visualization, the colored lines are draws from the posterior distributi
 There's great news shown here: the fit for individual species improved tremendously! That's a very big step forward!
 
 Curiously, it turns out the estimated lines are quite parallel, even though we don't impose that in the model. This is related to what we found in the foresplot a moment ago.
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "skip"} -->
-**Note:** Say something about spread bc of sample size?
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
@@ -2160,10 +2102,6 @@ Yeah, this is awesome. It's pretty clear now that our model is capturing the dat
 Do you know what it means? Much better predictions and more accurate estimation of fish. More money is on its way!
 <!-- #endregion -->
 
-<!-- #region slideshow={"slide_type": "skip"} -->
-**Exercise:** Repeat the residual analysis, now with the full model accounting for species. What's the difference with the original analysis? Why?
-<!-- #endregion -->
-
 <!-- #region slideshow={"slide_type": "slide"} -->
 ## Section Recap
 
@@ -2227,10 +2165,6 @@ with pm.Model(coords=coords) as model:
 Before running and making predictions, which is so exciting, we need to adjust a couple of things in our model. It's the same regression model as before, we're not changing that, but we need to make sure it uses the training data only and it's prepared to receive new data in the future. 
 
 This is where we get to know `pm.MutableData`. It's a function that registers the data in the model and returns a data container. It's very handy because it allows us to update the values of the predictors when we want to make predictions.
-<!-- #endregion -->
-
-<!-- #region slideshow={"slide_type": "skip"} -->
-**Note:** Highlight `MutableData` when saying "this is where we get to know MutableData".
 <!-- #endregion -->
 
 <!-- #region slideshow={"slide_type": "slide"} -->
