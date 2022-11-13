@@ -6,7 +6,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.13.8
+      jupytext_version: 1.14.1
   kernelspec:
     display_name: Python 3 (ipykernel)
     language: python
@@ -2663,7 +2663,7 @@ The key insight is that all the Height slopes, for all species, are non-zero. In
 ## Modeling with categories
 
 * Species is of a different nature than Length
-* Math with categories don't make sense
+* Math with categories doesn't make sense
 * Split the line into multiple lines
 <!-- #endregion -->
 
