@@ -85,3 +85,11 @@ Background
 .slide-number-b {
     visibility: hidden;
 }
+
+/*Center output images*/
+.rise-enabled .reveal section img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
